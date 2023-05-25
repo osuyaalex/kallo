@@ -1,0 +1,16 @@
+// _loadJson () async {
+  //   String data = await DefaultAssetBundle.of(context).loadString(
+  //       "asset/model/products.json"); //for calling local json
+  //   final jsonResult = jsonDecode(data);
+  //   return jsonResult;
+  // }
+
+  scanBarcodeNormal().then((value){
+        setState(() {
+          if(_scanBarcode != '-1'){
+            products = Network().getProducts(_scanBarcode);
+          }else{
+            products = Network().getProducts('8717163545652');
+          }
+        });
+      });

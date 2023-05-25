@@ -1,0 +1,78 @@
+{
+  "item_found": true,
+  "data": {
+    "this_product": "Name of the Product (official name, given the barcode sent)",
+    "this_price": null,
+    "this_currency": "",
+    "this_availability": false,
+    "products": [
+      {
+        "merchant_url": "https://jiji.ng",
+        "product_name": "Maxi Gas Cookeey",
+        "price": "170000.0",
+        "currency": "₦",
+        "product_link": "https://redirect.kallo.io/product/?n=Maxi+Gas+Cookeey&l=jiji.ng%2Fojo%2Fkitchen-and-dining%2Fmaxi-gas-cookeey-wD5L0hgIY489OL9gGGwn24u9.html%3Fpage%3D1%26pos%3D1%26cur_pos%3D1%26ads_per_page%3D23%26ads_count%3D25403%26lid%3DpV2je043wP4qudPn%26indexPosition%3D0&m=https%3A%2F%2Fjiji.ng&k=cfthnw3mij1335189645690",
+        "image_thumbnail_url": "https://pictures-nigeria.jijistatic.com/119465458_MzAwLTQwMC1kYjY1YzI2MTMz.webp",
+        "price_history_dict": {
+          "23-04-2023": "170000.0"
+        },
+        "merchant_domain": "jiji.ng",
+        "merchant_name": "Jiji Nigeria",
+        "merchant_type": "online",
+        "merchant_latitude": "6.458985",
+        "merchant_longitude": "3.601521"
+      },
+      {
+        "merchant_url": "https://jiji.ng",
+        "product_name": "Maxi Gas Cookeey",
+        "price": "170000.0",
+        "currency": "₦",
+        "product_link": "https://redirect.kallo.io/product/?n=Maxi+Gas+Cookeey+_&l=jiji.ng%2Fojo%2Fkitchen-and-dining%2Fmaxi-gas-cookeey-wD5L0hgIY489OL9gGGwn24u9.html%3Fpage%3D4%26pos%3D3%26cur_pos%3D3%26ads_per_page%3D23%26ads_count%3D25403%26lid%3DpV2je043wP4qudPn%26indexPosition%3D71&m=https%3A%2F%2Fjiji.ng&k=cfthnKHQvm1335189645690",
+        "image_thumbnail_url": "https://pictures-nigeria.jijistatic.com/119465458_MzAwLTQwMC1kYjY1YzI2MTMz.webp",
+        "price_history_dict": {
+          "23-04-2023": "170000.0"
+        },
+        "merchant_domain": "jiji.ng",
+        "merchant_name": "Jiji Nigeria",
+        "merchant_type": "online",
+        "merchant_latitude": "6.458985",
+        "merchant_longitude": "3.601521"
+      },
+      {
+        "currency": "₦",
+        "product_link": "https://redirect.kallo.io/product/?n=Maxi+4+Burner+Gas+Cooker&l=www.jumia.com.ng%2Fmaxi-4-burner-gas-cooker-generic-mpg226917.html&m=https%3A%2F%2Fwww.jumia.com.ng&k=cfthnXh1cS1335189645690",
+        "product_name": "Maxi 4 Burner Gas Cooker",
+        "image_thumbnail_url": "https://standardized-barcode-product-images.s3.amazonaws.com/1687bfac-43fc-49c4-b745-60275a015d0d.png",
+        "price": "24500.0",
+        "price_history_dict": {
+          "10-10-2022": "24500.0"
+        },
+        "merchant_url": "",
+        "merchant_domain": "",
+        "merchant_name": "SuperMart Lekki",
+        "merchant_type": "offline",
+        "merchant_latitude": "6.458985",
+        "merchant_longitude": "3.601521"
+      },
+      {
+        "merchant_url": "",
+        "product_name": "Maxi TABLE GAS (SINGLE BURNER)",
+        "price": "9000.0",
+        "currency": "₦",
+        "product_link": "https://redirect.kallo.io/product/?n=Maxi+TABLE+GAS+%28SINGLE+BURNER%29&l=www.jumia.com.ng%2Fmaxi-table-gas-single-burner-56935341.html&m=https%3A%2F%2Fwww.jumia.com.ng&k=cfthnheirM1335189645690",
+        "image_thumbnail_url": "https://standardized-barcode-product-images.s3.amazonaws.com/a53c5ffa-2309-40e9-90e8-b5e1600dfcec.png",
+        "price_history_dict": {
+          "24-12-2022": "9000.0"
+        },
+        "merchant_domain": "",
+        "merchant_name": "Ebanor Store Lekki",
+        "merchant_type": "offline",
+        "merchant_latitude": "6.458985",
+        "merchant_longitude": "3.601521"
+      }
+
+
+    ]
+  },
+  "error": null
+}

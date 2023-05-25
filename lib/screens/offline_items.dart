@@ -1,0 +1,185 @@
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
+import 'package:job/classes/putables.dart';
+import 'package:job/network/json.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+
+
+class Offline extends StatefulWidget {
+  final AsyncSnapshot<Koye> snapshot;
+  const Offline({Key? key, required this.snapshot}) : super(key: key);
+
+  @override
+  State<Offline> createState() => _OfflineState();
+}
+
+class _OfflineState extends State<Offline> {
+  String _latitude = '';
+  String _longitude = '';
+
+  Functions _functions = Functions();
+  void _getCurrentLocation() async {
+    final position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    print(position.latitude);
+    print(position.longitude);
+
+    setState(() {
+      _latitude = position.latitude.toString();
+      _longitude = position.longitude.toString();
+    });
+  }
+  _requestLocationPermission()async{
+    await _functions.requestLocationPermission();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     _requestLocationPermission();
+     _getCurrentLocation();
+
+  }
+  @override
+  Widget build(BuildContext context) {
+    String breakUnwantedPart(String name) {
+      if (name.length > 25) {
+        return name.trim().replaceRange(25, null, '...');
+      }
+      return name;
+    }
+    List<Products>? products = widget.snapshot.data!.data!.products;
+    var offline = products?.where((element) => element.merchantType == "offline").toList();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: StaggeredGridView.countBuilder(
+            crossAxisCount: 2,
+            itemCount: offline?.length,
+            itemBuilder: (context, index){
+              // final doubleValue = offline[index]['price'];
+              // // the indexOf() method is to check if there are any digits after the decimal point
+              // // If there is no decimal point, it will be set to -1.
+              // final decimalIndex = doubleValue.toString().indexOf('.');
+              // final textToDisplay = decimalIndex == -1
+              //     ? doubleValue.toStringAsFixed(0)
+              //     : doubleValue.toStringAsFixed(2);
+              final item = offline?[index].price;
+             // final text = item.endsWith('.0') ? item.substring(0, item.length -2) : item;
+              final double number = double.tryParse(item!) ?? 0.0;
+              String displayValue;
+              if (number == number.floor()) {
+                //.floor is basically used to convert doubles to integers
+                displayValue = number.floor().toString();
+              } else {
+                displayValue = number.toString();
+              }
+              if (number >= 1000) {
+                final formatter = NumberFormat("#,###");
+                displayValue = formatter.format(number);
+              }
+              final distance = Functions().calculateDistance(_latitude, _longitude, offline?[index].merchantLongitude??'', offline?[index].merchantLatitude??'');
+              return SizedBox(
+                height: 320,
+                width: 250,
+                child: Card(
+                  elevation: 1,
+                  shadowColor: Colors.grey.shade300,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17)
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 160,
+                        width: 180,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(17),
+                            image: DecorationImage(
+                                image: NetworkImage(offline?[index].imageThumbnailUrl?.isNotEmpty == true?
+                                offline![index].imageThumbnailUrl!:
+                                'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
+                                ),
+                                fit: BoxFit.fill
+                            )
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(breakUnwantedPart(offline?[index].productName??''),
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(offline?[index].merchantName??'',
+                              style: const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children:  [
+                            const Icon(Icons.location_on, color: Colors.red, size: 20,),
+                            Text(distance != 0 ?
+                            '${distance.toStringAsFixed(2)} miles':'--',
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(offline?[index].currency??'',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.green
+                              ),
+                            ),
+                            Text(displayValue,
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.green
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+            staggeredTileBuilder: (context) => const StaggeredTile.fit(1)
+        ),
+      ),
+    );
+  }
+}
