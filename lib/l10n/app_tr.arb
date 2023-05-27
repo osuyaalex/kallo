@@ -1,0 +1,14 @@
+{
+"language": "Türkçe",
+ "home": "Ev",
+  "search": "Arama",
+  "profile": "Profil",
+  "welcome": "Hoş geldiniz",
+  "getStarted": "Başlayın",
+  "shopsNearMe": "Yakındaki Mağazalar",
+  "onlineShops": "Çevrimiçi Mağazalar",
+  "tapToScanItem": "Ürünü taratmak için dokunun",
+  "searchForProducts": "Ürün arayın",
+  "noProductsAvailable": "Mevcut ürün yok",
+  "searchItem": "Ürün ara"
+}

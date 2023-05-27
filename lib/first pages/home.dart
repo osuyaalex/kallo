@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:job/screens/home.dart';
 import 'package:job/screens/idealo.dart';
 import 'package:job/screens/products.dart';
 import 'dart:ui';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,6 +16,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  }
   int _selectedItem = 1;
   @override
   Widget build(BuildContext context) {
@@ -31,18 +47,19 @@ class _HomeState extends State<Home> {
             _selectedItem = index;
           });
         },
-        items: const [
+        items:   [
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.home),
-            label: 'Home',
+            icon: const Icon(CupertinoIcons.home),
+            label: AppLocalizations.of(context)?.home,
+            tooltip: AppLocalizations.of(context)?.home,
+          ),
+           BottomNavigationBarItem(
+            icon: const Icon(CupertinoIcons.search),
+            label: AppLocalizations.of(context)?.search,
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.search),
-            label: 'Products',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.person),
-            label: 'Earn',
+            icon: const Icon(CupertinoIcons.person),
+            label:AppLocalizations.of(context)?.profile,
           ),
         ],
       ),
@@ -56,3 +73,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+

@@ -5,6 +5,7 @@ import 'package:job/classes/putables.dart';
 import 'package:job/network/json.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class Online extends StatefulWidget {
@@ -82,95 +83,106 @@ class _OnlineState extends State<Online> {
                 displayValue = formatter.format(number);
               }
                final distance = Functions().calculateDistance(_latitude, _longitude, online?[index].merchantLatitude??'', online?[index].merchantLongitude??'');
-              return SizedBox(
-                height: 320,
-                width: 250,
-                child: Card(
-                  elevation: 1,
-                  shadowColor: Colors.grey.shade300,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(17)
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 160,
-                        width: 180,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(17),
-                            image: DecorationImage(
-                                image: NetworkImage(online?[index].imageThumbnailUrl?.isNotEmpty == true?
-                                online![index].imageThumbnailUrl!:
-                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
-                                ),
-                                fit: BoxFit.fill
-                            )
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(breakUnwantedPart(online?[index].productName??''),
-                          style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600
+              return GestureDetector(
+                onTap: (){
+                  String url = online?[index].productLink??'';
+                  Uri uri = Uri.parse(url);
+                  try{
+                    launchUrl(uri);
+                  }catch(e){
+                    print(e.toString());
+                  }
+                },
+                child: SizedBox(
+                  height: 320,
+                  width: 250,
+                  child: Card(
+                    elevation: 1,
+                    shadowColor: Colors.grey.shade300,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(17)
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 160,
+                          width: 180,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(17),
+                              image: DecorationImage(
+                                  image: NetworkImage(online?[index].imageThumbnailUrl?.isNotEmpty == true?
+                                  online![index].imageThumbnailUrl!:
+                                      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
+                                  ),
+                                  fit: BoxFit.fill
+                              )
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(online?[index].merchantName??'',
-                              style: const TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(breakUnwantedPart(online?[index].productName??''),
+                            style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(online?[index].merchantName??'',
+                                style: const TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12
+                                ),
+                              ),
 
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children:  [
-                            const Icon(Icons.location_on, color: Colors.red, size: 20,),
-                            Text(distance != 0 ?
-                            '${distance.toStringAsFixed(2)} miles':'--',
-                              style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children:  [
+                              const Icon(Icons.location_on, color: Colors.red, size: 20,),
+                              Text(distance != 0 ?
+                              '${distance.toStringAsFixed(2)} miles':'--',
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(online?[index].currency??'',
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.green
+                        SizedBox(
+                          height: 20,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(online?[index].currency??'',
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.green
+                                ),
                               ),
-                            ),
-                            Text(displayValue,
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.green
+                              Text(displayValue,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.green
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );

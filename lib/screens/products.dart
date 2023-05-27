@@ -1,16 +1,17 @@
 
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:job/network/json.dart';
 import 'package:job/network/network.dart';
 import 'package:job/screens/demo.dart';
 import 'package:job/screens/offline_items.dart';
 import 'package:job/screens/online_items.dart';
-import 'package:job/screens/search.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
 
 class Products extends StatefulWidget {
 
@@ -20,11 +21,12 @@ class Products extends StatefulWidget {
   State<Products> createState() => _ProductsState();
 }
 
-class _ProductsState extends State<Products> {
+enum Segment { shopsNearMe, onlineShops }
+class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
   late Future<Koye> products = Network().getProducts(_scanBarcode);
-
+  late AnimationController _animationController;
+  Segment _selectedSegment = Segment.onlineShops;
   String _scanBarcode = 'Unknown';
-  bool _showOfflineItems = true;
   GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   Future<void> startBarcodeScanStream() async {
@@ -71,6 +73,19 @@ class _ProductsState extends State<Products> {
     });
   }
 
+  void _switchToSegment(Segment segment) {
+    if (_selectedSegment == segment) return;
+
+    setState(() {
+      _selectedSegment = segment;
+    });
+
+    if (_selectedSegment == Segment.onlineShops) {
+      _animationController.reverse();
+    } else {
+      _animationController.forward();
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -80,8 +95,18 @@ class _ProductsState extends State<Products> {
       print('the prducy issssssssssssssss ${value.data}');
       //snack(context, value.data.)
     });
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _animationController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -133,7 +158,7 @@ class _ProductsState extends State<Products> {
                         enabled: false,
                         onChanged: null,
                         decoration: InputDecoration(
-                            hintText: 'Search Kallo...',
+                            hintText: AppLocalizations.of(context)?.searchForProducts,
                             prefixIcon: Icon(Icons.search),
 
                             border: OutlineInputBorder(
@@ -174,29 +199,26 @@ class _ProductsState extends State<Products> {
               const SizedBox(
                 height: 10,
               ),
-              FlutterToggleTab(
-                height: MediaQuery.of(context).size.height*0.055,
-                width: 70,
-                borderRadius: 30,
-                selectedTextStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600
+
+              CustomSlidingSegmentedControl(
+                initialValue: _selectedSegment.index,
+                children:  {
+                  Segment.onlineShops.index: Text(AppLocalizations.of(context)?.onlineShops??''),
+                  Segment.shopsNearMe.index: Text(AppLocalizations.of(context)?.shopsNearMe??''),
+                },
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(15)
                 ),
-                unSelectedTextStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400
+                thumbDecoration: BoxDecoration(
+                  color: const Color(0xff7F78D8).withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(15)
                 ),
-                selectedBackgroundColors: const [
-                  Color(0xff7F78D8)
-                ],
-                labels: const ["Shops near me", "Online shops"],
-                icons: [Icons.location_on_outlined, Icons.directions_bus_rounded],
-                selectedIndex: _showOfflineItems ? 0 : 1,
-                selectedLabelIndex: (index) {
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInToLinear,
+                onValueChanged: (value) {
                   setState(() {
-                    _showOfflineItems = index == 0;
+                    _switchToSegment(Segment.values[value]);
                   });
                 },
               ),
@@ -208,34 +230,35 @@ class _ProductsState extends State<Products> {
             builder: (context, snapshot){
               if(snapshot.hasError){
                 return Center(
-                    child: GestureDetector(
-                      onTap: (){
-                        scanBarcodeNormal().then((value){
-                          setState(() {
-                            products = Network().getProducts(_scanBarcode);
-                          });
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: Container(
-                          height: 40,
-                          width: 120,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                              color: const Color(0xff7F78D8).withOpacity(0.8),
-                          ),
-                          child: const Text('Tap to scan item',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
+                    child: Text(snapshot.error.toString())
+                    // GestureDetector(
+                    //   onTap: (){
+                    //     scanBarcodeNormal().then((value){
+                    //       setState(() {
+                    //         products = Network().getProducts(_scanBarcode);
+                    //       });
+                    //     });
+                    //   },
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.only(bottom: 20.0),
+                    //     child: Container(
+                    //       height: 40,
+                    //       width: 120,
+                    //       padding: EdgeInsets.all(12),
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(12),
+                    //           color: const Color(0xff7F78D8).withOpacity(0.8),
+                    //       ),
+                    //       child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
+                    //         style: const TextStyle(
+                    //           color: Colors.white,
+                    //           fontWeight: FontWeight.w700,
+                    //           fontSize: 14
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
                 );
               }
               if(!snapshot.hasData){
@@ -258,9 +281,9 @@ class _ProductsState extends State<Products> {
                             borderRadius: BorderRadius.circular(12),
                             color: const Color(0xff7F78D8).withOpacity(0.5),
                           ),
-                          child: const Center(
-                            child: Text('Tap to scan item',
-                              style: TextStyle(
+                          child:Center(
+                            child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 14
@@ -277,8 +300,24 @@ class _ProductsState extends State<Products> {
                   child: CircularProgressIndicator(color: Color(0xff7F78D8),),
                 );
               }else if(snapshot.hasData){
-                return _showOfflineItems ?
-                Offline(snapshot: snapshot,):Online(snapshot: snapshot,);
+                return Stack(
+                  children: [
+                    SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1, 0),
+                        end: Offset.zero,
+                      ).animate(_animationController),
+                      child: Offline(snapshot: snapshot,),
+                    ),
+                    SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset.zero,
+                        end: Offset(-1, 0),
+                      ).animate(_animationController),
+                      child: Online(snapshot: snapshot,),
+                    ),
+                  ],
+                );
               }else{
                 return const Center(
                   child: CircularProgressIndicator(color: Colors.black,),

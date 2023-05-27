@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import '../network/json.dart';
 import '../network/network.dart';
 import 'offline_items.dart';
@@ -120,7 +120,7 @@ class _DemoScreenState extends State<DemoScreen> {
         backgroundColor: Colors.white,
         body: FloatingSearchBar(
             borderRadius: BorderRadius.circular(12),
-            hint: 'Search kallo ...',
+            hint: AppLocalizations.of(context)!.searchForProducts,
             controller: controller,
             openAxisAlignment: 0.0,
             axisAlignment: isPortrait ? 0.0:-1.0,
@@ -137,9 +137,9 @@ class _DemoScreenState extends State<DemoScreen> {
                     future: productName,
                     builder: (context, snapshot){
                       if(snapshot.hasError){
-                        return const Center(
-                          child: Text('Search item',
-                              style: TextStyle(
+                        return Center(
+                          child: Text(AppLocalizations.of(context)!.searchItem,
+                              style: const TextStyle(
                                   color: Color(0xff7F78D8),
                                   fontWeight: FontWeight.w800,
                                   fontSize: 14
@@ -148,9 +148,9 @@ class _DemoScreenState extends State<DemoScreen> {
                         );
                       }
                       if(!snapshot.hasData){
-                        return const Center(
-                          child: Text('No products available',
-                              style: TextStyle(
+                        return Center(
+                          child: Text(AppLocalizations.of(context)!.noProductsAvailable,
+                              style: const TextStyle(
                                   color: Color(0xff7F78D8),
                                   fontWeight: FontWeight.w800,
                                   fontSize: 14
@@ -168,7 +168,7 @@ class _DemoScreenState extends State<DemoScreen> {
                            AppBar(
                              automaticallyImplyLeading: false,
                              backgroundColor: Colors.white,
-                             elevation: 1,
+                             elevation: 0,
                              title: Center(
                                child: FlutterToggleTab(
                                  height: MediaQuery.of(context).size.height*0.055,
@@ -251,7 +251,7 @@ class _DemoScreenState extends State<DemoScreen> {
                   elevation: 4,
                   child: Builder(
                     builder: ((context) {
-                      if (_filteredSearchHistory!.isEmpty &&
+                      if (_filteredSearchHistory == null &&
                           controller.query.isEmpty) {
                         return Container(
                           padding: const EdgeInsets.all(10),

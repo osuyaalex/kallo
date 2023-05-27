@@ -1,0 +1,50 @@
+{
+"language": "English",
+"@language":{
+"description": "The current language"
+},
+"home": "Home",
+"@home":{
+"description":"Home of app"
+},
+"search": "Search",
+"@search":{
+"description":"Search screen"
+},
+"profile": "Profile",
+"@profile":{
+"description": "Profile screen"
+},
+"welcome": "Welcome",
+"@welcome":{
+"description": "Welcoming text"
+},
+"getStarted": "Get Started",
+"@getStarted":{
+"description": "Get started button"
+},
+"shopsNearMe": "Shops Near Me",
+"@shopsNearMe":{
+"description": "Shops near me"
+},
+"onlineShops": "Online shops",
+"@onlineShops":{
+"description": "Online shops"
+},
+"tapToScanItem": "Tap to scan item",
+"@tapToScanItem":{
+"description": "Scan button"
+},
+"searchForProducts": "Search for products",
+"@searchForProducts":{
+"description": "Search products"
+},
+"noProductsAvailable": "No products available",
+"@noProductsAvailable":{
+"description": "message"
+},
+"searchItem": "Search item",
+"@searchItem":{
+"description": "Search item"
+}
+}

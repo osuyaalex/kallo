@@ -1,0 +1,14 @@
+{
+"language": "Россия",
+ "home": "Домой",
+  "search": "Поиск",
+  "profile": "Профиль",
+  "welcome": "Добро пожаловать",
+  "getStarted": "Начать",
+  "shopsNearMe": "Магазины поблизости",
+  "onlineShops": "Онлайн-магазины",
+  "tapToScanItem": "Нажмите, чтобы сканировать товар",
+  "searchForProducts": "Поиск товаров",
+  "noProductsAvailable": "Нет доступных товаров",
+  "searchItem": "Поиск товара"
+}

@@ -27,6 +27,7 @@ class _OfflineState extends State<Offline> {
     print(position.latitude);
     print(position.longitude);
 
+    if (!mounted) return;
     setState(() {
       _latitude = position.latitude.toString();
       _longitude = position.longitude.toString();
