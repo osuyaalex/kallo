@@ -10,5 +10,10 @@
 "tapToScanItem":"Ketuk untuk memindai item",
 "searchForProducts":"Cari produk",
 "noProductsAvailable":"Tidak ada produk yang tersedia",
-"searchItem":"Cari barang"
+"searchItem":"Cari barang",
+  "getStartedOne": "Temukan penawaran terbaik di toko online dan di sekitarmu",
+  "getStartedTwo": "Atur peringatan harga - Kami akan mengirim email saat harga turun",
+  "getStartedThree": "Dapatkan poin loyalitas di pengecer terpercaya",
+  "lastViewed": "Terakhir Dilihat",
+  "seeMore": "Lihat Lebih Banyak"
 }

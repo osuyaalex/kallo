@@ -10,5 +10,10 @@
 "tapToScanItem":"Tippen Sie, um Elemente zu scannen",
 "searchForProducts":"Nach Produkten suchen",
 "noProductsAvailable":"Keine Produkte verfügbar",
-"searchItem":"Elemente suchen"
+"searchItem":"Elemente suchen",
+  "getStartedOne": "Finde die besten Schnäppchen in Online-Shops und in der Nähe",
+  "getStartedTwo": "Stelle Preisalarme ein - Wir senden Ihnen eine E-Mail, wenn der Preis fällt",
+  "getStartedThree": "Verdiene Treuepunkte bei deinem vertrauenswürdigsten Händler",
+  "lastViewed": "Zuletzt angesehen",
+  "seeMore": "Mehr anzeigen"
 }

@@ -10,5 +10,10 @@
 "tapToScanItem":"Toca para escanear",
 "searchForProducts":"Buscar productos",
 "noProductsAvailable":"No hay productos disponibles",
-"searchItem":"Buscar elementos"
+"searchItem":"Buscar elementos",
+  "getStartedOne": "Encuentra las mejores ofertas en tiendas en línea y cerca de ti",
+  "getStartedTwo": "Configura alertas de precio: te enviaremos un correo electrónico cuando baje el precio",
+  "getStartedThree": "Gana puntos de lealtad en tus tiendas de confianza",
+  "lastViewed": "Visto por última vez",
+  "seeMore": "Ver más"
 }

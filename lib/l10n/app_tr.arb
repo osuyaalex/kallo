@@ -10,5 +10,10 @@
   "tapToScanItem": "Ürünü taratmak için dokunun",
   "searchForProducts": "Ürün arayın",
   "noProductsAvailable": "Mevcut ürün yok",
-  "searchItem": "Ürün ara"
+  "searchItem": "Ürün ara",
+ "getStartedOne": "Çevrimiçi ve yakındaki mağazalarda en iyi fırsatları bulun",
+ "getStartedTwo": "Fiyat uyarıları ayarlayın - Fiyat düştüğünde size e-posta gönderelim",
+ "getStartedThree": "En güvendiğiniz perakendecide sadakat puanları kazanın",
+ "lastViewed": "Son Görüntülenenler",
+ "seeMore": "Daha Fazla Gör"
 }

@@ -10,5 +10,10 @@
 "tapToScanItem":"スキャンアイテム",
 "searchForProducts":"製品を探す",
 "noProductsAvailable":"利用可能な製品はありません",
-"searchItem":"検索項目"
+"searchItem":"検索項目",
+  "getStartedOne": "オンラインショップや近くのお店で最高のお買い得品を見つけましょう",
+  "getStartedTwo": "価格アラートを設定 - 価格が下がったらメールでお知らせします",
+  "getStartedThree": "信頼できるお気に入りの小売業者でポイントを獲得しましょう",
+  "lastViewed": "最後に閲覧した商品",
+  "seeMore": "もっと見る"
 }

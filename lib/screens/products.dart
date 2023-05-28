@@ -116,7 +116,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
         appBar: AppBar(
           backgroundColor: const Color(0xfffafafa),
           elevation: 0,
-          toolbarHeight:MediaQuery.of(context).size.height*0.24,
+          toolbarHeight:MediaQuery.of(context).size.height*0.17,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -196,32 +196,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                 ],
               ),
               // Text(_scanBarcode),
-              const SizedBox(
-                height: 10,
-              ),
 
-              CustomSlidingSegmentedControl(
-                initialValue: _selectedSegment.index,
-                children:  {
-                  Segment.onlineShops.index: Text(AppLocalizations.of(context)?.onlineShops??''),
-                  Segment.shopsNearMe.index: Text(AppLocalizations.of(context)?.shopsNearMe??''),
-                },
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(15)
-                ),
-                thumbDecoration: BoxDecoration(
-                  color: const Color(0xff7F78D8).withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(15)
-                ),
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInToLinear,
-                onValueChanged: (value) {
-                  setState(() {
-                    _switchToSegment(Segment.values[value]);
-                  });
-                },
-              ),
             ],
           ) ,
         ),
@@ -230,35 +205,34 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
             builder: (context, snapshot){
               if(snapshot.hasError){
                 return Center(
-                    child: Text(snapshot.error.toString())
-                    // GestureDetector(
-                    //   onTap: (){
-                    //     scanBarcodeNormal().then((value){
-                    //       setState(() {
-                    //         products = Network().getProducts(_scanBarcode);
-                    //       });
-                    //     });
-                    //   },
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.only(bottom: 20.0),
-                    //     child: Container(
-                    //       height: 40,
-                    //       width: 120,
-                    //       padding: EdgeInsets.all(12),
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(12),
-                    //           color: const Color(0xff7F78D8).withOpacity(0.8),
-                    //       ),
-                    //       child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
-                    //         style: const TextStyle(
-                    //           color: Colors.white,
-                    //           fontWeight: FontWeight.w700,
-                    //           fontSize: 14
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // )
+                   child: GestureDetector(
+                      onTap: (){
+                        scanBarcodeNormal().then((value){
+                          setState(() {
+                            products = Network().getProducts(_scanBarcode);
+                          });
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Container(
+                          height: 40,
+                          width: 120,
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                              color: const Color(0xff7F78D8).withOpacity(0.8),
+                          ),
+                          child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                 );
               }
               if(!snapshot.hasData){
@@ -279,7 +253,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                           padding: EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: const Color(0xff7F78D8).withOpacity(0.5),
+                            color: const Color(0xff7F78D8),
                           ),
                           child:Center(
                             child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
@@ -300,21 +274,119 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                   child: CircularProgressIndicator(color: Color(0xff7F78D8),),
                 );
               }else if(snapshot.hasData){
-                return Stack(
+                return Column(
                   children: [
-                    SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1, 0),
-                        end: Offset.zero,
-                      ).animate(_animationController),
-                      child: Offline(snapshot: snapshot,),
+                    AppBar(
+                      automaticallyImplyLeading: false,
+                      backgroundColor: const Color(0xfffafafa),
+                      elevation: 0,
+                      title:  Center(
+                        child: CustomSlidingSegmentedControl(
+                          //isStretch: true,
+                          initialValue: _selectedSegment.index,
+                          children:  {
+                            Segment.onlineShops.index: SizedBox(
+                              child: _selectedSegment == Segment.onlineShops?
+                              Row(
+                                children: [
+                                  Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                  Text(
+                                    AppLocalizations.of(context)?.onlineShops??'',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800
+                                    ),
+                                  ),
+                                ],
+                              ): Row(
+                                children: [
+                                  const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                  Text(
+                                    AppLocalizations.of(context)?.onlineShops??'',
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w800
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                            ),
+                            Segment.shopsNearMe.index: SizedBox(
+                              child: _selectedSegment == Segment.shopsNearMe?
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)?.shopsNearMe??'',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w800
+                                    ),
+                                  ),
+                                ],
+                              ): Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                  ),Text(
+                                    AppLocalizations.of(context)?.shopsNearMe??'',
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w800
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          },
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade400,
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          thumbDecoration: BoxDecoration(
+                              color: const Color(0xff7F78D8),
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeInToLinear,
+                          onValueChanged: (value) {
+                            setState(() {
+                              _switchToSegment(Segment.values[value]);
+                            });
+                          },
+                        ),
+                      ),
                     ),
-                    SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset.zero,
-                        end: Offset(-1, 0),
-                      ).animate(_animationController),
-                      child: Online(snapshot: snapshot,),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.588,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          SlideTransition(
+                            position: Tween<Offset>(
+                              begin: Offset(1, 0),
+                              end: Offset.zero,
+                            ).animate(_animationController),
+                            child: Offline(snapshot: snapshot,),
+                          ),
+                          SlideTransition(
+                            position: Tween<Offset>(
+                              begin: Offset.zero,
+                              end: Offset(-1, 0),
+                            ).animate(_animationController),
+                            child: Online(snapshot: snapshot,),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 );
