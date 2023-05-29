@@ -250,8 +250,6 @@ class _GetStartedState extends State<GetStarted> {
             right: MediaQuery.of(context).size.width*0.208,
             child: GestureDetector(
             onTap: ()async{
-              // SharedPreferences prefs = await SharedPreferences.getInstance();
-              // prefs.setBool('isFirstLaunch', false);
               Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Nationality()));

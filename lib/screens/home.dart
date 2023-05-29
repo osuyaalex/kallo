@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import '../network/json.dart';
 import '../network/network.dart';
 
@@ -25,7 +25,7 @@ class _MyHomeState extends State<MyHome> {
   ];
   late Future<Koye> products = Network().getProducts('8717163545652', _code);
   String _scanBarcode = 'Unknown';
-  late String _code;
+  late String _code = '';
 
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
@@ -196,8 +196,7 @@ class _MyHomeState extends State<MyHome> {
                   width: MediaQuery.of(context).size.width *0.77,
                   child: TextFormField(
                     decoration: InputDecoration(
-                      hintText: 'Search Kallo...',
-
+                      hintText: AppLocalizations.of(context)!.searchForProducts,
                       prefixIcon: IconButton(
                           onPressed: (){},
                           icon: Icon(Icons.search)
@@ -271,8 +270,8 @@ class _MyHomeState extends State<MyHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:  [
-                    const Text('Last Viewed',
-                      style: TextStyle(
+                     Text(AppLocalizations.of(context)!.lastViewed,
+                      style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w800
                       ),
@@ -281,8 +280,8 @@ class _MyHomeState extends State<MyHome> {
                         onPressed: (){
 
                         },
-                        child: const Text('See More',
-                          style: TextStyle(
+                        child:  Text(AppLocalizations.of(context)!.seeMore,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 18
                           ),

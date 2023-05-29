@@ -30,7 +30,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
   String _scanBarcode = 'Unknown';
   GlobalKey<FormState> _key = GlobalKey<FormState>();
   late String _code = '';
-
+  bool _firstOpen = false;
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
         '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
@@ -93,7 +93,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? savedCode = prefs.getString('countryCode');
     setState(() {
-      _code = savedCode??'NG';
+     _code = savedCode??'NG';
     });
   }
   @override
@@ -197,9 +197,12 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                   ),
                   IconButton(
                       onPressed: (){
+                        _loadCountryCode();
+
                         scanBarcodeNormal().then((value){
                           setState(() {
                             products = Network().getProducts(_scanBarcode, _code);
+                            _firstOpen = true;
                           });
                         });
                       },
@@ -217,67 +220,103 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
             builder: (context, snapshot){
               if(snapshot.hasError){
                 return Center(
-                   child: GestureDetector(
-                      onTap: (){
-                        scanBarcodeNormal().then((value){
-                          setState(() {
-                            products = Network().getProducts(_scanBarcode,_code);
-                          });
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: Container(
-                          height: 40,
-                          width: 120,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                              color: const Color(0xff7F78D8).withOpacity(0.8),
-                          ),
-                          child: Text(AppLocalizations.of(context)!.tapToScanItem,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14
-                            ),
-                          ),
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                      _firstOpen ? const Text('Something went wrong',
+                         style: TextStyle(
+                             fontSize: 15,
+                             fontWeight: FontWeight.w600
+                         ),
+                       ):const Text('Scan Barcode',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600
                         ),
                       ),
-                    )
-                );
-              }
-              if(!snapshot.hasData){
-                return Center(
-                    child: GestureDetector(
-                      onTap: (){
-                        scanBarcodeNormal().then((value){
-                          setState(() {
-                            products = Network().getProducts(_scanBarcode,_code);
-                          });
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: Container(
-                          height: 40,
-                          width: 120,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: const Color(0xff7F78D8),
-                          ),
-                          child:Center(
-                            child: Text(AppLocalizations.of(context)!.tapToScanItem,
-                              style: const TextStyle(
+                       const SizedBox(
+                         height: 10,
+                       ),
+                       GestureDetector(
+                          onTap: (){
+                            _loadCountryCode();
+                            scanBarcodeNormal().then((value){
+                              setState(() {
+                                products = Network().getProducts(_scanBarcode,_code);
+                                _firstOpen = true;
+                              });
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: Container(
+                              height: 40,
+                              width: 120,
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                  color: const Color(0xff7F78D8).withOpacity(0.8),
+                              ),
+                              child: Text(AppLocalizations.of(context)!.tapToScanItem,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 14
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                     ],
+                   )
+                );
+              }
+              if(!snapshot.hasData){
+                return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('No data available currently',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            _loadCountryCode();
+                            scanBarcodeNormal().then((value){
+                              setState(() {
+                                products = Network().getProducts(_scanBarcode,_code);
+                              });
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: Container(
+                              height: 40,
+                              width: 120,
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: const Color(0xff7F78D8),
+                              ),
+                              child:Center(
+                                child: Text(AppLocalizations.of(context)!.tapToScanItem,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     )
                 );
               }

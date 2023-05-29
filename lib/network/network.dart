@@ -40,7 +40,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
   }
 
-  Future<Koye> getProductsName(String name,) async {
+  Future<Koye> getProductsName(String name, String countryCode) async {
     var jsonResponse;
 
     try {
@@ -54,7 +54,7 @@ class Network{
         body:  jsonEncode({
           "action": "gpd_and_sd",
           "query_txt": name,
-          "country": "NG"
+          "country": countryCode
         }),
 
       );

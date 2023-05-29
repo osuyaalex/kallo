@@ -20,11 +20,11 @@ enum Shops { shopsNearMe, onlineShops }
 class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMixin{
   late AnimationController _animationController;
   Shops _selectedShop = Shops.onlineShops;
-  late Future<Koye> productName = Network().getProductsName(_name);
+  late Future<Koye> productName = Network().getProductsName(_name, _code);
   late FloatingSearchBarController controller;
   List<String>? _filteredSearchHistory;
   String _name = '';
-  bool _showOfflineItems = true;
+  late String _code = '';
 
   void _switchToShop(Shops segment) {
     if (_selectedShop == segment) return;
@@ -97,15 +97,23 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
     super.didChangeDependencies();
   }
 
+  Future<void> _loadCountryCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCode = prefs.getString('countryCode');
+    setState(() {
+      _code = savedCode??'NG';
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
-    productName = Network().getProductsName(_name);
+    productName = Network().getProductsName(_name, _code);
     controller = FloatingSearchBarController();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _loadCountryCode();
     super.initState();
   }
 
@@ -201,7 +209,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                      child: _selectedShop == Shops.onlineShops?
                                      Row(
                                        children: [
-                                         Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                         const Icon(Icons.location_on, color: Colors.white, size: 19,),
                                          Text(
                                            AppLocalizations.of(context)?.onlineShops??'',
                                            style: const TextStyle(
@@ -285,7 +293,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                 children: [
                                   SlideTransition(
                                     position: Tween<Offset>(
-                                      begin: Offset(1, 0),
+                                      begin: const Offset(1, 0),
                                       end: Offset.zero,
                                     ).animate(_animationController),
                                     child: Offline(snapshot: snapshot,),
@@ -320,12 +328,14 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
               });
             },
             onSubmitted: (v){
-              _saveToRecentSearches(v);
-              setState(() {
-                _name = v;
-                productName = Network().getProductsName(v);
+              _loadCountryCode().then((value){
+                _saveToRecentSearches(v);
+                setState(() {
+                  _name = v;
+                  productName = Network().getProductsName(v, _code);
+                });
+                controller.close();
               });
-             controller.close();
             },
             actions: [
               FloatingSearchBarAction(
@@ -367,22 +377,25 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                             Icons.search,
                           ),
                           onTap: () {
-                            setState(() {
-                              _name = controller.query;
-                              productName = Network().getProductsName(controller.query);
+                            _loadCountryCode().then((value){
+                              setState(() {
+                                _name = controller.query;
+                                productName = Network().getProductsName(controller.query, _code);
+                              });
+                              controller.close();
                             });
 
-                            controller.close();
                           },
                           trailing: IconButton(
                             onPressed: () {
-                              setState(() {
-                                _name = controller.query;
-                               productName = Network().getProductsName(controller.query);
+                              _loadCountryCode().then((value){
+                                setState(() {
+                                  _name = controller.query;
+                                  productName = Network().getProductsName(controller.query, _code);
+                                });
+                                controller.close();
+                                putSearchTermFirst(controller.query);
                               });
-
-                              controller.close();
-                              putSearchTermFirst(controller.query);
                             },
                             icon: const Icon(Icons.north_west),
                           ),
@@ -422,22 +435,26 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                   ),
                                   trailing: IconButton(
                                     onPressed: () {
-                                      setState(() {
-                                        _name = term;
-                                        productName = Network().getProductsName(term);
+                                      _loadCountryCode().then((value){
+                                        setState(() {
+                                          _name = term;
+                                          productName = Network().getProductsName(term, _code);
+                                        });
+                                        controller.close();
+                                        putSearchTermFirst(term);
                                       });
-                                      controller.close();
-                                      putSearchTermFirst(term);
                                     },
                                     icon: const Icon(Icons.north_west),
                                   ),
                                   onTap: () {
-                                    setState(() {
-                                     _name = term;
-                                     productName = Network().getProductsName(term);
+                                    _loadCountryCode().then((value){
+                                      setState(() {
+                                        _name = term;
+                                        productName = Network().getProductsName(term, _code);
+                                      });
+                                      controller.close();
+                                      putSearchTermFirst(term);
                                     });
-                                    controller.close();
-                                    putSearchTermFirst(term);
                                   },
                                 ),
                               )

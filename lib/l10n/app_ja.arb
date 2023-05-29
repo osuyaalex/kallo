@@ -18,5 +18,10 @@
   "seeMore": "もっと見る",
   "selectCountry": "国を選択",
   "nationalityDes": "アイテムと価格はローカル通貨で表示されます",
-  "nationalityDesTwo": "プロフィール > 設定に移動することでいつでも変更できます"
+  "nationalityDesTwo": "プロフィール > 設定に移動することでいつでも変更できます",
+  "pickWatchItems": "時計のアイテムを選択",
+  "contactAndFeedback": "連絡先とフィードバック",
+  "settings": "設定",
+  "region": "地域",
+  "loggedIn": "ログイン中"
 }

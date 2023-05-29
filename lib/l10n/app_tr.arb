@@ -18,6 +18,10 @@
  "seeMore": "Daha Fazla Gör",
  "selectCountry": "Ülke Seç",
  "nationalityDes": "Ürünler ve fiyatlar yerel para biriminizde gösterilecektir",
- "nationalityDesTwo": "Bu ayarı istediğiniz zaman Profil > Ayarlar bölümünden değiştirebilirsiniz"
-
+ "nationalityDesTwo": "Bu ayarı istediğiniz zaman Profil > Ayarlar bölümünden değiştirebilirsiniz",
+ "pickWatchItems": "Saat öğelerini seç",
+ "contactAndFeedback": "İletişim ve Geri Bildirim",
+ "settings": "Ayarlar",
+ "region": "Bölge",
+ "loggedIn": "Giriş Yapıldı"
 }

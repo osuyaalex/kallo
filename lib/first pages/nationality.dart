@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:job/first%20pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,12 +45,12 @@ class _NationalityState extends State<Nationality> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight:MediaQuery.of(context).size.height*0.3,
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade50,
         title: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: Container(
@@ -71,8 +72,8 @@ class _NationalityState extends State<Nationality> {
             SizedBox(
               height: MediaQuery.of(context).size.height*0.1,
             ),
-            const Text('Select a Country',
-            style: TextStyle(
+             Text(AppLocalizations.of(context)!.selectCountry,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 21
             ),
@@ -122,16 +123,72 @@ class _NationalityState extends State<Nationality> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 30,
             ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Icon(Icons.play_arrow_sharp, size: 24, color: Colors.grey,),
-
+                 Icon(Icons.play_arrow_sharp, size: 24, color: Colors.grey.shade400,),
+                SizedBox(
+                  width: 200,
+                    child: Text(AppLocalizations.of(context)!.nationalityDes,
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5
+                      ),
+                    )
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 35
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(Icons.play_arrow_sharp, size: 24, color: Colors.grey.shade400,),
+                SizedBox(
+                    width: 200,
+                    child: Text(AppLocalizations.of(context)!.nationalityDesTwo,
+                      style: TextStyle(
+                          color: Colors.grey.shade500,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5
+                      ),
+                ),
+                )
               ],
             )
           ],
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: SizedBox(
+          height: 60,
+          width: 60,
+          child: InkWell(
+            onTap: ()async{
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setBool('isFirstLaunch', false);
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const Home()));
+            },
+            child: Card(
+              elevation: 6,
+              color: const Color(0xff7F78D8),
+              shadowColor: Colors.grey.shade600,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Center(
+                child: Icon(Icons.arrow_forward_ios_outlined),
+              ),
+            ),
+          ),
         ),
       ),
     );

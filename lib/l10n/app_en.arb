@@ -75,5 +75,28 @@
   "@nationalityDes": {
     "description": "Nationality description"
   },
-  "nationalityDesTwo": "You can change this anytime by going to Profile > Settings"
+  "nationalityDesTwo": "You can change this anytime by going to Profile > Settings",
+  "@nationalityDesTwo": {
+    "description": "Nationality description two"
+  },
+  "pickWatchItems": "Pick watch items",
+  "@pickWatchItems": {
+    "description": "Pick items"
+  },
+  "contactAndFeedback": "Contact & Feedback",
+  "@contactAndFeedback": {
+    "description": "Contact and feedback"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings"
+  },
+  "region": "Region",
+  "@region": {
+    "description": "Region"
+  },
+  "loggedIn": "Logged in",
+  "@loggedIn": {
+    "description": "Logged in"
+  }
 }

@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
     final List<Widget> _screens = [
       MyHome(),
       Products(),
-      Earn()
+      Profile()
     ];
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(

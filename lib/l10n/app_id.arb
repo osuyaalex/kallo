@@ -18,6 +18,10 @@
   "seeMore": "Lihat Lebih Banyak",
   "selectCountry": "Pilih Negara",
   "nationalityDes": "Barang dan harga akan ditampilkan dalam mata uang lokal Anda",
-  "nationalityDesTwo": "Anda dapat mengubah ini kapan saja dengan pergi ke Profil > Pengaturan"
-
+  "nationalityDesTwo": "Anda dapat mengubah ini kapan saja dengan pergi ke Profil > Pengaturan",
+  "pickWatchItems": "Pilih item jam tangan",
+  "contactAndFeedback": "Kontak & Umpan Balik",
+  "settings": "Pengaturan",
+  "region": "Wilayah",
+  "loggedIn": "Masuk"
 }

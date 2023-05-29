@@ -18,5 +18,11 @@
   "seeMore": "Ver más",
   "selectCountry": "Seleccionar País",
   "nationalityDes": "Los artículos y precios se mostrarán en tu moneda local",
-  "nationalityDesTwo": "Puedes cambiar esto en cualquier momento yendo a Perfil > Configuración"
+  "nationalityDesTwo": "Puedes cambiar esto en cualquier momento yendo a Perfil > Configuración",
+  "pickWatchItems": "Seleccionar elementos de reloj",
+  "contactAndFeedback": "Contacto y comentarios",
+  "settings": "Configuración",
+  "region": "Región",
+  "loggedIn": "Conectado"
+
 }

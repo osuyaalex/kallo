@@ -18,5 +18,10 @@
  "seeMore": "Zobacz więcej",
  "selectCountry": "Wybierz kraj",
  "nationalityDes": "Produkty i ceny będą wyświetlane w twojej walucie",
- "nationalityDesTwo": "Możesz to zmienić w dowolnym momencie, przechodząc do Profil > Ustawienia"
+ "nationalityDesTwo": "Możesz to zmienić w dowolnym momencie, przechodząc do Profil > Ustawienia",
+ "pickWatchItems": "Wybierz przedmioty zegarka",
+ "contactAndFeedback": "Kontakt i opinie",
+ "settings": "Ustawienia",
+ "region": "Region",
+ "loggedIn": "Zalogowany"
 }
