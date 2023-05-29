@@ -15,5 +15,8 @@
  "getStartedTwo": "Ustaw powiadomienia cenowe - Wyślemy e-mail, gdy cena spadnie",
  "getStartedThree": "Zdobądź punkty lojalnościowe u swojego najbardziej zaufanego sprzedawcy",
  "lastViewed": "Ostatnio oglądane",
- "seeMore": "Zobacz więcej"
+ "seeMore": "Zobacz więcej",
+ "selectCountry": "Wybierz kraj",
+ "nationalityDes": "Produkty i ceny będą wyświetlane w twojej walucie",
+ "nationalityDesTwo": "Możesz to zmienić w dowolnym momencie, przechodząc do Profil > Ustawienia"
 }

@@ -11,6 +11,7 @@ import 'package:job/screens/demo.dart';
 import 'package:job/screens/offline_items.dart';
 import 'package:job/screens/online_items.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Products extends StatefulWidget {
@@ -23,11 +24,12 @@ class Products extends StatefulWidget {
 
 enum Segment { shopsNearMe, onlineShops }
 class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
-  late Future<Koye> products = Network().getProducts(_scanBarcode);
+  late Future<Koye> products = Network().getProducts(_scanBarcode, '');
   late AnimationController _animationController;
   Segment _selectedSegment = Segment.onlineShops;
   String _scanBarcode = 'Unknown';
   GlobalKey<FormState> _key = GlobalKey<FormState>();
+  late String _code = '';
 
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
@@ -86,11 +88,20 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
       _animationController.forward();
     }
   }
+
+  void _loadCountryCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCode = prefs.getString('countryCode');
+    setState(() {
+      _code = savedCode??'NG';
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    products = Network().getProducts(_scanBarcode);
+    _loadCountryCode();
+    products = Network().getProducts(_scanBarcode, _code);
     products.then((value){
       print('the prducy issssssssssssssss ${value.data}');
       //snack(context, value.data.)
@@ -114,6 +125,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
       child: Scaffold(
         backgroundColor:  Color(0xfffafafa),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: const Color(0xfffafafa),
           elevation: 0,
           toolbarHeight:MediaQuery.of(context).size.height*0.17,
@@ -187,7 +199,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                       onPressed: (){
                         scanBarcodeNormal().then((value){
                           setState(() {
-                            products = Network().getProducts(_scanBarcode);
+                            products = Network().getProducts(_scanBarcode, _code);
                           });
                         });
                       },
@@ -209,7 +221,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                       onTap: (){
                         scanBarcodeNormal().then((value){
                           setState(() {
-                            products = Network().getProducts(_scanBarcode);
+                            products = Network().getProducts(_scanBarcode,_code);
                           });
                         });
                       },
@@ -223,7 +235,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                             borderRadius: BorderRadius.circular(12),
                               color: const Color(0xff7F78D8).withOpacity(0.8),
                           ),
-                          child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
+                          child: Text(AppLocalizations.of(context)!.tapToScanItem,
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
@@ -241,7 +253,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                       onTap: (){
                         scanBarcodeNormal().then((value){
                           setState(() {
-                            products = Network().getProducts(_scanBarcode);
+                            products = Network().getProducts(_scanBarcode,_code);
                           });
                         });
                       },
@@ -256,7 +268,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                             color: const Color(0xff7F78D8),
                           ),
                           child:Center(
-                            child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
+                            child: Text(AppLocalizations.of(context)!.tapToScanItem,
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,

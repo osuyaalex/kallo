@@ -1,5 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:job/first%20pages/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Nationality extends StatefulWidget {
   const Nationality({Key? key}) : super(key: key);
@@ -32,7 +34,13 @@ class _NationalityState extends State<Nationality> {
     'ES',
     'CA'
   ]; // Add the country codes you want to allow
-  String _code = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,20 +102,35 @@ class _NationalityState extends State<Nationality> {
               ),
               padding: const EdgeInsets.all(3),
               child: CountryCodePicker(
-                onChanged: (code){
-                  setState(() {
-                    _code = code.code!;
-                  });
+                onChanged: (code)async{
+                  if(code.code != null){
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('countryCode', code.code!);
+                  }else{
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('countryCode', 'NG');
+                  }
                 },
                 showFlagMain: true,
                 showFlag: true,
                 favorite: _allowedCountryCodes,
                 countryFilter: _allowedCountryCodes,
-                initialSelection: 'OM',
+                initialSelection: 'NG',
                 hideSearch: false,
                 showOnlyCountryWhenClosed: true,
+
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.play_arrow_sharp, size: 24, color: Colors.grey,),
+
+              ],
+            )
           ],
         ),
       ),

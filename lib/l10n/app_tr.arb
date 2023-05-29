@@ -15,5 +15,9 @@
  "getStartedTwo": "Fiyat uyarıları ayarlayın - Fiyat düştüğünde size e-posta gönderelim",
  "getStartedThree": "En güvendiğiniz perakendecide sadakat puanları kazanın",
  "lastViewed": "Son Görüntülenenler",
- "seeMore": "Daha Fazla Gör"
+ "seeMore": "Daha Fazla Gör",
+ "selectCountry": "Ülke Seç",
+ "nationalityDes": "Ürünler ve fiyatlar yerel para biriminizde gösterilecektir",
+ "nationalityDesTwo": "Bu ayarı istediğiniz zaman Profil > Ayarlar bölümünden değiştirebilirsiniz"
+
 }

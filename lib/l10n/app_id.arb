@@ -15,5 +15,9 @@
   "getStartedTwo": "Atur peringatan harga - Kami akan mengirim email saat harga turun",
   "getStartedThree": "Dapatkan poin loyalitas di pengecer terpercaya",
   "lastViewed": "Terakhir Dilihat",
-  "seeMore": "Lihat Lebih Banyak"
+  "seeMore": "Lihat Lebih Banyak",
+  "selectCountry": "Pilih Negara",
+  "nationalityDes": "Barang dan harga akan ditampilkan dalam mata uang lokal Anda",
+  "nationalityDesTwo": "Anda dapat mengubah ini kapan saja dengan pergi ke Profil > Pengaturan"
+
 }

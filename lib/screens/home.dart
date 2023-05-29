@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../network/json.dart';
 import '../network/network.dart';
@@ -22,8 +23,9 @@ class _MyHomeState extends State<MyHome> {
     'https://images.pexels.com/photos/3735655/pexels-photo-3735655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/2783873/pexels-photo-2783873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
-  late Future<Koye> products = Network().getProducts('8717163545652');
+  late Future<Koye> products = Network().getProducts('8717163545652', _code);
   String _scanBarcode = 'Unknown';
+  late String _code;
 
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
@@ -69,11 +71,20 @@ class _MyHomeState extends State<MyHome> {
     });
   }
 
+  void _loadCountryCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCode = prefs.getString('countryCode');
+    setState(() {
+      _code = savedCode??'NG';
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    products = Network().getProducts('6151100056436');
+    _loadCountryCode();
+    products = Network().getProducts('6151100056436',_code);
     products.then((value){
       print('the prducy issssssssssssssss ${value.data}');
     });
@@ -216,7 +227,7 @@ class _MyHomeState extends State<MyHome> {
                     onPressed: (){
                       scanBarcodeNormal().then((value){
                         setState(() {
-                          products = Network().getProducts(_scanBarcode);
+                          products = Network().getProducts(_scanBarcode,_code);
                         });
                       });
                     },

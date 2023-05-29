@@ -15,5 +15,8 @@
   "getStartedTwo": "Configura alertas de precio: te enviaremos un correo electrónico cuando baje el precio",
   "getStartedThree": "Gana puntos de lealtad en tus tiendas de confianza",
   "lastViewed": "Visto por última vez",
-  "seeMore": "Ver más"
+  "seeMore": "Ver más",
+  "selectCountry": "Seleccionar País",
+  "nationalityDes": "Los artículos y precios se mostrarán en tu moneda local",
+  "nationalityDesTwo": "Puedes cambiar esto en cualquier momento yendo a Perfil > Configuración"
 }

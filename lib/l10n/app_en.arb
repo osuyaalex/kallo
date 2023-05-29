@@ -66,5 +66,14 @@
   "seeMore": "See More",
   "@seeMore": {
     "description": "Last viewed"
-  }
+  },
+  "selectCountry": "Select Country",
+  "@selectCountry": {
+    "description": "Select a country"
+  },
+  "nationalityDes": "Items and prices will be shown in your local currency",
+  "@nationalityDes": {
+    "description": "Nationality description"
+  },
+  "nationalityDesTwo": "You can change this anytime by going to Profile > Settings"
 }

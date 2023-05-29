@@ -6,7 +6,7 @@ import 'package:job/network/json.dart';
 
 
 class Network{
-  Future<Koye> getProducts(String barcode,) async {
+  Future<Koye> getProducts(String barcode,String countryCode) async {
     var jsonResponse;
 
     try {
@@ -20,8 +20,7 @@ class Network{
         body:  jsonEncode({
           "action": "gpd_and_sd",
           "barcode": barcode,
-          //"query_txt": name,
-          "country": "NG"
+          "country": countryCode
           }),
 
       );

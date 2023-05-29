@@ -15,5 +15,8 @@
   "getStartedTwo": "価格アラートを設定 - 価格が下がったらメールでお知らせします",
   "getStartedThree": "信頼できるお気に入りの小売業者でポイントを獲得しましょう",
   "lastViewed": "最後に閲覧した商品",
-  "seeMore": "もっと見る"
+  "seeMore": "もっと見る",
+  "selectCountry": "国を選択",
+  "nationalityDes": "アイテムと価格はローカル通貨で表示されます",
+  "nationalityDesTwo": "プロフィール > 設定に移動することでいつでも変更できます"
 }

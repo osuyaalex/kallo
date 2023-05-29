@@ -15,5 +15,9 @@
   "getStartedTwo": "Stelle Preisalarme ein - Wir senden Ihnen eine E-Mail, wenn der Preis fällt",
   "getStartedThree": "Verdiene Treuepunkte bei deinem vertrauenswürdigsten Händler",
   "lastViewed": "Zuletzt angesehen",
-  "seeMore": "Mehr anzeigen"
+  "seeMore": "Mehr anzeigen",
+  "selectCountry": "Land auswählen",
+  "nationalityDes": "Artikel und Preise werden in Ihrer Landeswährung angezeigt",
+  "nationalityDesTwo": "Sie können dies jederzeit ändern, indem Sie zu Profil > Einstellungen gehen"
+
 }
