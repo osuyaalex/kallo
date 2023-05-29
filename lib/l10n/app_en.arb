@@ -46,5 +46,25 @@
 "searchItem": "Search item",
 "@searchItem":{
 "description": "Search item"
-}
+},
+  "getStartedOne": "Find the best bargains at shops online and close by",
+  "@getStartedOne": {
+    "description": "Info"
+  },
+  "getStartedTwo": "Set Price alerts - We'll email you when price drops",
+  "@getStartedTwo": {
+    "description": "More info"
+  },
+  "getStartedThree": "Earn loyalty points at your most trusted retailer",
+  "@getStartedThree": {
+    "description": "Last info"
+  },
+  "lastViewed": "Last Viewed",
+  "@LastViewed": {
+    "description": "Last viewed"
+  },
+  "seeMore": "See More",
+  "@seeMore": {
+    "description": "Last viewed"
+  }
 }

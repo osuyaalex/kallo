@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
-
-import 'home.dart';
+import 'nationality.dart';
 
 class GetStarted extends StatefulWidget {
    const GetStarted({Key? key}) : super(key: key);
@@ -29,100 +28,139 @@ class _GetStartedState extends State<GetStarted> {
     // Show the system overlays (buttons) when the page is disposed
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-
   int _activeIndex = 0;
-  final List<Widget> _screens = [
-    Container(
-      width: double.infinity,
-      color: const Color(0xff090a0c),
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 120
-            ),
-            Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
-            const SizedBox(
-              height: 28,
-            ),
-             Builder(
-               builder: (context) {
-                 return Text(AppLocalizations.of(context)!.welcome,
-            style:const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white
-            ),
-            );
-               }
-             )
-          ],
-        ),
-      ) ,
-    ),
-    Container(
-      width: double.infinity,
-      color: Color(0xff090a0c),
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-                height: 120
-            ),
-            Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
-            const SizedBox(
-              height: 28,
-            ),
-             Builder(
-                builder: (context) {
-                  return Text(AppLocalizations.of(context)!.welcome,
-                    style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white
-                    ),
-                  );
-                }
-            )
-          ],
-        ),
-      ) ,
-    ),
-    Container(
-      width: double.infinity,
-      color: Color(0xff090a0c),
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-                height: 120
-            ),
-            Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
-            const SizedBox(
-              height: 28,
-            ),
-             Builder(
-                builder: (context) {
-                  return Text(AppLocalizations.of(context)!.welcome,
-                    style:  const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white
-                    ),
-                  );
-                }
-            )
-          ],
-        ),
-      ) ,
-    ),
-  ];
+  CarouselController _carouselController = CarouselController();
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      Container(
+        width: double.infinity,
+        color: const Color(0xff1E1E1E),
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 120
+              ),
+              Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
+              const SizedBox(
+                height: 28,
+              ),
+             Text(AppLocalizations.of(context)!.welcome,
+                      style:const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                      ),
+                    ),
+              const SizedBox(
+                height: 30,
+              ),
+             SizedBox(
+                      width: 200,
+                      child: Text(AppLocalizations.of(context)!.getStartedOne,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white
+                        ),
+                      ),
+                    )
+            ],
+          ),
+        ) ,
+      ),
+      Container(
+        width: double.infinity,
+        color: Color(0xff1E1E1E),
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 120
+              ),
+              Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
+              const SizedBox(
+                height: 28,
+              ),
+              Text(AppLocalizations.of(context)!.welcome,
+                      style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                      ),
+                    ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                      width: 200,
+                      child: Text(AppLocalizations.of(context)!.getStartedTwo,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white
+                        ),
+                      ),
+                    )
+            ],
+          ),
+        ) ,
+      ),
+      Container(
+        width: double.infinity,
+        color: Color(0xff1E1E1E),
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 120
+              ),
+              Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
+              const SizedBox(
+                height: 28,
+              ),
+              Text(AppLocalizations.of(context)!.welcome,
+                      style:  const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                      ),
+                    ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                      width: 200,
+                      child: Text(AppLocalizations.of(context)!.getStartedThree,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white
+                        ),
+                      ),
+                    )
+            ],
+          ),
+        ) ,
+      ),
+    ];
+    Widget buildIndicator(){
+      return AnimatedSmoothIndicator(
+        activeIndex: _activeIndex,
+        count: screens.length,
+        effect: const JumpingDotEffect(
+            dotHeight: 10,
+            dotWidth: 10,
+            activeDotColor: Colors.white
+        ),
+      );
+    }
     return Scaffold(
       body: Stack(
         children: [
           CarouselSlider.builder(
+            carouselController: _carouselController,
             options: CarouselOptions(
                 viewportFraction: 1,
                 aspectRatio: 16/9,
@@ -137,11 +175,22 @@ class _GetStartedState extends State<GetStarted> {
                   });
                 }
             ),
-            itemCount: _screens.length,
+            itemCount: screens.length,
             itemBuilder: (BuildContext context, int index, int realIndex) {
-              return _screens[index];
+              return screens[index];
             },
           ),
+          // PageView.builder(
+          //   itemCount: screens.length,
+          //   onPageChanged: (index) {
+          //     setState(() {
+          //       _activeIndex = index;
+          //     });
+          //   },
+          //   itemBuilder: (BuildContext context, int index) {
+          //     return screens[index];
+          //   },
+          // ),
           Positioned(
             left: 16,
             top: MediaQuery.of(context).size.height / 2 - 16,
@@ -154,6 +203,7 @@ class _GetStartedState extends State<GetStarted> {
                   setState(() {
                     _activeIndex--;
                   });
+                  _carouselController.previousPage();
                 }
                     : null,
               ),
@@ -163,14 +213,15 @@ class _GetStartedState extends State<GetStarted> {
             right: 16,
             top: MediaQuery.of(context).size.height / 2 - 16,
             child: Opacity(
-              opacity: _activeIndex < _screens.length - 1 ? 1.0 : 0.0,
+              opacity: _activeIndex < screens.length - 1 ? 1.0 : 0.0,
               child: IconButton(
                 icon: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 30,),
-                onPressed: _activeIndex < _screens.length - 1
+                onPressed: _activeIndex < screens.length - 1
                     ? () {
                   setState(() {
                     _activeIndex++;
                   });
+                  _carouselController.nextPage();
                 }
                     : null,
               ),
@@ -179,7 +230,7 @@ class _GetStartedState extends State<GetStarted> {
           Positioned(
             bottom: MediaQuery.of(context).size.height*0.2,
             right: MediaQuery.of(context).size.width*0.45,
-            child: _buildIndicator(),
+            child: buildIndicator(),
           ),
           Positioned(
             bottom: MediaQuery.of(context).size.height*0.05,
@@ -190,7 +241,7 @@ class _GetStartedState extends State<GetStarted> {
               // prefs.setBool('isFirstLaunch', false);
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Home()));
+                  MaterialPageRoute(builder: (context) => const Nationality()));
             },
             child: Container(
               height: 60,
@@ -214,15 +265,5 @@ class _GetStartedState extends State<GetStarted> {
       ),
     );
   }
-  Widget _buildIndicator(){
-    return AnimatedSmoothIndicator(
-      activeIndex: _activeIndex,
-      count: _screens.length,
-      effect: const JumpingDotEffect(
-          dotHeight: 10,
-          dotWidth: 10,
-          activeDotColor: Colors.white
-      ),
-    );
-  }
+
 }

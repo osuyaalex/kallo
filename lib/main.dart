@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:job/first%20pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 import 'L10n/l10n.dart';
 import 'first pages/get_started.dart';
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate
+              GlobalWidgetsLocalizations.delegate,
+              CountryLocalizations.delegate
             ],
 
             home: isFirstLaunch?const GetStarted():const Home(),

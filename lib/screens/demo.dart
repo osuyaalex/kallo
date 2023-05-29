@@ -1,5 +1,6 @@
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
@@ -15,12 +16,29 @@ class DemoScreen extends StatefulWidget {
   State<DemoScreen> createState() => _DemoScreenState();
 }
 
-class _DemoScreenState extends State<DemoScreen> {
+enum Shops { shopsNearMe, onlineShops }
+class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMixin{
+  late AnimationController _animationController;
+  Shops _selectedShop = Shops.onlineShops;
   late Future<Koye> productName = Network().getProductsName(_name);
   late FloatingSearchBarController controller;
   List<String>? _filteredSearchHistory;
   String _name = '';
   bool _showOfflineItems = true;
+
+  void _switchToShop(Shops segment) {
+    if (_selectedShop == segment) return;
+
+    setState(() {
+      _selectedShop = segment;
+    });
+
+    if (_selectedShop == Shops.onlineShops) {
+      _animationController.reverse();
+    } else {
+      _animationController.forward();
+    }
+  }
 
   Future<List<String>> _getRecentSearchesLike(String query) async {
     if (_filteredSearchHistory == null) {
@@ -84,6 +102,10 @@ class _DemoScreenState extends State<DemoScreen> {
     // TODO: implement initState
     productName = Network().getProductsName(_name);
     controller = FloatingSearchBarController();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
     super.initState();
   }
 
@@ -92,6 +114,7 @@ class _DemoScreenState extends State<DemoScreen> {
     // TODO: implement dispose
     super.dispose();
     controller.dispose();
+    _animationController.dispose();
   }
 
   @override
@@ -170,39 +193,112 @@ class _DemoScreenState extends State<DemoScreen> {
                              backgroundColor: Colors.white,
                              elevation: 0,
                              title: Center(
-                               child: FlutterToggleTab(
-                                 height: MediaQuery.of(context).size.height*0.055,
-                                 width: 70,
-                                 borderRadius: 30,
-                                 selectedTextStyle: const TextStyle(
-                                     color: Colors.white,
-                                     fontSize: 12,
-                                     fontWeight: FontWeight.w600
+                               child: CustomSlidingSegmentedControl(
+                                 //isStretch: true,
+                                 initialValue: _selectedShop.index,
+                                 children:  {
+                                   Shops.onlineShops.index: SizedBox(
+                                     child: _selectedShop == Shops.onlineShops?
+                                     Row(
+                                       children: [
+                                         Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                         Text(
+                                           AppLocalizations.of(context)?.onlineShops??'',
+                                           style: const TextStyle(
+                                               color: Colors.white,
+                                               fontSize: 16,
+                                               fontWeight: FontWeight.w800
+                                           ),
+                                         ),
+                                       ],
+                                     ): Row(
+                                       children: [
+                                         const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                         Text(
+                                           AppLocalizations.of(context)?.onlineShops??'',
+                                           style: const TextStyle(
+                                               color: Colors.black,
+                                               fontSize: 16,
+                                               fontWeight: FontWeight.w800
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+
+                                   ),
+                                   Shops.shopsNearMe.index: SizedBox(
+                                     child: _selectedShop == Shops.shopsNearMe?
+                                     Row(
+                                       children: [
+                                         Padding(
+                                           padding: const EdgeInsets.only(right: 4.0),
+                                           child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                         ),
+                                         Text(
+                                           AppLocalizations.of(context)?.shopsNearMe??'',
+                                           style: const TextStyle(
+                                               color: Colors.white,
+                                               fontSize: 16,
+                                               fontWeight: FontWeight.w800
+                                           ),
+                                         ),
+                                       ],
+                                     ): Row(
+                                       children: [
+                                         Padding(
+                                           padding: const EdgeInsets.only(right: 4.0),
+                                           child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                         ),                                  Text(
+                                           AppLocalizations.of(context)?.shopsNearMe??'',
+                                           style: const TextStyle(
+                                               color: Colors.black,
+                                               fontSize: 16,
+                                               fontWeight: FontWeight.w800
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                   ),
+                                 },
+                                 decoration: BoxDecoration(
+                                     color: Colors.grey.shade400,
+                                     borderRadius: BorderRadius.circular(20)
                                  ),
-                                 unSelectedTextStyle: const TextStyle(
-                                     color: Colors.black,
-                                     fontSize: 12,
-                                     fontWeight: FontWeight.w400
+                                 thumbDecoration: BoxDecoration(
+                                     color: const Color(0xff7F78D8),
+                                     borderRadius: BorderRadius.circular(20)
                                  ),
-                                 selectedBackgroundColors: const [
-                                   Color(0xff7F78D8)
-                                 ],
-                                 labels: const ["Shops near me", "Online shops"],
-                                 icons: [Icons.location_on_outlined, Icons.directions_bus_rounded],
-                                 selectedIndex: _showOfflineItems ? 0 : 1,
-                                 selectedLabelIndex: (index) {
+                                 duration: const Duration(milliseconds: 200),
+                                 curve: Curves.easeInToLinear,
+                                 onValueChanged: (value) {
                                    setState(() {
-                                     _showOfflineItems = index == 0;
+                                     _switchToShop(Shops.values[value]);
                                    });
                                  },
                                ),
                              ),
                            ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height*0.629,
+                              height: MediaQuery.of(context).size.height*0.601,
                               width: double.infinity,
-                              child: _showOfflineItems ?
-                                  Offline(snapshot: snapshot,):Online(snapshot: snapshot,)
+                              child: Stack(
+                                children: [
+                                  SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1, 0),
+                                      end: Offset.zero,
+                                    ).animate(_animationController),
+                                    child: Offline(snapshot: snapshot,),
+                                  ),
+                                  SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset.zero,
+                                      end: Offset(-1, 0),
+                                    ).animate(_animationController),
+                                    child: Online(snapshot: snapshot,),
+                                  ),
+                                ],
+                              ),
                             )
                           ],
                         );
