@@ -15,5 +15,17 @@
   "getStartedTwo": "Imposta avvisi di prezzo - Ti invieremo un'email quando il prezzo scende",
   "getStartedThree": "Guadagna punti fedeltà presso il tuo rivenditore di fiducia",
   "lastViewed": "Ultimo Visualizzato",
-  "seeMore": "Vedi Altro"
+  "seeMore": "Vedi Altro",
+  "selectCountry": "Seleziona Paese",
+  "nationalityDes": "Gli articoli e i prezzi verranno mostrati nella tua valuta locale",
+  "nationalityDesTwo": "Puoi cambiarlo in qualsiasi momento andando su Profilo > Impostazioni",
+  "pickWatchItems": "Scegli articoli da orologio",
+  "contactAndFeedback": "Contatto e feedback",
+  "settings": "Impostazioni",
+  "region": "Regione",
+  "loggedIn": "Accesso effettuato",
+  "somethingWentWrong": "Qualcosa è andato storto",
+  "scanBarcode": "Scansiona il codice a barre",
+  "dataUnavailable": "Dati non disponibili al momento",
+  "processingData": "Elaborazione dati, attendere..."
 }

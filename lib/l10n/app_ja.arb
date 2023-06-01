@@ -15,5 +15,17 @@
   "getStartedTwo": "価格アラートを設定 - 価格が下がったらメールでお知らせします",
   "getStartedThree": "信頼できるお気に入りの小売業者でポイントを獲得しましょう",
   "lastViewed": "最後に閲覧した商品",
-  "seeMore": "もっと見る"
+  "seeMore": "もっと見る",
+  "selectCountry": "国を選択",
+  "nationalityDes": "アイテムと価格はローカル通貨で表示されます",
+  "nationalityDesTwo": "プロフィール > 設定に移動することでいつでも変更できます",
+  "pickWatchItems": "時計のアイテムを選択",
+  "contactAndFeedback": "連絡先とフィードバック",
+  "settings": "設定",
+  "region": "地域",
+  "loggedIn": "ログイン中",
+  "somethingWentWrong": "何かがうまくいかなかった",
+  "scanBarcode": "バーコードをスキャンする",
+  "dataUnavailable": "現在データは利用できません",
+  "processingData": "データ処理中です、お待ちください..."
 }

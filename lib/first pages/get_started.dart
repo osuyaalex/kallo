@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'nationality.dart';
@@ -65,7 +66,11 @@ class _GetStartedState extends State<GetStarted> {
                             color: Colors.white
                         ),
                       ),
-                    )
+                    ),
+              const SizedBox(
+                height: 15,
+              ),
+              SvgPicture.asset('asset/Best price 1.svg', height: MediaQuery.of(context).size.height*0.36,)
             ],
           ),
         ) ,
@@ -94,7 +99,7 @@ class _GetStartedState extends State<GetStarted> {
                 height: 30,
               ),
               SizedBox(
-                      width: 200,
+                      width: 218,
                       child: Text(AppLocalizations.of(context)!.getStartedTwo,
                         style: const TextStyle(
                             fontSize: 20,
@@ -102,7 +107,11 @@ class _GetStartedState extends State<GetStarted> {
                             color: Colors.white
                         ),
                       ),
-                    )
+                    ),
+              const SizedBox(
+                height: 15,
+              ),
+              SvgPicture.asset('asset/Price notifications 1.svg', height: MediaQuery.of(context).size.height*0.36,)
             ],
           ),
         ) ,
@@ -139,7 +148,11 @@ class _GetStartedState extends State<GetStarted> {
                             color: Colors.white
                         ),
                       ),
-                    )
+                    ),
+              const SizedBox(
+                height: 15,
+              ),
+              SvgPicture.asset('asset/loyalty 1.svg', height: MediaQuery.of(context).size.height*0.36,)
             ],
           ),
         ) ,
@@ -237,8 +250,6 @@ class _GetStartedState extends State<GetStarted> {
             right: MediaQuery.of(context).size.width*0.208,
             child: GestureDetector(
             onTap: ()async{
-              // SharedPreferences prefs = await SharedPreferences.getInstance();
-              // prefs.setBool('isFirstLaunch', false);
               Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Nationality()));

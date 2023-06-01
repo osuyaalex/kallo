@@ -15,5 +15,17 @@
   "getStartedTwo": "Stel pryswaarskuwings in - Ons stuur 'n e-pos as die prys daal",
   "getStartedThree": "Verdien lojaliteitspunte by jou mees vertroude kleinhandelaar",
   "lastViewed": "Laas Bekeken",
-  "seeMore": "Sien Meer"
+  "seeMore": "Sien Meer",
+  "selectCountry": "Kies Land",
+  "nationalityDes": "Items en pryse sal in jou plaaslike geldeenheid vertoon word",
+  "nationalityDesTwo": "Jy kan dit enige tyd verander deur na Profiel > Instellings te gaan",
+  "pickWatchItems": "Kies horlosie-items",
+  "contactAndFeedback": "Kontak & Terugvoer",
+  "settings": "Instellings",
+  "region": "Streek",
+  "loggedIn": "Aangeteken",
+  "somethingWentWrong": "Iets het verkeerd gegaan",
+  "scanBarcode": "Skandeer Strepieskode",
+  "dataUnavailable": "Geen beskikbare data tans",
+  "processingData": "Verwerk data, wag asseblief..."
 }

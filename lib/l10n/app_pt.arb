@@ -15,5 +15,17 @@
  "getStartedTwo": "Defina alertas de preço - Enviaremos um e-mail quando o preço baixar",
  "getStartedThree": "Ganhe pontos de fidelidade no seu varejista mais confiável",
  "lastViewed": "Últimos Visualizados",
- "seeMore": "Ver Mais"
+ "seeMore": "Ver Mais",
+ "selectCountry": "Selecionar País",
+ "nationalityDes": "Os itens e preços serão mostrados na sua moeda local",
+ "nationalityDesTwo": "Você pode alterar isso a qualquer momento indo para Perfil > Configurações",
+ "pickWatchItems": "Escolha itens de relógio",
+ "contactAndFeedback": "Contato e Feedback",
+ "settings": "Configurações",
+ "region": "Região",
+ "loggedIn": "Logado",
+ "somethingWentWrong": "Algo deu errado",
+ "scanBarcode": "Escanear código de barras",
+ "dataUnavailable": "Dados indisponíveis no momento",
+ "processingData": "Processando dados, por favor aguarde..."
 }

@@ -66,5 +66,53 @@
   "seeMore": "See More",
   "@seeMore": {
     "description": "Last viewed"
+  },
+  "selectCountry": "Select Country",
+  "@selectCountry": {
+    "description": "Select a country"
+  },
+  "nationalityDes": "Items and prices will be shown in your local currency",
+  "@nationalityDes": {
+    "description": "Nationality description"
+  },
+  "nationalityDesTwo": "You can change this anytime by going to Profile > Settings",
+  "@nationalityDesTwo": {
+    "description": "Nationality description two"
+  },
+  "pickWatchItems": "Pick watch items",
+  "@pickWatchItems": {
+    "description": "Pick items"
+  },
+  "contactAndFeedback": "Contact & Feedback",
+  "@contactAndFeedback": {
+    "description": "Contact and feedback"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings"
+  },
+  "region": "Region",
+  "@region": {
+    "description": "Region"
+  },
+  "loggedIn": "Logged in",
+  "@loggedIn": {
+    "description": "Logged in"
+  },
+  "somethingWentWrong": "Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Error message"
+  },
+  "scanBarcode": "Scan Barcode",
+  "@scanBarcode": {
+    "description": "Scan"
+  },
+  "dataUnavailable": "No data available currently",
+  "@dataUnavailable": {
+    "description": "Data unavailable"
+  },
+  "processingData": "Processing data, please wait...",
+  "@processingData": {
+    "description": "Processing data"
   }
 }

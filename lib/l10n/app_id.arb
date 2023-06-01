@@ -15,5 +15,17 @@
   "getStartedTwo": "Atur peringatan harga - Kami akan mengirim email saat harga turun",
   "getStartedThree": "Dapatkan poin loyalitas di pengecer terpercaya",
   "lastViewed": "Terakhir Dilihat",
-  "seeMore": "Lihat Lebih Banyak"
+  "seeMore": "Lihat Lebih Banyak",
+  "selectCountry": "Pilih Negara",
+  "nationalityDes": "Barang dan harga akan ditampilkan dalam mata uang lokal Anda",
+  "nationalityDesTwo": "Anda dapat mengubah ini kapan saja dengan pergi ke Profil > Pengaturan",
+  "pickWatchItems": "Pilih item jam tangan",
+  "contactAndFeedback": "Kontak & Umpan Balik",
+  "settings": "Pengaturan",
+  "region": "Wilayah",
+  "loggedIn": "Masuk",
+  "somethingWentWrong": "Qualcosa è andato storto",
+  "scanBarcode": "Scansiona il codice a barre",
+  "dataUnavailable": "Dati non disponibili al momento",
+  "processingData": "Memproses data, harap tunggu..."
 }

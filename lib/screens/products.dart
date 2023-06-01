@@ -11,6 +11,7 @@ import 'package:job/screens/demo.dart';
 import 'package:job/screens/offline_items.dart';
 import 'package:job/screens/online_items.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Products extends StatefulWidget {
@@ -23,12 +24,13 @@ class Products extends StatefulWidget {
 
 enum Segment { shopsNearMe, onlineShops }
 class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
-  late Future<Koye> products = Network().getProducts(_scanBarcode);
+  late Future<Koye> products = Network().getProducts(_scanBarcode, '');
   late AnimationController _animationController;
   Segment _selectedSegment = Segment.onlineShops;
   String _scanBarcode = 'Unknown';
   GlobalKey<FormState> _key = GlobalKey<FormState>();
-
+  late String _code = '';
+  bool _firstOpen = false;
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
         '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
@@ -86,11 +88,20 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
       _animationController.forward();
     }
   }
+
+  void _loadCountryCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCode = prefs.getString('countryCode');
+    setState(() {
+     _code = savedCode??'NG';
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    products = Network().getProducts(_scanBarcode);
+    _loadCountryCode();
+    products = Network().getProducts(_scanBarcode, _code);
     products.then((value){
       print('the prducy issssssssssssssss ${value.data}');
       //snack(context, value.data.)
@@ -114,6 +125,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
       child: Scaffold(
         backgroundColor:  Color(0xfffafafa),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: const Color(0xfffafafa),
           elevation: 0,
           toolbarHeight:MediaQuery.of(context).size.height*0.17,
@@ -153,7 +165,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                     },
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height*0.06,
-                      width: MediaQuery.of(context).size.width *0.77,
+                      width: MediaQuery.of(context).size.width *0.7,
                       child: TextFormField(
                         enabled: false,
                         onChanged: null,
@@ -185,18 +197,24 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                   ),
                   IconButton(
                       onPressed: (){
+                        _loadCountryCode();
+
                         scanBarcodeNormal().then((value){
                           setState(() {
-                            products = Network().getProducts(_scanBarcode);
+                            products = Network().getProducts(_scanBarcode, _code);
+                            _firstOpen = true;
                           });
                         });
                       },
                       icon: SvgPicture.asset('asset/barcode-scan-svgrepo-com.svg')
                   ),
+                  InkWell(
+                    onTap: (){},
+                      child: Icon(Icons.camera_alt_outlined, color: Colors.black,)
+                  )
+
                 ],
               ),
-              // Text(_scanBarcode),
-
             ],
           ) ,
         ),
@@ -205,67 +223,110 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
             builder: (context, snapshot){
               if(snapshot.hasError){
                 return Center(
-                   child: GestureDetector(
-                      onTap: (){
-                        scanBarcodeNormal().then((value){
-                          setState(() {
-                            products = Network().getProducts(_scanBarcode);
-                          });
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: Container(
-                          height: 40,
-                          width: 120,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                              color: const Color(0xff7F78D8).withOpacity(0.8),
-                          ),
-                          child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14
-                            ),
-                          ),
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                      _firstOpen ?  Text(AppLocalizations.of(context)!.somethingWentWrong,
+                         style: const TextStyle(
+                             fontSize: 15,
+                             fontWeight: FontWeight.w600
+                         ),
+                       ): Text(AppLocalizations.of(context)!.scanBarcode,
+                        style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600
                         ),
                       ),
-                    )
-                );
-              }
-              if(!snapshot.hasData){
-                return Center(
-                    child: GestureDetector(
-                      onTap: (){
-                        scanBarcodeNormal().then((value){
-                          setState(() {
-                            products = Network().getProducts(_scanBarcode);
-                          });
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: Container(
-                          height: 40,
-                          width: 120,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: const Color(0xff7F78D8),
-                          ),
-                          child:Center(
-                            child: Text(AppLocalizations.of(context)!.tapToScanItem??'',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14
+                       const SizedBox(
+                         height: 10,
+                       ),
+                       GestureDetector(
+                          onTap: (){
+                            _loadCountryCode();
+                            scanBarcodeNormal().then((value){
+                              setState(() {
+                                products = Network().getProducts(_scanBarcode,_code);
+                                _firstOpen = true;
+                              });
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: Container(
+                              height: 50,
+                              width: 150,
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                  color: const Color(0xff7F78D8).withOpacity(0.8),
+                              ),
+                              child: Center(
+                                child: Text(AppLocalizations.of(context)!.tapToScanItem,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 17
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                     ],
+                   )
+                );
+              }
+              if(!snapshot.hasData){
+                return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                         _firstOpen?Text(AppLocalizations.of(context)!.dataUnavailable,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ):Text(AppLocalizations.of(context)!.processingData,
+                           style: const TextStyle(
+                               fontSize: 15,
+                               fontWeight: FontWeight.w600
+                           ),
+                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            _loadCountryCode();
+                            scanBarcodeNormal().then((value){
+                              setState(() {
+                                products = Network().getProducts(_scanBarcode,_code);
+                              });
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: Container(
+                              height: 50,
+                              width: 150,
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: const Color(0xff7F78D8),
+                              ),
+                              child:Center(
+                                child: Text(AppLocalizations.of(context)!.tapToScanItem,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 17
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     )
                 );
               }
@@ -367,7 +428,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*0.588,
+                      height: MediaQuery.of(context).size.height*0.65,
                       width: double.infinity,
                       child: Stack(
                         children: [

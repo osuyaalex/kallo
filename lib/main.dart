@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:job/first%20pages/home.dart';
+import 'package:job/providers/country_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
@@ -13,7 +15,14 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
-  runApp( MyApp(isFirstLaunch: isFirstLaunch,));
+  runApp( MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_){
+        return CountryProvider();
+      })
+    ],
+      child: MyApp(isFirstLaunch: isFirstLaunch,)
+  ));
 }
 
 class MyApp extends StatelessWidget {

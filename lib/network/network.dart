@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:job/network/json.dart';
 
@@ -6,7 +7,7 @@ import 'package:job/network/json.dart';
 
 
 class Network{
-  Future<Koye> getProducts(String barcode,) async {
+  Future<Koye> getProducts(String barcode,String countryCode) async {
     var jsonResponse;
 
     try {
@@ -20,8 +21,7 @@ class Network{
         body:  jsonEncode({
           "action": "gpd_and_sd",
           "barcode": barcode,
-          //"query_txt": name,
-          "country": "NG"
+          "country": countryCode
           }),
 
       );
@@ -41,7 +41,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
   }
 
-  Future<Koye> getProductsName(String name,) async {
+  Future<Koye> getProductsName(String name, String countryCode,) async {
     var jsonResponse;
 
     try {
@@ -55,7 +55,7 @@ class Network{
         body:  jsonEncode({
           "action": "gpd_and_sd",
           "query_txt": name,
-          "country": "NG"
+          "country": countryCode
         }),
 
       );
@@ -73,7 +73,6 @@ class Network{
     }
 
     return Koye.fromJson(jsonResponse);
-
 
   }
 }

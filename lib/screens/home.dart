@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import '../network/json.dart';
 import '../network/network.dart';
 
@@ -22,8 +23,9 @@ class _MyHomeState extends State<MyHome> {
     'https://images.pexels.com/photos/3735655/pexels-photo-3735655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/2783873/pexels-photo-2783873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
-  late Future<Koye> products = Network().getProducts('8717163545652');
+  late Future<Koye> products = Network().getProducts('8717163545652', _code);
   String _scanBarcode = 'Unknown';
+  late String _code = '';
 
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
@@ -69,11 +71,20 @@ class _MyHomeState extends State<MyHome> {
     });
   }
 
+  void _loadCountryCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCode = prefs.getString('countryCode');
+    setState(() {
+      _code = savedCode??'NG';
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    products = Network().getProducts('6151100056436');
+    _loadCountryCode();
+    products = Network().getProducts('6151100056436',_code);
     products.then((value){
       print('the prducy issssssssssssssss ${value.data}');
     });
@@ -95,7 +106,7 @@ class _MyHomeState extends State<MyHome> {
               shadowColor: Colors.grey,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset('asset/pexels-godisable-jacob-1191529.jpeg', fit: BoxFit.cover,),
+                child: Image.network('https://images.pexels.com/photos/3735655/pexels-photo-3735655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
               ),
             ),
           ),
@@ -112,7 +123,7 @@ class _MyHomeState extends State<MyHome> {
           shadowColor: Colors.grey,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset('asset/pexels-rachel-claire-5865340.jpeg', fit: BoxFit.cover,),
+            child: Image.network('https://images.pexels.com/photos/3685523/pexels-photo-3685523.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
           ),
         ),
       ),
@@ -127,7 +138,7 @@ class _MyHomeState extends State<MyHome> {
           shadowColor: Colors.grey,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset('asset/pexels-markus-winkler-12100420.jpeg', fit: BoxFit.cover,),
+            child: Image.network('https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
           ),
         ),
       ),
@@ -142,7 +153,7 @@ class _MyHomeState extends State<MyHome> {
           shadowColor: Colors.grey,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset('asset/pexels-mateusz-dach-2547541.jpeg', fit: BoxFit.cover,),
+            child: Image.network('https://images.pexels.com/photos/2783873/pexels-photo-2783873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
           ),
         ),
       ),
@@ -185,8 +196,7 @@ class _MyHomeState extends State<MyHome> {
                   width: MediaQuery.of(context).size.width *0.77,
                   child: TextFormField(
                     decoration: InputDecoration(
-                      hintText: 'Search Kallo...',
-
+                      hintText: AppLocalizations.of(context)!.searchForProducts,
                       prefixIcon: IconButton(
                           onPressed: (){},
                           icon: Icon(Icons.search)
@@ -216,7 +226,7 @@ class _MyHomeState extends State<MyHome> {
                     onPressed: (){
                       scanBarcodeNormal().then((value){
                         setState(() {
-                          products = Network().getProducts(_scanBarcode);
+                          products = Network().getProducts(_scanBarcode,_code);
                         });
                       });
                     },
@@ -260,8 +270,8 @@ class _MyHomeState extends State<MyHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:  [
-                    const Text('Last Viewed',
-                      style: TextStyle(
+                     Text(AppLocalizations.of(context)!.lastViewed,
+                      style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w800
                       ),
@@ -270,8 +280,8 @@ class _MyHomeState extends State<MyHome> {
                         onPressed: (){
 
                         },
-                        child: const Text('See More',
-                          style: TextStyle(
+                        child:  Text(AppLocalizations.of(context)!.seeMore,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 18
                           ),

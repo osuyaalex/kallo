@@ -15,5 +15,17 @@
  "getStartedTwo": "Fiyat uyarıları ayarlayın - Fiyat düştüğünde size e-posta gönderelim",
  "getStartedThree": "En güvendiğiniz perakendecide sadakat puanları kazanın",
  "lastViewed": "Son Görüntülenenler",
- "seeMore": "Daha Fazla Gör"
+ "seeMore": "Daha Fazla Gör",
+ "selectCountry": "Ülke Seç",
+ "nationalityDes": "Ürünler ve fiyatlar yerel para biriminizde gösterilecektir",
+ "nationalityDesTwo": "Bu ayarı istediğiniz zaman Profil > Ayarlar bölümünden değiştirebilirsiniz",
+ "pickWatchItems": "Saat öğelerini seç",
+ "contactAndFeedback": "İletişim ve Geri Bildirim",
+ "settings": "Ayarlar",
+ "region": "Bölge",
+ "loggedIn": "Giriş Yapıldı",
+ "somethingWentWrong": "Bir şeyler yanlış gitti",
+ "scanBarcode": "Barkod Tara",
+ "dataUnavailable": "Şu anda veri yok",
+ "processingData": "Veriler işleniyor, lütfen bekleyin..."
 }
