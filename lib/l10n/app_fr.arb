@@ -23,5 +23,9 @@
   "contactAndFeedback": "Contact et retour d'information",
   "settings": "Paramètres",
   "region": "Région",
-  "loggedIn": "Connecté"
+  "loggedIn": "Connecté",
+  "somethingWentWrong": "Quelque chose s'est mal passé",
+  "scanBarcode": "Scanner le code-barres",
+  "dataUnavailable": "Pas de données disponibles actuellement",
+  "processingData": "Traitement des données, veuillez patienter..."
 }

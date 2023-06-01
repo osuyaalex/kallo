@@ -106,7 +106,7 @@ class _MyHomeState extends State<MyHome> {
               shadowColor: Colors.grey,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset('asset/pexels-godisable-jacob-1191529.jpeg', fit: BoxFit.cover,),
+                child: Image.network('https://images.pexels.com/photos/3735655/pexels-photo-3735655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
               ),
             ),
           ),
@@ -123,7 +123,7 @@ class _MyHomeState extends State<MyHome> {
           shadowColor: Colors.grey,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset('asset/pexels-rachel-claire-5865340.jpeg', fit: BoxFit.cover,),
+            child: Image.network('https://images.pexels.com/photos/3685523/pexels-photo-3685523.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
           ),
         ),
       ),
@@ -138,7 +138,7 @@ class _MyHomeState extends State<MyHome> {
           shadowColor: Colors.grey,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset('asset/pexels-markus-winkler-12100420.jpeg', fit: BoxFit.cover,),
+            child: Image.network('https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
           ),
         ),
       ),
@@ -153,7 +153,7 @@ class _MyHomeState extends State<MyHome> {
           shadowColor: Colors.grey,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset('asset/pexels-mateusz-dach-2547541.jpeg', fit: BoxFit.cover,),
+            child: Image.network('https://images.pexels.com/photos/2783873/pexels-photo-2783873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', fit: BoxFit.cover,),
           ),
         ),
       ),

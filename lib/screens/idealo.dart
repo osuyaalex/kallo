@@ -83,7 +83,7 @@ class _ProfileState extends State<Profile> {
                     ExpansionTile(
                       textColor: Colors.black,
                       iconColor: Colors.black,
-                      leading: const Icon(Icons.remove_red_eye_outlined, color: Colors.black,),
+                      leading: const Icon(Icons.phone, color: Colors.black,),
                       title: Text(AppLocalizations.of(context)!.contactAndFeedback),
                       shape: Border.all(color: Colors.transparent),
                       children: [],
@@ -91,7 +91,7 @@ class _ProfileState extends State<Profile> {
                     ExpansionTile(
                       textColor: Colors.black,
                       iconColor: Colors.black,
-                      leading: const Icon(Icons.remove_red_eye_outlined, color: Colors.black,),
+                      leading: const Icon(Icons.settings, color: Colors.black,),
                       title: Text(AppLocalizations.of(context)!.settings),
                       shape: Border.all(color: Colors.transparent),
                       children: [],
@@ -122,12 +122,10 @@ class _ProfileState extends State<Profile> {
                   },
                   showFlagMain: true,
                   showFlag: true,
-                  favorite: _allowedCountryCodes,
                   countryFilter: _allowedCountryCodes,
                   initialSelection:_getInitialCountry,
                   hideSearch: false,
                   showOnlyCountryWhenClosed: true,
-
                 ),
               ],
             ),

@@ -140,12 +140,6 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
               },
               icon: const Icon(Icons.arrow_back_ios, size: 23, color: Colors.black,)
           ),
-          actions: [
-            IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.menu, size: 23, color: Colors.black,)
-            ),
-          ],
 
         ),
         backgroundColor: Colors.white,

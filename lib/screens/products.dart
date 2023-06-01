@@ -165,7 +165,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                     },
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height*0.06,
-                      width: MediaQuery.of(context).size.width *0.77,
+                      width: MediaQuery.of(context).size.width *0.7,
                       child: TextFormField(
                         enabled: false,
                         onChanged: null,
@@ -208,10 +208,13 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                       },
                       icon: SvgPicture.asset('asset/barcode-scan-svgrepo-com.svg')
                   ),
+                  InkWell(
+                    onTap: (){},
+                      child: Icon(Icons.camera_alt_outlined, color: Colors.black,)
+                  )
+
                 ],
               ),
-              // Text(_scanBarcode),
-
             ],
           ) ,
         ),
@@ -223,13 +226,13 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                    child: Column(
                      mainAxisAlignment: MainAxisAlignment.center,
                      children: [
-                      _firstOpen ? const Text('Something went wrong',
-                         style: TextStyle(
+                      _firstOpen ?  Text(AppLocalizations.of(context)!.somethingWentWrong,
+                         style: const TextStyle(
                              fontSize: 15,
                              fontWeight: FontWeight.w600
                          ),
-                       ):const Text('Scan Barcode',
-                        style: TextStyle(
+                       ): Text(AppLocalizations.of(context)!.scanBarcode,
+                        style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600
                         ),
@@ -250,18 +253,20 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 20.0),
                             child: Container(
-                              height: 40,
-                              width: 120,
+                              height: 50,
+                              width: 150,
                               padding: EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                   color: const Color(0xff7F78D8).withOpacity(0.8),
                               ),
-                              child: Text(AppLocalizations.of(context)!.tapToScanItem,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14
+                              child: Center(
+                                child: Text(AppLocalizations.of(context)!.tapToScanItem,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 17
+                                  ),
                                 ),
                               ),
                             ),
@@ -276,12 +281,17 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('No data available currently',
-                          style: TextStyle(
+                         _firstOpen?Text(AppLocalizations.of(context)!.dataUnavailable,
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600
                           ),
-                        ),
+                        ):Text(AppLocalizations.of(context)!.processingData,
+                           style: const TextStyle(
+                               fontSize: 15,
+                               fontWeight: FontWeight.w600
+                           ),
+                         ),
                         const SizedBox(
                           height: 10,
                         ),
@@ -297,8 +307,8 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 20.0),
                             child: Container(
-                              height: 40,
-                              width: 120,
+                              height: 50,
+                              width: 150,
                               padding: EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
@@ -309,7 +319,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 14
+                                      fontSize: 17
                                   ),
                                 ),
                               ),
@@ -418,7 +428,7 @@ class _ProductsState extends State<Products>with SingleTickerProviderStateMixin{
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*0.588,
+                      height: MediaQuery.of(context).size.height*0.65,
                       width: double.infinity,
                       child: Stack(
                         children: [

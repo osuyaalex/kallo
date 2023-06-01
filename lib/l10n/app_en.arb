@@ -98,5 +98,21 @@
   "loggedIn": "Logged in",
   "@loggedIn": {
     "description": "Logged in"
+  },
+  "somethingWentWrong": "Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Error message"
+  },
+  "scanBarcode": "Scan Barcode",
+  "@scanBarcode": {
+    "description": "Scan"
+  },
+  "dataUnavailable": "No data available currently",
+  "@dataUnavailable": {
+    "description": "Data unavailable"
+  },
+  "processingData": "Processing data, please wait...",
+  "@processingData": {
+    "description": "Processing data"
   }
 }

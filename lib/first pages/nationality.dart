@@ -114,7 +114,6 @@ class _NationalityState extends State<Nationality> {
                 },
                 showFlagMain: true,
                 showFlag: true,
-                favorite: _allowedCountryCodes,
                 countryFilter: _allowedCountryCodes,
                 initialSelection: 'NG',
                 hideSearch: false,

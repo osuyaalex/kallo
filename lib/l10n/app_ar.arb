@@ -23,5 +23,9 @@
   "contactAndFeedback": "اتصل وأعط تعليقك",
   "settings": "الإعدادات",
   "region": "المنطقة",
-  "loggedIn": "تم تسجيل الدخول"
+  "loggedIn": "تم تسجيل الدخول",
+  "somethingWentWrong": "حدث خطأ ما",
+  "scanBarcode": "مسح الباركود",
+  "dataUnavailable": "لا تتوفر بيانات حاليًا",
+  "processingData": "جاري معالجة البيانات، يرجى الانتظار..."
 }

@@ -23,5 +23,9 @@
   "contactAndFeedback": "문의 및 피드백",
   "settings": "설정",
   "region": "지역",
-  "loggedIn": "로그인됨"
+  "loggedIn": "로그인됨",
+  "somethingWentWrong": "문제가 발생했습니다",
+  "scanBarcode": "바코드 스캔",
+  "dataUnavailable": "현재 데이터를 사용할 수 없습니다",
+  "processingData": "데이터 처리 중입니다. 잠시 기다려주세요..."
 }

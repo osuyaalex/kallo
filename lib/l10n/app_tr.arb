@@ -23,5 +23,9 @@
  "contactAndFeedback": "İletişim ve Geri Bildirim",
  "settings": "Ayarlar",
  "region": "Bölge",
- "loggedIn": "Giriş Yapıldı"
+ "loggedIn": "Giriş Yapıldı",
+ "somethingWentWrong": "Bir şeyler yanlış gitti",
+ "scanBarcode": "Barkod Tara",
+ "dataUnavailable": "Şu anda veri yok",
+ "processingData": "Veriler işleniyor, lütfen bekleyin..."
 }

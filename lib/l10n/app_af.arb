@@ -23,5 +23,9 @@
   "contactAndFeedback": "Kontak & Terugvoer",
   "settings": "Instellings",
   "region": "Streek",
-  "loggedIn": "Aangeteken"
+  "loggedIn": "Aangeteken",
+  "somethingWentWrong": "Iets het verkeerd gegaan",
+  "scanBarcode": "Skandeer Strepieskode",
+  "dataUnavailable": "Geen beskikbare data tans",
+  "processingData": "Verwerk data, wag asseblief..."
 }

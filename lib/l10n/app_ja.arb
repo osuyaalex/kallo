@@ -23,5 +23,9 @@
   "contactAndFeedback": "連絡先とフィードバック",
   "settings": "設定",
   "region": "地域",
-  "loggedIn": "ログイン中"
+  "loggedIn": "ログイン中",
+  "somethingWentWrong": "何かがうまくいかなかった",
+  "scanBarcode": "バーコードをスキャンする",
+  "dataUnavailable": "現在データは利用できません",
+  "processingData": "データ処理中です、お待ちください..."
 }

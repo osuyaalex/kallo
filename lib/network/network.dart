@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:job/network/json.dart';
 
@@ -40,7 +41,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
   }
 
-  Future<Koye> getProductsName(String name, String countryCode) async {
+  Future<Koye> getProductsName(String name, String countryCode,) async {
     var jsonResponse;
 
     try {
@@ -72,7 +73,6 @@ class Network{
     }
 
     return Koye.fromJson(jsonResponse);
-
 
   }
 }

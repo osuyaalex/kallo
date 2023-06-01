@@ -23,5 +23,9 @@
   "contactAndFeedback": "Kontak & Umpan Balik",
   "settings": "Pengaturan",
   "region": "Wilayah",
-  "loggedIn": "Masuk"
+  "loggedIn": "Masuk",
+  "somethingWentWrong": "Qualcosa è andato storto",
+  "scanBarcode": "Scansiona il codice a barre",
+  "dataUnavailable": "Dati non disponibili al momento",
+  "processingData": "Memproses data, harap tunggu..."
 }

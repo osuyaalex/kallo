@@ -23,5 +23,9 @@
  "contactAndFeedback": "Связь и обратная связь",
  "settings": "Настройки",
  "region": "Регион",
- "loggedIn": "Вход выполнен"
+ "loggedIn": "Вход выполнен",
+ "somethingWentWrong": "Что-то пошло не так",
+ "scanBarcode": "Сканировать штрих-код",
+ "dataUnavailable": "Данные в настоящее время недоступны",
+ "processingData": "Обработка данных, пожалуйста, подождите..."
 }
