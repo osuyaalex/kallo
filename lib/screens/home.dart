@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -7,9 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import '../network/json.dart';
 import '../network/network.dart';
+import 'demo.dart';
 
 class MyHome extends StatefulWidget {
-  const MyHome({Key? key}) : super(key: key);
+  final VoidCallback? onProductPressed;
+  final VoidCallback? onCameraPressed;
+  const MyHome({Key? key, required this.onProductPressed, required this.onCameraPressed}) : super(key: key);
 
   @override
   State<MyHome> createState() => _MyHomeState();
@@ -159,10 +163,11 @@ class _MyHomeState extends State<MyHome> {
       ),
     ];
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        backgroundColor: const Color(0xfffafafa),
+        backgroundColor: Colors.grey.shade100,
         elevation: 0,
-        toolbarHeight:MediaQuery.of(context).size.height*0.19,
+        toolbarHeight:MediaQuery.of(context).size.height*0.17,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -171,10 +176,11 @@ class _MyHomeState extends State<MyHome> {
                   height: 60,
                   width: 60,
                   child: Card(
+
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7)
                     ),
-                    elevation: 1,
+                    elevation: 5,
                     shadowColor: Color(0xff7F78D8).withOpacity(0.6),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
@@ -191,47 +197,52 @@ class _MyHomeState extends State<MyHome> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height*0.06,
-                  width: MediaQuery.of(context).size.width *0.77,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.searchForProducts,
-                      prefixIcon: IconButton(
-                          onPressed: (){},
-                          icon: Icon(Icons.search)
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xff7F78D8)
-                          )
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xff7F78D8)
-                          )
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xff7F78D8)
-                          )
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context)=>DemoScreen()));
+                  },
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height*0.06,
+                    width: MediaQuery.of(context).size.width *0.7,
+                    child: TextFormField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.searchForProducts,
+                        prefixIcon: IconButton(
+                            onPressed: (){},
+                            icon: Icon(Icons.search)
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                                color: Color(0xff7F78D8)
+                            )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                                color: Color(0xff7F78D8)
+                            )
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                                color: Color(0xff7F78D8)
+                            )
+                        ),
                       ),
                     ),
                   ),
                 ),
                 IconButton(
-                    onPressed: (){
-                      scanBarcodeNormal().then((value){
-                        setState(() {
-                          products = Network().getProducts(_scanBarcode,_code);
-                        });
-                      });
-                    },
+                    onPressed: widget.onProductPressed,
                     icon: SvgPicture.asset('asset/barcode-scan-svgrepo-com.svg')
                 ),
+                InkWell(
+                    onTap: widget.onCameraPressed,
+                    child: Icon(Icons.camera_alt_outlined, color: Colors.black,size: 25,)
+                )
               ],
             ),
           ],

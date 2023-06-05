@@ -25,7 +25,12 @@
   "region": "Regione",
   "loggedIn": "Accesso effettuato",
   "somethingWentWrong": "Qualcosa è andato storto",
-  "scanBarcode": "Scansiona il codice a barre",
+  "scanBarcode": "Cerca tramite codice a barre",
   "dataUnavailable": "Dati non disponibili al momento",
-  "processingData": "Elaborazione dati, attendere..."
+  "processingData": "Elaborazione dati, attendere...",
+  "takePicture": "Scatta Foto",
+  "searchByPicture": "Cerca per Immagine",
+  "barcodeInfo": "Scansiona il codice a barre di un prodotto per visualizzare i prezzi",
+  "pictureInfo": "Scatta una foto di un prodotto per cercarlo",
+  "letsGo": "Andiamo!"
 }

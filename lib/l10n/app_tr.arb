@@ -25,7 +25,12 @@
  "region": "Bölge",
  "loggedIn": "Giriş Yapıldı",
  "somethingWentWrong": "Bir şeyler yanlış gitti",
- "scanBarcode": "Barkod Tara",
+ "scanBarcode": "Barkodla Arama",
  "dataUnavailable": "Şu anda veri yok",
- "processingData": "Veriler işleniyor, lütfen bekleyin..."
+ "processingData": "Veriler işleniyor, lütfen bekleyin...",
+ "takePicture": "Fotoğraf Çek",
+ "searchByPicture": "Resimle Arama",
+ "barcodeInfo": "Ürünün barkodunu tarayarak fiyatları görüntüleyin",
+ "pictureInfo": "Arama yapmak için bir ürünün fotoğrafını çekin",
+ "letsGo": "Haydi gidelim!"
 }

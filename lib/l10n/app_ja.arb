@@ -25,7 +25,12 @@
   "region": "地域",
   "loggedIn": "ログイン中",
   "somethingWentWrong": "何かがうまくいかなかった",
-  "scanBarcode": "バーコードをスキャンする",
+  "scanBarcode": "バーコードで検索する",
   "dataUnavailable": "現在データは利用できません",
-  "processingData": "データ処理中です、お待ちください..."
+  "processingData": "データ処理中です、お待ちください...",
+  "takePicture": "写真を撮る",
+  "searchByPicture": "画像検索",
+  "barcodeInfo": "製品のバーコードをスキャンして価格を確認する",
+  "pictureInfo": "製品の写真を撮って検索する",
+  "letsGo": "行こう！"
 }

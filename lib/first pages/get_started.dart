@@ -36,32 +36,19 @@ class _GetStartedState extends State<GetStarted> {
     final List<Widget> screens = [
       Container(
         width: double.infinity,
-        color: const Color(0xff1E1E1E),
+        color: const Color(0xff161b22),
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                  height: 120
-              ),
-              Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
-              const SizedBox(
-                height: 28,
-              ),
-             Text(AppLocalizations.of(context)!.welcome,
-                      style:const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
-                      ),
-                    ),
-              const SizedBox(
-                height: 30,
+               SizedBox(
+                  height: MediaQuery.of(context).size.height*0.33
               ),
              SizedBox(
-                      width: 200,
+                      width: 272,
                       child: Text(AppLocalizations.of(context)!.getStartedOne,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.white
                         ),
@@ -77,32 +64,19 @@ class _GetStartedState extends State<GetStarted> {
       ),
       Container(
         width: double.infinity,
-        color: Color(0xff1E1E1E),
+        color: Color(0xff161b22),
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                  height: 120
-              ),
-              Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
-              const SizedBox(
-                height: 28,
-              ),
-              Text(AppLocalizations.of(context)!.welcome,
-                      style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
-                      ),
-                    ),
-              const SizedBox(
-                height: 30,
+               SizedBox(
+                height: MediaQuery.of(context).size.height*0.33,
               ),
               SizedBox(
-                      width: 218,
+                      width: 288,
                       child: Text(AppLocalizations.of(context)!.getStartedTwo,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.white
                         ),
@@ -118,32 +92,19 @@ class _GetStartedState extends State<GetStarted> {
       ),
       Container(
         width: double.infinity,
-        color: Color(0xff1E1E1E),
+        color: Color(0xff161b22),
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                  height: 120
-              ),
-              Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
-              const SizedBox(
-                height: 28,
-              ),
-              Text(AppLocalizations.of(context)!.welcome,
-                      style:  const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
-                      ),
-                    ),
-              const SizedBox(
-                height: 30,
+               SizedBox(
+                height: MediaQuery.of(context).size.height*0.33,
               ),
               SizedBox(
-                      width: 200,
+                      width: 268,
                       child: Text(AppLocalizations.of(context)!.getStartedThree,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.white
                         ),
@@ -241,13 +202,35 @@ class _GetStartedState extends State<GetStarted> {
             ),
           ),
           Positioned(
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.06,
+                    ),
+                    Image.asset('asset/Kallo logo dark background zoomed in png.png', height: 100,),
+                    const SizedBox(
+                      height: 28,
+                    ),
+                    Text(AppLocalizations.of(context)!.welcome,
+                      style:const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                      ),
+                    ),
+                  ],
+                ),
+              )
+          ),
+          Positioned(
             bottom: MediaQuery.of(context).size.height*0.2,
             right: MediaQuery.of(context).size.width*0.45,
             child: buildIndicator(),
           ),
           Positioned(
             bottom: MediaQuery.of(context).size.height*0.05,
-            right: MediaQuery.of(context).size.width*0.208,
+            right: MediaQuery.of(context).size.width*0.206,
             child: GestureDetector(
             onTap: ()async{
               Navigator.push(

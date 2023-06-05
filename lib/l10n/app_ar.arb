@@ -25,7 +25,12 @@
   "region": "المنطقة",
   "loggedIn": "تم تسجيل الدخول",
   "somethingWentWrong": "حدث خطأ ما",
-  "scanBarcode": "مسح الباركود",
+  "scanBarcode": "البحث بواسطة الباركود",
   "dataUnavailable": "لا تتوفر بيانات حاليًا",
-  "processingData": "جاري معالجة البيانات، يرجى الانتظار..."
+  "processingData": "جاري معالجة البيانات، يرجى الانتظار...",
+  "takePicture": "التقاط صورة",
+  "searchByPicture": "البحث بواسطة الصورة",
+  "barcodeInfo": "مسح شريط الباركود للمنتج لرؤية الأسعار",
+  "pictureInfo": "التقاط صورة للمنتج للبحث",
+  "letsGo": "لنذهب!"
 }

@@ -1,7 +1,7 @@
 class Koye {
   bool? itemFound;
   Data? data;
-  Null? error;
+  Null error;
 
   Koye({this.itemFound, this.data, this.error});
 
