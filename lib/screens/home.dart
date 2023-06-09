@@ -1,15 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
-import '../network/json.dart';
-import '../network/network.dart';
+
+import 'demo.dart';
 
 class MyHome extends StatefulWidget {
-  const MyHome({Key? key}) : super(key: key);
+  final VoidCallback? onProductPressed;
+  final VoidCallback? onCameraPressed;
+  final VoidCallback? onSearchPressed;
+  const MyHome({Key? key, required this.onProductPressed, required this.onCameraPressed, required this.onSearchPressed}) : super(key: key);
 
   @override
   State<MyHome> createState() => _MyHomeState();
@@ -23,53 +26,8 @@ class _MyHomeState extends State<MyHome> {
     'https://images.pexels.com/photos/3735655/pexels-photo-3735655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/2783873/pexels-photo-2783873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
-  late Future<Koye> products = Network().getProducts('8717163545652', _code);
-  String _scanBarcode = 'Unknown';
   late String _code = '';
 
-  Future<void> startBarcodeScanStream() async {
-    FlutterBarcodeScanner.getBarcodeStreamReceiver(
-        '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
-        .listen((barcode) => print(barcode));
-  }
-
-  Future<void> scanQR() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
-  }
-
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
-  }
 
   void _loadCountryCode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -84,10 +42,6 @@ class _MyHomeState extends State<MyHome> {
     // TODO: implement initState
     super.initState();
     _loadCountryCode();
-    products = Network().getProducts('6151100056436',_code);
-    products.then((value){
-      print('the prducy issssssssssssssss ${value.data}');
-    });
   }
   int _activeIndex = 0;
   @override
@@ -159,10 +113,11 @@ class _MyHomeState extends State<MyHome> {
       ),
     ];
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        backgroundColor: const Color(0xfffafafa),
+        backgroundColor: Colors.grey.shade100,
         elevation: 0,
-        toolbarHeight:MediaQuery.of(context).size.height*0.19,
+        toolbarHeight:MediaQuery.of(context).size.height*0.17,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -171,10 +126,11 @@ class _MyHomeState extends State<MyHome> {
                   height: 60,
                   width: 60,
                   child: Card(
+
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7)
                     ),
-                    elevation: 1,
+                    elevation: 5,
                     shadowColor: Color(0xff7F78D8).withOpacity(0.6),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
@@ -191,47 +147,49 @@ class _MyHomeState extends State<MyHome> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height*0.06,
-                  width: MediaQuery.of(context).size.width *0.77,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.searchForProducts,
-                      prefixIcon: IconButton(
-                          onPressed: (){},
-                          icon: Icon(Icons.search)
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xff7F78D8)
-                          )
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xff7F78D8)
-                          )
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xff7F78D8)
-                          )
+                GestureDetector(
+                  onTap: widget.onSearchPressed,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height*0.06,
+                    width: MediaQuery.of(context).size.width *0.7,
+                    child: TextFormField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.searchForProducts,
+                        prefixIcon: IconButton(
+                            onPressed: (){},
+                            icon: Icon(Icons.search)
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                                color: Color(0xff7F78D8)
+                            )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                                color: Color(0xff7F78D8)
+                            )
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                                color: Color(0xff7F78D8)
+                            )
+                        ),
                       ),
                     ),
                   ),
                 ),
                 IconButton(
-                    onPressed: (){
-                      scanBarcodeNormal().then((value){
-                        setState(() {
-                          products = Network().getProducts(_scanBarcode,_code);
-                        });
-                      });
-                    },
-                    icon: SvgPicture.asset('asset/barcode-scan-svgrepo-com.svg')
+                    onPressed: widget.onProductPressed,
+                    icon: SvgPicture.asset('asset/barcode-scan-svgrepo-com (1).svg')
                 ),
+                InkWell(
+                    onTap: widget.onCameraPressed,
+                    child: Icon(Icons.camera_alt_outlined, color: Color(0xff7F78D8),size: 25,)
+                )
               ],
             ),
           ],

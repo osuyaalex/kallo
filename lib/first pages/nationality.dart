@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:job/first%20pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,12 +41,18 @@ class _NationalityState extends State<Nationality> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight:MediaQuery.of(context).size.height*0.3,
@@ -112,6 +119,7 @@ class _NationalityState extends State<Nationality> {
                     await prefs.setString('countryCode', 'NG');
                   }
                 },
+                showCountryOnly: true,
                 showFlagMain: true,
                 showFlag: true,
                 countryFilter: _allowedCountryCodes,
@@ -129,11 +137,11 @@ class _NationalityState extends State<Nationality> {
               children: [
                  Icon(Icons.play_arrow_sharp, size: 24, color: Colors.grey.shade400,),
                 SizedBox(
-                  width: 200,
+                  width: 250,
                     child: Text(AppLocalizations.of(context)!.nationalityDes,
                       style: TextStyle(
                         color: Colors.grey.shade500,
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.5
                       ),
@@ -149,11 +157,11 @@ class _NationalityState extends State<Nationality> {
               children: [
                 Icon(Icons.play_arrow_sharp, size: 24, color: Colors.grey.shade400,),
                 SizedBox(
-                    width: 200,
+                    width: 250,
                     child: Text(AppLocalizations.of(context)!.nationalityDesTwo,
                       style: TextStyle(
                           color: Colors.grey.shade500,
-                          fontSize: 15,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
                         letterSpacing: 0.5
                       ),
@@ -164,30 +172,39 @@ class _NationalityState extends State<Nationality> {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: SizedBox(
-          height: 60,
-          width: 60,
-          child: InkWell(
-            onTap: ()async{
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.setBool('isFirstLaunch', false);
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const Home()));
-            },
-            child: Card(
-              elevation: 6,
-              color: const Color(0xff7F78D8),
-              shadowColor: Colors.grey.shade600,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Center(
-                child: Icon(Icons.arrow_forward_ios_outlined),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: MediaQuery.of(context).size.width*0.45,
+              child: InkWell(
+                onTap: ()async{
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('isFirstLaunch', false);
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => const Home()));
+                },
+                child: Card(
+                  color: const Color(0xff7F78D8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child:  Center(
+                    child: Text(AppLocalizations.of(context)!.letsGo,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16
+                      ),
+                    )
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

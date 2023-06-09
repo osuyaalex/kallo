@@ -25,6 +25,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   List<String>? _filteredSearchHistory;
   String _name = '';
   late String _code = '';
+  bool _firstpage = true;
 
   void _switchToShop(Shops segment) {
     if (_selectedShop == segment) return;
@@ -128,71 +129,85 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios, size: 23, color: Colors.black,)
-          ),
-
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey.shade50,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios, size: 23, color: Colors.black,)
         ),
-        backgroundColor: Colors.white,
-        body: FloatingSearchBar(
-            borderRadius: BorderRadius.circular(12),
-            hint: AppLocalizations.of(context)!.searchForProducts,
-            controller: controller,
-            openAxisAlignment: 0.0,
-            axisAlignment: isPortrait ? 0.0:-1.0,
-            scrollPadding: const EdgeInsets.only(top: 12, bottom: 20),
-            elevation: 1,
-            transitionCurve: Curves.easeInOut,
-            transitionDuration: const Duration(seconds: 1),
-            transition: CircularFloatingSearchBarTransition(),
-            debounceDelay: const Duration(milliseconds: 500),
-            body:  SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0,80,0,10),
-                child: FutureBuilder(
-                    future: productName,
-                    builder: (context, snapshot){
-                      if(snapshot.hasError){
-                        return Center(
-                          child: Text(AppLocalizations.of(context)!.searchItem,
-                              style: const TextStyle(
-                                  color: Color(0xff7F78D8),
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14
-                              )
-                          ),
-                        );
-                      }
-                      if(!snapshot.hasData){
-                        return Center(
-                          child: Text(AppLocalizations.of(context)!.noProductsAvailable,
-                              style: const TextStyle(
-                                  color: Color(0xff7F78D8),
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14
-                              )
-                          ),
-                        );
-                      }
-                      if(snapshot.connectionState == ConnectionState.waiting){
-                        return const Center(
-                          child: CircularProgressIndicator(color: Color(0xff7F78D8),),
-                        );
-                      }else if(snapshot.hasData){
-                        return Column(
-                          children: [
-                           AppBar(
+
+      ),
+      backgroundColor: Colors.grey.shade50,
+      body: FloatingSearchBar(
+        backgroundColor: Color(0xfff2f2fb),
+          elevation: 1,
+          borderRadius: BorderRadius.circular(12),
+          hint: AppLocalizations.of(context)!.searchForProducts,
+          controller: controller,
+          openAxisAlignment: 0.0,
+          axisAlignment: isPortrait ? 0.0:-1.0,
+          scrollPadding: const EdgeInsets.only(top: 12, bottom: 20),
+          transitionCurve: Curves.easeInOut,
+          transitionDuration: const Duration(milliseconds: 800),
+          transition: CircularFloatingSearchBarTransition(),
+          debounceDelay: const Duration(milliseconds: 500),
+          body:  SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0,80,0,10),
+              child: FutureBuilder(
+                  future: productName,
+                  builder: (context, snapshot){
+                    if(snapshot.hasError){
+                      return Center(
+                        child: _firstpage?Text(AppLocalizations.of(context)!.searchItem,
+                            style: const TextStyle(
+                                color: Color(0xff7F78D8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14
+                            )
+                        ):Text(AppLocalizations.of(context)!.somethingWentWrong,
+                            style: const TextStyle(
+                                color: Color(0xff7F78D8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14
+                            )
+                        ),
+                      );
+                    }
+                    if(!snapshot.hasData){
+                      return Center(
+                        child: _firstpage?Text(AppLocalizations.of(context)!.processingData,
+                            style: const TextStyle(
+                                color: Color(0xff7F78D8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14
+                            )
+                        ):Text(AppLocalizations.of(context)!.noProductsAvailable,
+                            style: const TextStyle(
+                                color: Color(0xff7F78D8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14
+                            )
+                        ),
+                      );
+                    }
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      return const Center(
+                        child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                      );
+                    }else if(snapshot.hasData){
+                      return Column(
+                        children: [
+                         Padding(
+                           padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                           child: AppBar(
                              automaticallyImplyLeading: false,
-                             backgroundColor: Colors.white,
+                             backgroundColor: Colors.grey.shade50,
                              elevation: 0,
                              title: Center(
                                child: CustomSlidingSegmentedControl(
@@ -280,169 +295,162 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                ),
                              ),
                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height*0.601,
-                              width: double.infinity,
-                              child: Stack(
-                                children: [
-                                  SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(1, 0),
-                                      end: Offset.zero,
-                                    ).animate(_animationController),
-                                    child: Offline(snapshot: snapshot,),
-                                  ),
-                                  SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset.zero,
-                                      end: Offset(-1, 0),
-                                    ).animate(_animationController),
-                                    child: Online(snapshot: snapshot,),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        );
+                         ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height*0.65,
+                            width: double.infinity,
+                            child: Stack(
+                              children: [
+                                SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(1, 0),
+                                    end: Offset.zero,
+                                  ).animate(_animationController),
+                                  child: Offline(snapshot: snapshot,),
+                                ),
+                                SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset.zero,
+                                    end: Offset(-1, 0),
+                                  ).animate(_animationController),
+                                  child: Online(snapshot: snapshot,),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      );
 
-                      }else{
-                        return const Center(
-                          child: CircularProgressIndicator(color: Colors.black,),
-                        );
-                      }
+                    }else{
+                      return const Center(
+                        child: CircularProgressIndicator(color: Colors.black,),
+                      );
                     }
-                ),
+                  }
               ),
             ),
-            physics: const BouncingScrollPhysics(),
-            onQueryChanged: (query) async {
-              var searches = await _getRecentSearchesLike(query);
+          ),
+          physics: const BouncingScrollPhysics(),
+          onQueryChanged: (query) async {
+            var searches = await _getRecentSearchesLike(query);
+            setState(() {
+              _filteredSearchHistory = searches;
+            });
+          },
+          onSubmitted: (v){
+            _loadCountryCode().then((value){
+              _saveToRecentSearches(v);
               setState(() {
-                _filteredSearchHistory = searches;
+                _firstpage = false;
+                _name = v;
+                productName = Network().getProductsName(v, _code);
               });
-            },
-            onSubmitted: (v){
-              _loadCountryCode().then((value){
-                _saveToRecentSearches(v);
-                setState(() {
-                  _name = v;
-                  productName = Network().getProductsName(v, _code);
-                });
-                controller.close();
-              });
-            },
-            actions: [
-              FloatingSearchBarAction(
-                showIfOpened: false,
-                child: CircularButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: (){
-                    }
-                ),
+              controller.close();
+            });
+          },
+          actions: [
+            FloatingSearchBarAction(
+              showIfOpened: false,
+              child: CircularButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: (){
+                  }
               ),
-              FloatingSearchBarAction.searchToClear(
-                showIfClosed: false,
-              )
-            ],
-            builder:(context, transition){
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Material(
-                  elevation: 4,
-                  child: Builder(
-                    builder: ((context) {
-                      if (_filteredSearchHistory == null &&
-                          controller.query.isEmpty) {
-                        return Container(
-                          padding: const EdgeInsets.all(10),
-                          height: 50,
-                          width: double.infinity,
-                          child: Text(
-                            'Start Searching',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        );
-                      } else if (_filteredSearchHistory!.isEmpty) {
-                        return ListTile(
-                          title: Text(controller.query),
-                          leading: const Icon(
-                            Icons.search,
-                          ),
-                          onTap: () {
+            ),
+            FloatingSearchBarAction.searchToClear(
+              showIfClosed: false,
+            )
+          ],
+          builder:(context, transition){
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Material(
+                elevation: 4,
+                child: Builder(
+                  builder: ((context) {
+                    if (_filteredSearchHistory == null &&
+                        controller.query.isEmpty) {
+                      return Container(
+                        padding: const EdgeInsets.all(10),
+                        height: 50,
+                        width: double.infinity,
+                        child: Text(
+                          'Start Searching',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      );
+                    } else if (_filteredSearchHistory!.isEmpty) {
+                      return ListTile(
+                        title: Text(controller.query),
+                        leading: const Icon(
+                          Icons.search,
+                        ),
+                        onTap: () {
+                          _loadCountryCode().then((value){
+                            setState(() {
+                              _firstpage = false;
+                              _name = controller.query;
+                              productName = Network().getProductsName(controller.query, _code);
+                            });
+                            controller.close();
+                          });
+
+                        },
+                        trailing: IconButton(
+                          onPressed: () {
+                            _firstpage = false;
                             _loadCountryCode().then((value){
                               setState(() {
                                 _name = controller.query;
                                 productName = Network().getProductsName(controller.query, _code);
                               });
                               controller.close();
+                              putSearchTermFirst(controller.query);
                             });
-
                           },
-                          trailing: IconButton(
-                            onPressed: () {
-                              _loadCountryCode().then((value){
-                                setState(() {
-                                  _name = controller.query;
-                                  productName = Network().getProductsName(controller.query, _code);
-                                });
-                                controller.close();
-                                putSearchTermFirst(controller.query);
-                              });
-                            },
-                            icon: const Icon(Icons.north_west),
-                          ),
-                        );
-                      } else {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              decoration: const BoxDecoration(),
-                              child: const Padding(
-                                padding: EdgeInsets.only(
-                                    left: 20, bottom: 10, top: 10),
-                                child: Text(
-                                  'Recent Searches',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                  ),
+                          icon: const Icon(Icons.north_west),
+                        ),
+                      );
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(),
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                  left: 20, bottom: 10, top: 10),
+                              child: Text(
+                                'Recent Searches',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: _filteredSearchHistory!
-                                  .map(
-                                    (term) => ListTile(
-                                  title: Text(
-                                    term,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  leading: const Icon(
-                                    Icons.update,
-                                  ),
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      _loadCountryCode().then((value){
-                                        setState(() {
-                                          _name = term;
-                                          productName = Network().getProductsName(term, _code);
-                                        });
-                                        controller.close();
-                                        putSearchTermFirst(term);
-                                      });
-                                    },
-                                    icon: const Icon(Icons.north_west),
-                                  ),
-                                  onTap: () {
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: _filteredSearchHistory!
+                                .map(
+                                  (term) => ListTile(
+                                title: Text(
+                                  term,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                leading: const Icon(
+                                  Icons.update,
+                                ),
+                                trailing: IconButton(
+                                  onPressed: () {
                                     _loadCountryCode().then((value){
                                       setState(() {
+                                        _firstpage = false;
                                         _name = term;
                                         productName = Network().getProductsName(term, _code);
                                       });
@@ -450,19 +458,31 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                       putSearchTermFirst(term);
                                     });
                                   },
+                                  icon: const Icon(Icons.north_west),
                                 ),
-                              )
-                                  .toList(),
-                            ),
-                          ],
-                        );
-                      }
-                    }),
-                  ),
+                                onTap: () {
+                                  _loadCountryCode().then((value){
+                                    setState(() {
+                                      _firstpage = false;
+                                      _name = term;
+                                      productName = Network().getProductsName(term, _code);
+                                    });
+                                    controller.close();
+                                    putSearchTermFirst(term);
+                                  });
+                                },
+                              ),
+                            )
+                                .toList(),
+                          ),
+                        ],
+                      );
+                    }
+                  }),
                 ),
-              );
-            }
-        ),
+              ),
+            );
+          }
       ),
     );
   }

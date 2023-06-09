@@ -25,7 +25,13 @@
  "region": "Region",
  "loggedIn": "Zalogowany",
  "somethingWentWrong": "Coś poszło nie tak",
- "scanBarcode": "Skanuj kod kreskowy",
+ "scanBarcode": "Szukaj za pomocą kodu kreskowego",
  "dataUnavailable": "Brak dostępnych danych",
- "processingData": "Przetwarzanie danych, proszę czekać..."
+ "processingData": "Przetwarzanie danych, proszę czekać...",
+ "takePicture": "Zrób zdjęcie",
+ "searchByPicture": "Szukaj według obrazu",
+ "barcodeInfo": "Zeskanuj kod kreskowy produktu, aby zobaczyć ceny",
+ "pictureInfo": "Zrób zdjęcie produktu, aby wyszukać",
+ "letsGo": "Chodźmy!",
+ "position": "Umieść produkt wewnątrz tego pudełka"
 }

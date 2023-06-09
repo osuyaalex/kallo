@@ -25,7 +25,13 @@
   "region": "지역",
   "loggedIn": "로그인됨",
   "somethingWentWrong": "문제가 발생했습니다",
-  "scanBarcode": "바코드 스캔",
+  "scanBarcode": "바코드로 검색하기",
   "dataUnavailable": "현재 데이터를 사용할 수 없습니다",
-  "processingData": "데이터 처리 중입니다. 잠시 기다려주세요..."
+  "processingData": "데이터 처리 중입니다. 잠시 기다려주세요...",
+  "takePicture": "사진 찍기",
+  "searchByPicture": "사진으로 검색",
+  "barcodeInfo": "제품의 바코드를 스캔하여 가격 확인",
+  "pictureInfo": "제품 사진을 찍어서 검색",
+  "letsGo": "갑시다!",
+  "position": "제품을 이 상자 안에 위치시키세요"
 }

@@ -25,7 +25,13 @@
   "region": "Streek",
   "loggedIn": "Aangeteken",
   "somethingWentWrong": "Iets het verkeerd gegaan",
-  "scanBarcode": "Skandeer Strepieskode",
+  "scanBarcode": "Soek op strepieskode",
   "dataUnavailable": "Geen beskikbare data tans",
-  "processingData": "Verwerk data, wag asseblief..."
+  "processingData": "Verwerk data, wag asseblief...",
+  "takePicture": "Neem Foto",
+  "searchByPicture": "Soek per prentjie",
+  "barcodeInfo": "Skandeer 'n produk se strepieskode om pryse te sien",
+  "pictureInfo": "Neem 'n prentjie van 'n produk om te soek",
+  "letsGo": "Kom ons gaan!",
+  "position": "Posisieer die produk binne hierdie boks"
 }

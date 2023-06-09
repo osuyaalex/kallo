@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:job/screens/home.dart';
 import 'package:job/screens/idealo.dart';
-import 'package:job/screens/products.dart';
 import 'dart:ui';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../screens/demo_two.dart';
 
 
 class Home extends StatefulWidget {
@@ -17,24 +20,59 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  }
+
   int _selectedItem = 1;
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      MyHome(),
-      Products(),
+      MyHome(
+        onProductPressed: () async{
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isLaunch', true);
+          setState(() {
+            _selectedItem = 1;
+          });
+          Navigator.of(context).pushReplacement(PageTransition(
+            child: const Home(),
+            type: PageTransitionType.fade,
+            childCurrent: widget,
+            duration: const Duration(milliseconds: 100),
+            reverseDuration: const Duration(milliseconds: 100),
+          )
+          );
+        },
+        onCameraPressed: ()async{
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isLaunchCamera', true);
+          setState(() {
+            _selectedItem = 1;
+          });
+          Navigator.of(context).pushReplacement(PageTransition(
+            child: const Home(),
+            type: PageTransitionType.fade,
+            childCurrent: widget,
+            duration: const Duration(milliseconds: 100),
+            reverseDuration: const Duration(milliseconds: 100),
+          )
+          );
+        },
+        onSearchPressed: ()async{
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isSearchBar', true);
+          setState(() {
+            _selectedItem = 1;
+          });
+          Navigator.of(context).pushReplacement(PageTransition(
+            child: const Home(),
+            type: PageTransitionType.fade,
+            childCurrent: widget,
+            duration: const Duration(milliseconds: 100),
+            reverseDuration: const Duration(milliseconds: 100),
+          )
+          );
+        },
+      ),
+      Dems(),
       Profile()
     ];
     return CupertinoTabScaffold(
@@ -68,6 +106,7 @@ class _HomeState extends State<Home> {
           builder: (context) {
             return _screens[index];
           },
+
         );
       },
     );

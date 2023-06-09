@@ -25,7 +25,14 @@
   "region": "Region",
   "loggedIn": "Angemeldet",
   "somethingWentWrong": "Etwas ist schief gelaufen",
-  "scanBarcode": "Barcode scannen",
+  "scanBarcode": "Suche per Barcode",
   "dataUnavailable": "Keine Daten verfügbar",
-  "processingData": "Daten werden verarbeitet, bitte warten..."
+  "processingData": "Daten werden verarbeitet, bitte warten...",
+  "takePicture": "Foto machen",
+  "searchByPicture": "Nach Bild suchen",
+  "barcodeInfo": "Scannen Sie den Barcode eines Produkts, um Preise zu sehen",
+  "pictureInfo": "Machen Sie ein Bild von einem Produkt, um zu suchen",
+  "letsGo": "Los geht's!",
+  "position": "Positioniere das Produkt innerhalb dieses Kastens"
+
 }

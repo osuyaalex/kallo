@@ -25,7 +25,13 @@
   "region": "Wilayah",
   "loggedIn": "Masuk",
   "somethingWentWrong": "Qualcosa è andato storto",
-  "scanBarcode": "Scansiona il codice a barre",
+  "scanBarcode": "Cari dengan Barcode",
   "dataUnavailable": "Dati non disponibili al momento",
-  "processingData": "Memproses data, harap tunggu..."
+  "processingData": "Memproses data, harap tunggu...",
+  "takePicture": "Ambil Foto",
+  "searchByPicture": "Cari dengan Gambar",
+  "barcodeInfo": "Pindai kode batang produk untuk melihat harga",
+  "pictureInfo": "Ambil gambar produk untuk mencari",
+  "letsGo": "Ayo pergi!",
+  "position": "Posisikan produk ini di dalam kotak ini"
 }

@@ -54,6 +54,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey.shade50,
@@ -120,6 +121,7 @@ class _ProfileState extends State<Profile> {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     await prefs.setString('countryCode', _getInitialCountry);
                   },
+                  showCountryOnly: true,
                   showFlagMain: true,
                   showFlag: true,
                   countryFilter: _allowedCountryCodes,

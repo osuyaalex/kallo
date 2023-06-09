@@ -103,7 +103,7 @@
   "@somethingWentWrong": {
     "description": "Error message"
   },
-  "scanBarcode": "Scan Barcode",
+  "scanBarcode": "Search by Barcode",
   "@scanBarcode": {
     "description": "Scan"
   },
@@ -114,5 +114,29 @@
   "processingData": "Processing data, please wait...",
   "@processingData": {
     "description": "Processing data"
+  },
+  "takePicture": "Take picture",
+  "@takePicture": {
+    "description": "Taking Picture"
+  },
+  "searchByPicture": "Search by Picture",
+  "@searchByPicture": {
+    "description": "Search by picture"
+  },
+  "barcodeInfo": "Scan a product's barcode to see prices",
+  "@barcodeInfo": {
+    "description": "Barcode info"
+  },
+  "pictureInfo": "Take a picture of a product to search",
+  "@pictureInfo": {
+    "description": "Picture info"
+  },
+  "letsGo": "Lets Go!",
+  "@letsGo": {
+    "description": "Lets go"
+  },
+  "position": "Position the product within this box",
+  "@position": {
+    "description": "Position the product within this box"
   }
 }

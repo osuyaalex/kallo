@@ -48,7 +48,7 @@ class _OfflineState extends State<Offline> {
   @override
   Widget build(BuildContext context) {
     String breakUnwantedPart(String name) {
-      if (name.length > 25) {
+      if (name.length > 40) {
         return name.trim().replaceRange(25, null, '...');
       }
       return name;
