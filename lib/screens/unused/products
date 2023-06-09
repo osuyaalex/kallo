@@ -41,7 +41,7 @@ class _ProductState extends State<Product>with SingleTickerProviderStateMixin{
   Timer? _timer;
   int _start = 5;
   final ImagePicker _picker = ImagePicker();
-
+  Uint8List? img;
 
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
@@ -67,28 +67,31 @@ class _ProductState extends State<Product>with SingleTickerProviderStateMixin{
       _scanBarcode = barcodeScanRes;
     });
   }
-  Future<String?> _pickImage() async {
+   _pickImage() async {
     XFile? file = await _picker.pickImage(source: ImageSource.camera);
 
     if (file != null) {
-      List<int> bytes = await file.readAsBytes();
-      Uint8List uint8List = Uint8List.fromList(bytes);
-      // Resize the image to the desired dimensions
-      List<int> compressedBytes = await FlutterImageCompress.compressWithList(
-        uint8List,
+      Uint8List bytes = await file.readAsBytes();
+      //Resize the image to the desired dimensions
+      var compressedBytes = await FlutterImageCompress.compressWithList(
+        bytes,
         minHeight: 224,
         minWidth: 224,
         quality: 90, // Adjust the quality as needed
+        format: CompressFormat.png
       );
-
-      String base64Image = base64Encode(compressedBytes);
-
       setState(() {
-        _image = base64Image;
-        print(_image);
+        img = compressedBytes;
       });
-
-      return base64Image;
+      //
+      // String base64Image = base64Encode(compressedBytes);
+      //
+      // setState(() {
+      //   _image = base64Image;
+      //   print(_image);
+      // });
+      //
+      // return base64Image;
     } else {
       print('No image selected');
       return null;
@@ -189,12 +192,23 @@ class _ProductState extends State<Product>with SingleTickerProviderStateMixin{
       });
     }
   }
+  _shiftSearchBar()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isSearch = prefs.getBool('isSearchBar') ?? false;
+    if(isSearch == true){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DemoScreen()));
+      });
+      prefs.setBool(('isSearchBar'), false);
+    }
+  }
   @override
   void initState(){
     // TODO: implement initState
     super.initState();
     _shiftBarCode();
     _shiftCamera();
+    _shiftSearchBar();
     _loadCountryCode();
     imageSearch = Network().getProductsImage(_image, _code);
     products = Network().getProducts(_scanBarcode, _code);
@@ -465,6 +479,7 @@ class _ProductState extends State<Product>with SingleTickerProviderStateMixin{
                                 color: Colors.grey.shade600
                             ),
                           ),
+                         Image.memory(img!)
                         ],
                       ),
                     );

@@ -32,5 +32,6 @@
   "searchByPicture": "Cerca per Immagine",
   "barcodeInfo": "Scansiona il codice a barre di un prodotto per visualizzare i prezzi",
   "pictureInfo": "Scatta una foto di un prodotto per cercarlo",
-  "letsGo": "Andiamo!"
+  "letsGo": "Andiamo!",
+  "position": "Posiziona il prodotto all'interno di questa scatola"
 }

@@ -2,18 +2,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
-import '../network/json.dart';
-import '../network/network.dart';
+
 import 'demo.dart';
 
 class MyHome extends StatefulWidget {
   final VoidCallback? onProductPressed;
   final VoidCallback? onCameraPressed;
-  const MyHome({Key? key, required this.onProductPressed, required this.onCameraPressed}) : super(key: key);
+  final VoidCallback? onSearchPressed;
+  const MyHome({Key? key, required this.onProductPressed, required this.onCameraPressed, required this.onSearchPressed}) : super(key: key);
 
   @override
   State<MyHome> createState() => _MyHomeState();
@@ -27,53 +26,8 @@ class _MyHomeState extends State<MyHome> {
     'https://images.pexels.com/photos/3735655/pexels-photo-3735655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/2783873/pexels-photo-2783873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
-  late Future<Koye> products = Network().getProducts('8717163545652', _code);
-  String _scanBarcode = 'Unknown';
   late String _code = '';
 
-  Future<void> startBarcodeScanStream() async {
-    FlutterBarcodeScanner.getBarcodeStreamReceiver(
-        '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
-        .listen((barcode) => print(barcode));
-  }
-
-  Future<void> scanQR() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
-  }
-
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
-  }
 
   void _loadCountryCode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -88,10 +42,6 @@ class _MyHomeState extends State<MyHome> {
     // TODO: implement initState
     super.initState();
     _loadCountryCode();
-    products = Network().getProducts('6151100056436',_code);
-    products.then((value){
-      print('the prducy issssssssssssssss ${value.data}');
-    });
   }
   int _activeIndex = 0;
   @override
@@ -198,10 +148,7 @@ class _MyHomeState extends State<MyHome> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context)=>DemoScreen()));
-                  },
+                  onTap: widget.onSearchPressed,
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height*0.06,
                     width: MediaQuery.of(context).size.width *0.7,
@@ -237,11 +184,11 @@ class _MyHomeState extends State<MyHome> {
                 ),
                 IconButton(
                     onPressed: widget.onProductPressed,
-                    icon: SvgPicture.asset('asset/barcode-scan-svgrepo-com.svg')
+                    icon: SvgPicture.asset('asset/barcode-scan-svgrepo-com (1).svg')
                 ),
                 InkWell(
                     onTap: widget.onCameraPressed,
-                    child: Icon(Icons.camera_alt_outlined, color: Colors.black,size: 25,)
+                    child: Icon(Icons.camera_alt_outlined, color: Color(0xff7F78D8),size: 25,)
                 )
               ],
             ),

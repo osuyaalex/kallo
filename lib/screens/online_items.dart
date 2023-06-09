@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:job/classes/putables.dart';
 import 'package:job/network/json.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -46,7 +44,7 @@ class _OnlineState extends State<Online> {
   @override
   Widget build(BuildContext context) {
     String breakUnwantedPart(String name) {
-      if (name.length > 25) {
+      if (name.length > 40) {
         return name.trim().replaceRange(25, null, '...');
       }
       return name;
@@ -82,10 +80,10 @@ class _OnlineState extends State<Online> {
                 final formatter = NumberFormat("#,###");
                 displayValue = formatter.format(number);
               }
-               final distance = Functions().calculateDistance(_latitude, _longitude, online?[index].merchantLatitude??'', online?[index].merchantLongitude??'');
+              final addRow = online?[index];
               return GestureDetector(
                 onTap: (){
-                  String url = online?[index].productLink??'';
+                  String url = addRow?.productLink??'';
                   Uri uri = Uri.parse(url);
                   try{
                     launchUrl(uri);
@@ -110,7 +108,7 @@ class _OnlineState extends State<Online> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(17),
                               image: DecorationImage(
-                                  image: NetworkImage(online?[index].imageThumbnailUrl?.isNotEmpty == true?
+                                  image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
                                   online![index].imageThumbnailUrl!:
                                       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
                                   ),
@@ -120,10 +118,9 @@ class _OnlineState extends State<Online> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(breakUnwantedPart(online?[index].productName??''),
+                          child: Text(addRow?.productName??'',
                             style: const TextStyle(
                                 fontSize: 13,
-                                fontWeight: FontWeight.w600
                             ),
                           ),
                         ),
@@ -132,9 +129,9 @@ class _OnlineState extends State<Online> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(online?[index].merchantName??'',
+                              Text(addRow?.merchantName??'',
                                 style: const TextStyle(
-                                    color: Colors.red,
+                                    color: Color(0xff161b22),
                                     fontWeight: FontWeight.w700,
                                     fontSize: 12
                                 ),
@@ -143,39 +140,24 @@ class _OnlineState extends State<Online> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children:  [
-                              const Icon(Icons.location_on, color: Colors.red, size: 20,),
-                              Text(distance != 0 ?
-                              '${distance.toStringAsFixed(2)} miles':'--',
-                                style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+
                         SizedBox(
                           height: 20,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(online?[index].currency??'',
+                              Text(addRow?.currency??'',
                                 style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.green
+                                    color: Color(0xff7F78D8)
                                 ),
                               ),
                               Text(displayValue,
                                 style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.green
+                                    color: Color(0xff7F78D8)
                                 ),
                               ),
                             ],

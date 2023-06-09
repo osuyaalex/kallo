@@ -32,5 +32,6 @@
  "searchByPicture": "Resimle Arama",
  "barcodeInfo": "Ürünün barkodunu tarayarak fiyatları görüntüleyin",
  "pictureInfo": "Arama yapmak için bir ürünün fotoğrafını çekin",
- "letsGo": "Haydi gidelim!"
+ "letsGo": "Haydi gidelim!",
+ "position": "Bu kutunun içine ürünü yerleştirin"
 }

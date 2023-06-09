@@ -32,5 +32,6 @@
   "searchByPicture": "사진으로 검색",
   "barcodeInfo": "제품의 바코드를 스캔하여 가격 확인",
   "pictureInfo": "제품 사진을 찍어서 검색",
-  "letsGo": "갑시다!"
+  "letsGo": "갑시다!",
+  "position": "제품을 이 상자 안에 위치시키세요"
 }

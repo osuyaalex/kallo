@@ -134,5 +134,9 @@
   "letsGo": "Lets Go!",
   "@letsGo": {
     "description": "Lets go"
+  },
+  "position": "Position the product within this box",
+  "@position": {
+    "description": "Position the product within this box"
   }
 }

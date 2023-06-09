@@ -32,5 +32,6 @@
  "searchByPicture": "Szukaj według obrazu",
  "barcodeInfo": "Zeskanuj kod kreskowy produktu, aby zobaczyć ceny",
  "pictureInfo": "Zrób zdjęcie produktu, aby wyszukać",
- "letsGo": "Chodźmy!"
+ "letsGo": "Chodźmy!",
+ "position": "Umieść produkt wewnątrz tego pudełka"
 }

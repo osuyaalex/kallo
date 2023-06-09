@@ -32,5 +32,6 @@
   "searchByPicture": "画像検索",
   "barcodeInfo": "製品のバーコードをスキャンして価格を確認する",
   "pictureInfo": "製品の写真を撮って検索する",
-  "letsGo": "行こう！"
+  "letsGo": "行こう！",
+  "position": "このボックス内で製品を配置してください"
 }

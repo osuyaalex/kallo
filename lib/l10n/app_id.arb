@@ -32,5 +32,6 @@
   "searchByPicture": "Cari dengan Gambar",
   "barcodeInfo": "Pindai kode batang produk untuk melihat harga",
   "pictureInfo": "Ambil gambar produk untuk mencari",
-  "letsGo": "Ayo pergi!"
+  "letsGo": "Ayo pergi!",
+  "position": "Posisikan produk ini di dalam kotak ini"
 }
