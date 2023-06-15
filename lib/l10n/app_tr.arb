@@ -33,5 +33,10 @@
  "barcodeInfo": "Ürünün barkodunu tarayarak fiyatları görüntüleyin",
  "pictureInfo": "Arama yapmak için bir ürünün fotoğrafını çekin",
  "letsGo": "Haydi gidelim!",
- "position": "Bu kutunun içine ürünü yerleştirin"
+ "position": "Bu kutunun içine ürünü yerleştirin",
+ "startSearching": "Aramaya başla",
+ "recentSearches": "Son aramalar",
+ "searchSuggestions": "Arama önerileri",
+ "pleaseWaitSearching": "Öneriler aranıyor, lütfen bekleyin",
+ "noSuggestions": "Mevcut öneri yok"
 }

@@ -33,5 +33,10 @@
   "barcodeInfo": "Pindai kode batang produk untuk melihat harga",
   "pictureInfo": "Ambil gambar produk untuk mencari",
   "letsGo": "Ayo pergi!",
-  "position": "Posisikan produk ini di dalam kotak ini"
+  "position": "Posisikan produk ini di dalam kotak ini",
+  "startSearching": "Mulai mencari",
+  "recentSearches": "Pencarian terbaru",
+  "searchSuggestions": "Saran pencarian",
+  "pleaseWaitSearching": "Mencari saran, harap tunggu",
+  "noSuggestions": "Tidak ada saran yang tersedia"
 }

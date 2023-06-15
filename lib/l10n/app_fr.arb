@@ -33,6 +33,10 @@
   "barcodeInfo": "Scanner le code-barres d'un produit pour voir les prix",
   "pictureInfo": "Prendre une photo d'un produit pour rechercher",
   "letsGo": "Allons-y !",
-  "position": "Positionnez le produit dans cette boîte"
-
+  "position": "Positionnez le produit dans cette boîte",
+  "startSearching": "Commencer la recherche",
+  "recentSearches": "Recherches récentes",
+  "searchSuggestions": "Suggestions de recherche",
+  "pleaseWaitSearching": "Recherche de suggestions, veuillez patienter",
+  "noSuggestions": "Aucune suggestion disponible"
 }

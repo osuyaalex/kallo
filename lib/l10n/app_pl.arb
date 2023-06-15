@@ -33,5 +33,10 @@
  "barcodeInfo": "Zeskanuj kod kreskowy produktu, aby zobaczyć ceny",
  "pictureInfo": "Zrób zdjęcie produktu, aby wyszukać",
  "letsGo": "Chodźmy!",
- "position": "Umieść produkt wewnątrz tego pudełka"
+ "position": "Umieść produkt wewnątrz tego pudełka",
+ "startSearching": "Rozpocznij wyszukiwanie",
+ "recentSearches": "Ostatnie wyszukiwania",
+ "searchSuggestions": "Sugestie wyszukiwania",
+ "pleaseWaitSearching": "Wyszukiwanie sugestii, proszę czekać",
+ "noSuggestions": "Brak dostępnych sugestii"
 }

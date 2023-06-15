@@ -44,7 +44,7 @@ class _OnlineState extends State<Online> {
   @override
   Widget build(BuildContext context) {
     String breakUnwantedPart(String name) {
-      if (name.length > 40) {
+      if (name.length > 55) {
         return name.trim().replaceRange(25, null, '...');
       }
       return name;
@@ -118,7 +118,7 @@ class _OnlineState extends State<Online> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(addRow?.productName??'',
+                          child: Text(breakUnwantedPart(addRow?.productName??''),
                             style: const TextStyle(
                                 fontSize: 13,
                             ),

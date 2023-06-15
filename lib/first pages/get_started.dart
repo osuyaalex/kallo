@@ -49,7 +49,7 @@ class _GetStartedState extends State<GetStarted> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                            //fontWeight: FontWeight.w600,
                             color: Colors.white
                         ),
                       ),
@@ -77,7 +77,7 @@ class _GetStartedState extends State<GetStarted> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                            //fontWeight: FontWeight.w600,
                             color: Colors.white
                         ),
                       ),
@@ -104,8 +104,8 @@ class _GetStartedState extends State<GetStarted> {
                       child: Text(AppLocalizations.of(context)!.getStartedThree,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                           fontSize: 18,
+                           // fontWeight: FontWeight.w600,
                             color: Colors.white
                         ),
                       ),
@@ -126,7 +126,7 @@ class _GetStartedState extends State<GetStarted> {
         effect: const JumpingDotEffect(
             dotHeight: 10,
             dotWidth: 10,
-            activeDotColor: Colors.white
+            activeDotColor: Color(0xff7F78D8),
         ),
       );
     }

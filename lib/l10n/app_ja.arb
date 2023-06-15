@@ -33,5 +33,10 @@
   "barcodeInfo": "製品のバーコードをスキャンして価格を確認する",
   "pictureInfo": "製品の写真を撮って検索する",
   "letsGo": "行こう！",
-  "position": "このボックス内で製品を配置してください"
+  "position": "このボックス内で製品を配置してください",
+  "startSearching": "検索を開始",
+  "recentSearches": "最近の検索",
+  "searchSuggestions": "検索の提案",
+  "pleaseWaitSearching": "提案を検索中、お待ちください",
+  "noSuggestions": "利用可能な提案はありません"
 }
