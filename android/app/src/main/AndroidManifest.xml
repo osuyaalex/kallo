@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.koye.job">
 
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />

@@ -131,12 +131,32 @@
   "@pictureInfo": {
     "description": "Picture info"
   },
-  "letsGo": "Lets Go!",
+  "letsGo": "Let's Go!",
   "@letsGo": {
-    "description": "Lets go"
+    "description": "Let's go"
   },
   "position": "Position the product within this box",
   "@position": {
     "description": "Position the product within this box"
+  },
+  "startSearching": "Start searching",
+  "@startSearching": {
+    "description": "Start searching"
+  },
+  "recentSearches": "Recent searches",
+  "@recentSearches": {
+    "description": "Recent searches"
+  },
+  "searchSuggestions": "Search suggestions",
+  "@searchSuggestions": {
+    "description": "Search suggestions"
+  },
+  "pleaseWaitSearching": "Searching suggestions, please wait",
+  "@pleaseWaitSearching": {
+    "description": "Wait"
+  },
+  "noSuggestions": "No suggestions available",
+  "@noSuggestions": {
+    "description": "No"
   }
 }

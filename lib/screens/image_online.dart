@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:job/network/json.dart';
+import 'package:job/network/image_json.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
-class Online extends StatefulWidget {
-  final AsyncSnapshot<Koye> snapshot;
-  const Online({Key? key, required this.snapshot}) : super(key: key);
+class ImageOnline extends StatefulWidget {
+  final AsyncSnapshot<KalloImageSearch> snapshot;
+  const ImageOnline({Key? key, required this.snapshot}) : super(key: key);
 
   @override
-  State<Online> createState() => _OnlineState();
+  State<ImageOnline> createState() => _ImageOnlineState();
 }
 
-class _OnlineState extends State<Online> {
+class _ImageOnlineState extends State<ImageOnline> {
   String _latitude = '';
   String _longitude = '';
   // void _getCurrentLocation() async {
@@ -40,7 +40,7 @@ class _OnlineState extends State<Online> {
     // _requestLocationPermission();
     // _getCurrentLocation();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     String breakUnwantedPart(String name) {
@@ -49,7 +49,7 @@ class _OnlineState extends State<Online> {
       }
       return name;
     }
-    List<Products>? products = widget.snapshot.data!.data!.products;
+    List? products = widget.snapshot.data!.data!.products;
     var online = products?.where((element) => element.merchantType == "online").toList();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -67,19 +67,8 @@ class _OnlineState extends State<Online> {
               //     ? doubleValue.toStringAsFixed(0)
               //     : doubleValue.toStringAsFixed(2);
               final item = online?[index].price;
-              // final text = item.endsWith('.0') ? item.substring(0, item.length -2) : item;
-              final double number = double.tryParse(item!) ?? 0.0;
-              String displayValue;
-              if (number == number.floor()) {
-                //.floor is basically used to convert doubles to integers
-                displayValue = number.floor().toString();
-              } else {
-                displayValue = number.toString();
-              }
-              if (number >= 1000) {
-                final formatter = NumberFormat("#,###");
-                displayValue = formatter.format(number);
-              }
+              final numberFormat = NumberFormat('#,##0');
+              String formattedValue = numberFormat.format(item);
               final addRow = online?[index];
               return GestureDetector(
                 onTap: (){
@@ -110,7 +99,7 @@ class _OnlineState extends State<Online> {
                               image: DecorationImage(
                                   image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
                                   online![index].imageThumbnailUrl!:
-                                      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
+                                  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
                                   ),
                                   fit: BoxFit.fill
                               )
@@ -120,7 +109,7 @@ class _OnlineState extends State<Online> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(breakUnwantedPart(addRow?.productName??''),
                             style: const TextStyle(
-                                fontSize: 13,
+                              fontSize: 13,
                             ),
                           ),
                         ),
@@ -153,7 +142,7 @@ class _OnlineState extends State<Online> {
                                     color: Color(0xff7F78D8)
                                 ),
                               ),
-                              Text(displayValue,
+                              Text(formattedValue,
                                 style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,

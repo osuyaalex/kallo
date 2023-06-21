@@ -1,5 +1,10 @@
+import 'dart:ui';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:job/first%20pages/home.dart';
 import 'package:job/providers/country_provider.dart';
@@ -13,6 +18,8 @@ import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  User? user = FirebaseAuth.instance.currentUser;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
   runApp( MultiProvider(
@@ -21,13 +28,14 @@ void main() async{
         return CountryProvider();
       })
     ],
-      child: MyApp(isFirstLaunch: isFirstLaunch,)
+      child: MyApp(isFirstLaunch: isFirstLaunch, user:  user,)
   ));
 }
 
 class MyApp extends StatelessWidget {
   final bool isFirstLaunch;
-  const MyApp({super.key, required this.isFirstLaunch});
+  final User? user;
+  const MyApp({super.key, required this.isFirstLaunch, required this.user});
 
   // This widget is the root of your application.
   @override
@@ -55,7 +63,9 @@ class MyApp extends StatelessWidget {
               CountryLocalizations.delegate
             ],
 
-            home: isFirstLaunch?const GetStarted():const Home(),
+            home: user == null ?
+            isFirstLaunch?const GetStarted():const Home():Home(),
+            builder: EasyLoading.init(),
 
     );
   }

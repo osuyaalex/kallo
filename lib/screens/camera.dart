@@ -140,7 +140,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+                                 // fontWeight: FontWeight.w700,
                                   fontSize: 17
 
                                 ),
@@ -150,23 +150,23 @@ class _CameraScreenState extends State<CameraScreen> {
                           Positioned(
                             top: 0,
                             left: 0,
-                              child: Image.asset('asset/curve-arrows-svgrepo-com (1).png', height: 25, color: Colors.white,)
+                              child: Image.asset('asset/curve-arrow-svgrepo-com (1).png', height: 25, color: Colors.white,)
                           ),
                           Positioned(
                             top: 0,
                             right: 0,
-                              child: Image.asset('asset/curve-arrows-svgrepo-com.png', height: 25, color: Colors.white,)
+                              child: Image.asset('asset/curve-arrow-svgrepo-com (2).png', height: 25, color: Colors.white,)
 
                           ),
                           Positioned(
                             bottom: 0,
                             left: 0,
-                            child: Image.asset('asset/curve-arrows-svgrepo-com (2).png', height: 25, color: Colors.white,)
+                            child: Image.asset('asset/curve-arrow-svgrepo-com (3).png', height: 25, color: Colors.white,)
                           ),
                           Positioned(
                             bottom: 0,
                             right: 0,
-                            child: Image.asset('asset/curve-arrows-svgrepo-com (3).png', height: 25, color: Colors.white,)
+                            child: Image.asset('asset/curve-arrow-svgrepo-com (4).png', height: 25, color: Colors.white,)
                           ),
                         ],
                       )

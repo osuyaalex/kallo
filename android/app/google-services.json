@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "262305031185",
+    "project_id": "kallo-1e220",
+    "storage_bucket": "kallo-1e220.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262305031185:android:3ffd78f47cdab6ebed3db0",
+        "android_client_info": {
+          "package_name": "com.koye.job"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "262305031185-1fvu7alvl7vrncrbu24stfo4dh3hmm6p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.koye.job",
+            "certificate_hash": "173dfcb65ae90c9db7f14bba677a0d423f522129"
+          }
+        },
+        {
+          "client_id": "262305031185-rr5mupcnqihiplmdg8n2pl4faagdc2mu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOqy2xqQOOkgzWYscPCWNR65TFDAZ_cww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "262305031185-rr5mupcnqihiplmdg8n2pl4faagdc2mu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

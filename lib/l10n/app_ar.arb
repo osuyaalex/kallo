@@ -33,5 +33,10 @@
   "barcodeInfo": "مسح شريط الباركود للمنتج لرؤية الأسعار",
   "pictureInfo": "التقاط صورة للمنتج للبحث",
   "letsGo": "لنذهب!",
-  "position": "ضع المنتج داخل هذا الصندوق"
+  "position": "ضع المنتج داخل هذا الصندوق",
+  "startSearching": "ابدأ البحث",
+  "recentSearches": "عمليات البحث الأخيرة",
+  "searchSuggestions": "اقتراحات البحث",
+  "pleaseWaitSearching": "جاري البحث عن اقتراحات، يرجى الانتظار",
+  "noSuggestions": "لا توجد اقتراحات متاحة"
 }

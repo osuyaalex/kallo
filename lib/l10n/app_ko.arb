@@ -33,5 +33,10 @@
   "barcodeInfo": "제품의 바코드를 스캔하여 가격 확인",
   "pictureInfo": "제품 사진을 찍어서 검색",
   "letsGo": "갑시다!",
-  "position": "제품을 이 상자 안에 위치시키세요"
+  "position": "제품을 이 상자 안에 위치시키세요",
+  "startSearching": "검색 시작",
+  "recentSearches": "최근 검색",
+  "searchSuggestions": "검색 제안",
+  "pleaseWaitSearching": "제안을 검색 중입니다. 기다려주세요",
+  "noSuggestions": "사용 가능한 제안이 없습니다"
 }

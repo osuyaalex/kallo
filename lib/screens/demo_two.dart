@@ -7,12 +7,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:job/network/image_json.dart';
 import 'package:job/network/json.dart';
 import 'package:job/network/network.dart';
 import 'package:job/screens/demo.dart';
+import 'package:job/screens/image_offline.dart';
+import 'package:job/screens/image_online.dart';
 import 'package:job/screens/offline_items.dart';
 import 'package:job/screens/online_items.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
@@ -30,7 +34,7 @@ class Dems extends StatefulWidget {
 enum Segment { shopsNearMe, onlineShops }
 class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
   late Future<Koye> products = Network().getProducts(_scanBarcode, '');
-  late Future<Koye> imageSearch = Network().getProductsImage(_image, '');
+  late Future<KalloImageSearch> imageSearch = Network().getProductsImage(_image, '');
   late AnimationController _animationController;
   Segment _selectedSegment = Segment.onlineShops;
   String _scanBarcode = 'Unknown';
@@ -74,26 +78,52 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
   _pickImage() async {
     final cameras = await availableCameras();
     final firstCamera = cameras.first;
-
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CameraScreen(
+    PermissionStatus status = await Permission.camera.request();
+    if(status.isGranted){
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CameraScreen(
             camera: firstCamera,
+          ),
         ),
-      ),
-    );
+      );
 
-    // Handle the result, such as saving the picture or displaying it in the UI
-    if (result != null) {
-      setState(() {
-        _image = result;
-      });
-      print('Captured image path: $result');
-    } else {
-      print('No image selected');
-      return null;
+      // Handle the result, such as saving the picture or displaying it in the UI
+      if (result != null) {
+        setState(() {
+          _image = result;
+        });
+        print('Captured image path: $result');
+      } else {
+        print('No image selected');
+        return null;
+      }
+    }else if(status.isDenied || status.isPermanentlyDenied){
+      showDialog(
+          context: context,
+          builder: (context){
+            return AlertDialog(
+              title: Text('Camera Permissions',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 17
+                ),
+              ),
+              content: Text('Please grant camera permissions to use this feature'),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK')
+                )
+              ],
+            );
+          }
+      );
     }
+
   }
 
   Future<void> scanBarcodeNormal() async {
@@ -351,6 +381,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     return Center(
                       child: Column(
                         children: [
+                          //Text(snapshot.error.toString()),
                           const SizedBox(
                             height: 40,
                           ),
@@ -1166,6 +1197,8 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                           const SizedBox(
                             height: 40,
                           ),
+
+                          //Text(snapshot.error.toString()),
                           GestureDetector(
                             onTap: (){
                               setState(() {
@@ -1457,14 +1490,14 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                   begin: Offset(1, 0),
                                   end: Offset.zero,
                                 ).animate(_animationController),
-                                child: Offline(snapshot: snapshot,),
+                                child: ImageOffline(snapshot: snapshot,),
                               ),
                               SlideTransition(
                                 position: Tween<Offset>(
                                   begin: Offset.zero,
                                   end: Offset(-1, 0),
                                 ).animate(_animationController),
-                                child: Online(snapshot: snapshot,),
+                                child: ImageOnline(snapshot: snapshot,),
                               ),
                             ],
                           ),

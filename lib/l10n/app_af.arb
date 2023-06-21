@@ -33,5 +33,10 @@
   "barcodeInfo": "Skandeer 'n produk se strepieskode om pryse te sien",
   "pictureInfo": "Neem 'n prentjie van 'n produk om te soek",
   "letsGo": "Kom ons gaan!",
-  "position": "Posisieer die produk binne hierdie boks"
+  "position": "Posisieer die produk binne hierdie boks",
+  "startSearching": "Begin soek",
+  "recentSearches": "Onlangse soekopdragte",
+  "searchSuggestions": "Soek voorstelle",
+  "pleaseWaitSearching": "Soek na voorstelle, wag asseblief",
+  "noSuggestions": "Geen voorstelle beskikbaar nie"
 }
