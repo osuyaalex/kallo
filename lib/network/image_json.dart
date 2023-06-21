@@ -1,11 +1,11 @@
-class Koye {
+class KalloImageSearch {
   bool? itemFound;
   Data? data;
-  Null error;
+  Null? error;
 
-  Koye({this.itemFound, this.data, this.error});
+  KalloImageSearch({this.itemFound, this.data, this.error});
 
-  Koye.fromJson(Map<String, dynamic> json) {
+  KalloImageSearch.fromJson(Map<String, dynamic> json) {
     itemFound = json['item_found'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     error = json['error'];
@@ -23,7 +23,7 @@ class Koye {
 }
 
 class Data {
-  String? thisProduct;
+  Null? thisProduct;
   Null? thisPrice;
   Null? thisCurrency;
   Null? thisAvailability;
@@ -58,19 +58,19 @@ class Data {
     if (json['cprs'] != null) {
       cprs = <Null>[];
       json['cprs'].forEach((v) {
-        cprs!.add( Null as Null);
+        cprs!.add(null);
       });
     }
     if (json['cprs_truncated'] != null) {
       cprsTruncated = <Null>[];
       json['cprs_truncated'].forEach((v) {
-        cprsTruncated!.add( Null as Null);
+        cprsTruncated!.add(null);
       });
     }
     if (json['cprs_within_range'] != null) {
       cprsWithinRange = <Null>[];
       json['cprs_within_range'].forEach((v) {
-        cprsWithinRange!.add(Null as Null);
+        cprsWithinRange!.add(null);
       });
     }
     scores = json['scores'];
@@ -102,88 +102,82 @@ class Data {
 }
 
 class Products {
-  String? merchantUrl;
-  String? productName;
-  String? price;
   String? currency;
   String? productLink;
+  bool? hasRn50Vector2048;
+  String? productName;
   String? imageThumbnailUrl;
+  int? price;
   PriceHistoryDict? priceHistoryDict;
+  String? merchantUrl;
+  List<dynamic>? clipVector512;
   String? merchantDomain;
   String? merchantName;
   String? merchantType;
-  String? merchantLongitude;
-  String? merchantLatitude;
 
   Products(
-      {this.merchantUrl,
-        this.productName,
-        this.price,
-        this.currency,
+      {this.currency,
         this.productLink,
+        this.hasRn50Vector2048,
+        this.productName,
         this.imageThumbnailUrl,
+        this.price,
         this.priceHistoryDict,
+        this.merchantUrl,
+        this.clipVector512,
         this.merchantDomain,
         this.merchantName,
-        this.merchantType,
-        this.merchantLongitude,
-        this.merchantLatitude});
+        this.merchantType});
 
   Products.fromJson(Map<String, dynamic> json) {
-    merchantUrl = json['merchant_url'];
-    productName = json['product_name'];
-    price = json['price'];
     currency = json['currency'];
     productLink = json['product_link'];
+    hasRn50Vector2048 = json['has_rn50_vector_2048'];
+    productName = json['product_name'];
     imageThumbnailUrl = json['image_thumbnail_url'];
+    price = json['price'].toInt();
     priceHistoryDict = json['price_history_dict'] != null
         ? new PriceHistoryDict.fromJson(json['price_history_dict'])
         : null;
+    merchantUrl = json['merchant_url'];
+    clipVector512 = json['clip_vector_512'];
     merchantDomain = json['merchant_domain'];
     merchantName = json['merchant_name'];
     merchantType = json['merchant_type'];
-    merchantLongitude = json['merchant_longitude'];
-    merchantLatitude = json['merchant_latitude'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['merchant_url'] = this.merchantUrl;
-    data['product_name'] = this.productName;
-    data['price'] = this.price;
     data['currency'] = this.currency;
     data['product_link'] = this.productLink;
+    data['has_rn50_vector_2048'] = this.hasRn50Vector2048;
+    data['product_name'] = this.productName;
     data['image_thumbnail_url'] = this.imageThumbnailUrl;
+    data['price'] = this.price;
     if (this.priceHistoryDict != null) {
       data['price_history_dict'] = this.priceHistoryDict!.toJson();
     }
+    data['merchant_url'] = this.merchantUrl;
+    data['clip_vector_512'] = this.clipVector512;
     data['merchant_domain'] = this.merchantDomain;
     data['merchant_name'] = this.merchantName;
     data['merchant_type'] = this.merchantType;
-    data['merchant_longitude'] = this.merchantLongitude;
-    data['merchant_latitude'] = this.merchantLatitude;
     return data;
   }
 }
 
 class PriceHistoryDict {
-  String? s23122022;
-  String? s10022023;
-  String? s24122022;
+  double? i20052023;
 
-  PriceHistoryDict({this.s23122022, this.s10022023, this.s24122022});
+  PriceHistoryDict({this.i20052023});
 
   PriceHistoryDict.fromJson(Map<String, dynamic> json) {
-    s23122022 = json['23-12-2022'];
-    s10022023 = json['10-02-2023'];
-    s24122022 = json['24-12-2022'];
+    i20052023 = json['20-05-2023'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['23-12-2022'] = this.s23122022;
-    data['10-02-2023'] = this.s10022023;
-    data['24-12-2022'] = this.s24122022;
+    data['20-05-2023'] = this.i20052023;
     return data;
   }
 }

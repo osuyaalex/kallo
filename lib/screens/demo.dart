@@ -169,6 +169,40 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
          }
     });
   }
+  RichText buildSuggestionTile(String suggestion, String query) {
+    final lowercaseSuggestion = suggestion.toLowerCase();
+    final lowercaseQuery = query.toLowerCase();
+
+    final highlightedLetters = <int>{};
+    for (var i = 0; i < lowercaseSuggestion.length; i++) {
+      if (i < lowercaseQuery.length && lowercaseSuggestion[i] == lowercaseQuery[i]) {
+        highlightedLetters.add(i);
+      }
+    }
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          for (var i = 0; i < suggestion.length; i++)
+            TextSpan(
+              text: suggestion[i],
+              style: highlightedLetters.contains(i)
+                  ? TextStyle(
+
+                color: Colors.black,
+              )
+                  : TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              )
+            ),
+        ],
+      ),
+    );
+  }
+
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -850,63 +884,67 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                       children: [
                         Padding(
                             padding: const EdgeInsets.only(top: 8.0, left: 15),
-                            child: Text('About ${_suggestion.length.toString()} result(s) in ${_timeTakenText} milliseconds',
+                            child: _suggestion.length != 0?
+                            Text('About ${_suggestion.length.toString()} result(s) in ${_timeTakenText} milliseconds',
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey.shade500
                               ),
-                            )
+                            ):Text('')
                         ),
                       ],
                     ),
                     _suggestion.length != 0?SizedBox(
                       height: 230,
                       child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _suggestion.length,
-                          itemBuilder: (context, index){
-                            return ListTile(
-                              leading: const Icon(
-                                Icons.search,
-                              ),
-                              title: Text(_suggestion[index]),
-                              onTap: (){
+                        shrinkWrap: true,
+                        itemCount: _suggestion.length,
+                        itemBuilder: (context, index) {
+                          final suggestion = _suggestion[index];
+                          final query = controller.query;
+                          final suggestionWithHighlightedLetters =
+                          buildSuggestionTile(suggestion, query);
+
+                          return ListTile(
+                            leading: const Icon(Icons.search),
+                            title: suggestionWithHighlightedLetters,
+                            onTap: () {
+                              setState(() {
+                                _type = false;
+                              });
+                              _loadCountryCode().then((value) {
+                                _saveToRecentSearches(suggestion);
                                 setState(() {
-                                  _type = false;
+                                  _firstpage = false;
+                                  _name = suggestion;
+                                  productName = Network().getProductsName(suggestion, _code);
                                 });
-                                _loadCountryCode().then((value){
-                                  _saveToRecentSearches(_suggestion[index]);
+                                controller.close();
+                                putSearchTermFirst(suggestion);
+                              });
+                            },
+                            trailing: IconButton(
+                              onPressed: () {
+                                _firstpage = false;
+                                _loadCountryCode().then((value) {
+                                  _saveToRecentSearches(suggestion);
                                   setState(() {
-                                    _firstpage = false;
-                                    _name = _suggestion[index];
-                                    productName = Network().getProductsName(_suggestion[index], _code);
+                                    _name = suggestion;
+                                    productName = Network().getProductsName(suggestion, _code);
                                   });
                                   controller.close();
-                                  putSearchTermFirst(_suggestion[index]);
+                                  putSearchTermFirst(suggestion);
                                 });
                               },
-                              trailing: IconButton(
-                                onPressed: () {
-                                  _firstpage = false;
-                                  _loadCountryCode().then((value){
-                                    _saveToRecentSearches(_suggestion[index]);
-                                    setState(() {
-                                      _name = _suggestion[index];
-                                      productName = Network().getProductsName(_suggestion[index], _code);
-                                    });
-                                    controller.close();
-                                    putSearchTermFirst(_suggestion[index]);
-                                  });
-                                },
-                                icon: const Icon(Icons.north_east),
-                              ),
-                            );
-                          }
-                      ),
+                              icon: const Icon(Icons.north_east),
+                            ),
+                          );
+                        },
+                      )
                     ): SizedBox(
                       height: 140,
                       child: Center(child: _start == 0?
-                      Text(AppLocalizations.of(context)!.noSuggestions):
+                      Text(''):
                       Text(AppLocalizations.of(context)!.pleaseWaitSearching)
                       ),
                     ),

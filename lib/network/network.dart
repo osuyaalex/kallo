@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:job/network/image_json.dart';
 import 'package:job/network/json.dart';
 import 'package:job/network/search_suggestion_json.dart';
 
@@ -76,7 +77,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
 
   }
-  Future<Koye> getProductsImage(String image, String countryCode,) async {
+  Future<KalloImageSearch> getProductsImage(String image, String countryCode,) async {
     var jsonResponse;
 
     try {
@@ -107,7 +108,7 @@ class Network{
       print('the error isissssssisisisis ${error.toString()}');
     }
 
-    return Koye.fromJson(jsonResponse);
+    return KalloImageSearch.fromJson(jsonResponse);
 
   }
   Future<List<String>> getSearchSuggestions(String search, String countryCode,) async {

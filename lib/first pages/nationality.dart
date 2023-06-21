@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:job/first%20pages/home.dart';
+import 'package:job/first%20pages/signin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Nationality extends StatefulWidget {
@@ -55,7 +56,7 @@ class _NationalityState extends State<Nationality> {
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight:MediaQuery.of(context).size.height*0.3,
+        toolbarHeight:MediaQuery.of(context).size.height*0.28,
         elevation: 0,
         backgroundColor: Colors.grey.shade50,
         title: Padding(
@@ -142,7 +143,7 @@ class _NationalityState extends State<Nationality> {
                       style: TextStyle(
                         color: Colors.grey.shade500,
                         fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                        //fontWeight: FontWeight.w500,
                         letterSpacing: 0.5
                       ),
                     )
@@ -162,7 +163,7 @@ class _NationalityState extends State<Nationality> {
                       style: TextStyle(
                           color: Colors.grey.shade500,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          //fontWeight: FontWeight.w500,
                         letterSpacing: 0.5
                       ),
                 ),
@@ -173,38 +174,70 @@ class _NationalityState extends State<Nationality> {
         ),
       ),
       bottomSheet: Padding(
-        padding: const EdgeInsets.only(bottom: 50.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 60,
-              width: MediaQuery.of(context).size.width*0.45,
-              child: InkWell(
-                onTap: ()async{
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setBool('isFirstLaunch', false);
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const Home()));
-                },
-                child: Card(
-                  color: const Color(0xff7F78D8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child:  Center(
-                    child: Text(AppLocalizations.of(context)!.letsGo,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16
+        padding: const EdgeInsets.only(bottom: 80.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height*0.13,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  SizedBox(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width*0.45,
+                    child: InkWell(
+                      onTap: ()async{
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.setBool('isFirstLaunch', false);
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => const Home()));
+                      },
+                      child: Card(
+                        color: const Color(0xff7F78D8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child:  Center(
+                          child: Text(AppLocalizations.of(context)!.letsGo,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16
+                            ),
+                          )
+                        ),
                       ),
-                    )
+                    ),
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return SignUp();
+                            }));
+                          },
+                          child: Text('LogIn',
+                          style: TextStyle(
+                            color: Color(0xff7F78D8)
+                          ),
+                          )
+                      ),
+                      TextButton(
+                          onPressed: (){},
+                          child: Text('SignUp',
+                          style: TextStyle(
+                            color: Color(0xff7F78D8)
+                          ),
+                          )
+                      )
+                    ],
+                  )
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
