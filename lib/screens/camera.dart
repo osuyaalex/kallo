@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image/image.dart' as Img;
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
-
-import '../classes/frame_clipper.dart';
+import 'dart:math' as math;
 
 
 class CameraScreen extends StatefulWidget {
@@ -22,8 +21,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-
-
+  bool isFlashOn = true;
   // Future<File> _cropAndResizeImage(File imageFile) async {
   //   final originalImage = Img.decodeImage(imageFile.readAsBytesSync());
   //
@@ -94,10 +92,13 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
 
+
+
+
+
   @override
   void initState() {
     super.initState();
-
     _controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
@@ -111,6 +112,15 @@ class _CameraScreenState extends State<CameraScreen> {
     super.dispose();
   }
 
+  Future<void> _toggleFlash() async {
+    if (_controller.value.isInitialized) {
+      if (isFlashOn) {
+        await _controller.setFlashMode(FlashMode.always);
+      } else {
+        await _controller.setFlashMode(FlashMode.off);
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,15 +144,18 @@ class _CameraScreenState extends State<CameraScreen> {
                         children: [
                           SizedBox(
                             height: MediaQuery.of(context).size.width*0.85,
-                            width: MediaQuery.of(context).size.width*0.85,
+                            width: MediaQuery.of(context).size.width,
                             child: Center(
-                              child: Text(AppLocalizations.of(context)!.position,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                 // fontWeight: FontWeight.w700,
-                                  fontSize: 17
+                              child: SizedBox(
+                                width: 200,
+                                child: Text(AppLocalizations.of(context)!.position,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 25
 
+                                  ),
                                 ),
                               ),
                             )
@@ -150,23 +163,40 @@ class _CameraScreenState extends State<CameraScreen> {
                           Positioned(
                             top: 0,
                             left: 0,
-                              child: Image.asset('asset/curve-arrow-svgrepo-com (1).png', height: 25, color: Colors.white,)
+                              child: Transform(
+                                alignment: Alignment.center,
+                                transform: Matrix4.rotationY(math.pi),
+                                child: SvgPicture.asset(
+                                  'asset/xlarge-svg.svg',
+                                  height: 60,
+                                ),
+                              )
                           ),
                           Positioned(
                             top: 0,
                             right: 0,
-                              child: Image.asset('asset/curve-arrow-svgrepo-com (2).png', height: 25, color: Colors.white,)
+                              child:  SvgPicture.asset('asset/xlarge-svg.svg', height: 60,),
+                            //Image.asset('asset/curve-arrow-svgrepo-com (2).png', height: 25, color: Colors.white,)
 
                           ),
                           Positioned(
                             bottom: 0,
                             left: 0,
-                            child: Image.asset('asset/curve-arrow-svgrepo-com (3).png', height: 25, color: Colors.white,)
+                            child: Transform(
+                              transform: Matrix4.identity()..scale(-1.0, 1.0)..scale(1.0, -1.0),
+                              alignment: Alignment.center,
+                              child: SvgPicture.asset('asset/xlarge-svg.svg', height: 60),
+                            )
+
                           ),
                           Positioned(
                             bottom: 0,
                             right: 0,
-                            child: Image.asset('asset/curve-arrow-svgrepo-com (4).png', height: 25, color: Colors.white,)
+                            child:Transform(
+                              transform: Matrix4.identity()..scale(1.0, -1.0),
+                              alignment: Alignment.center,
+                              child: SvgPicture.asset('asset/xlarge-svg.svg', height: 60),
+                            )
                           ),
                         ],
                       )
@@ -181,8 +211,20 @@ class _CameraScreenState extends State<CameraScreen> {
                         onPressed: (){
                           Navigator.pop(context);
                         },
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white,)
+                        icon: Icon(Icons.close, color: Colors.white, size: 30,)
                     ),
+                ),
+                Positioned(
+                    top: MediaQuery.of(context).size.height*0.05,
+                    left: 100,
+                    child: IconButton(
+                        onPressed: (){
+                          setState(() {
+                            isFlashOn = !isFlashOn;
+                          });
+                        }, icon: isFlashOn ? Icon(Icons.flash_auto, color: Colors.white,):Icon(Icons.flash_off, color: Colors.white,)
+                    )
+
                 )
               ],
             );
@@ -193,45 +235,51 @@ class _CameraScreenState extends State<CameraScreen> {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton(
-          backgroundColor: Colors.white,
-          child: Icon(Icons.camera, color: Colors.black,),
-          onPressed: () async {
-            try {
-              await _initializeControllerFuture;
-              final image = await _controller.takePicture();
-              // Get the captured image as a File
-             // final File capturedImageFile = File(image.path);
+        child: CircleAvatar(
+          backgroundColor: Color(0xff7F78D8).withOpacity(0.4),
+          radius: 35,
+          child: FloatingActionButton(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            onPressed: () async {
+              try {
+                await _initializeControllerFuture;
+                await _toggleFlash();
+                await Future.delayed(Duration(milliseconds: 200));
+                final image = await _controller.takePicture();
+                // Get the captured image as a File
+               // final File capturedImageFile = File(image.path);
 
-              // Create an instance of ImageCropper
-              //final imageCropper = ImageCropper();
+                // Create an instance of ImageCropper
+                //final imageCropper = ImageCropper();
 
-              // Crop the captured image to a square shape
-              // final croppedImage = await imageCropper.cropImage(
-              //   sourcePath: image.path,
-              //   aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-              //   compressFormat: ImageCompressFormat.png,
-              //   compressQuality: 90,
-              //   aspectRatioPresets: [
-              //     CropAspectRatioPreset.square
-              //   ],
-              //   maxHeight: 224,
-              //   maxWidth: 224,
-              // );
-              final _imageFile = File(image.path);
-              final croppedImage = await _cropAndResizeImage(_imageFile);
-                // Resize the image to 224x224
+                // Crop the captured image to a square shape
+                // final croppedImage = await imageCropper.cropImage(
+                //   sourcePath: image.path,
+                //   aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+                //   compressFormat: ImageCompressFormat.png,
+                //   compressQuality: 90,
+                //   aspectRatioPresets: [
+                //     CropAspectRatioPreset.square
+                //   ],
+                //   maxHeight: 224,
+                //   maxWidth: 224,
+                // );
+                final _imageFile = File(image.path);
+                final croppedImage = await _cropAndResizeImage(_imageFile);
+                  // Resize the image to 224x224
 
 
-                // Convert the compressed image (Uint8List) to a base64-encoded string
-                //final String compressedImageString = croppedImage
+                  // Convert the compressed image (Uint8List) to a base64-encoded string
+                  //final String compressedImageString = croppedImage
 
-                // Pass the resized image path back to the previous screen
-                Navigator.pop(context, croppedImage);
-            } catch (e) {
-              print('Error capturing image: $e');
-            }
-          },
+                  // Pass the resized image path back to the previous screen
+                  Navigator.pop(context, croppedImage);
+              } catch (e) {
+                print('Error capturing image: $e');
+              }
+            },
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

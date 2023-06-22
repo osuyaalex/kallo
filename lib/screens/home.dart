@@ -116,17 +116,17 @@ class _MyHomeState extends State<MyHome> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade100,
-        elevation: 0,
-        toolbarHeight:MediaQuery.of(context).size.height*0.17,
+        shadowColor: Color(0xff7F78D8).withOpacity(0.3),
+        elevation: 2,
+        toolbarHeight:MediaQuery.of(context).size.height*0.12,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
                 child: SizedBox(
-                  height: 60,
-                  width: 60,
+                  height: 40,
+                  width: 40,
                   child: Card(
-
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7)
                     ),
@@ -142,7 +142,7 @@ class _MyHomeState extends State<MyHome> {
                 )
             ),
             const SizedBox(
-              height: 10,
+              height: 3,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +150,7 @@ class _MyHomeState extends State<MyHome> {
                 GestureDetector(
                   onTap: widget.onSearchPressed,
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height*0.06,
+                    height: MediaQuery.of(context).size.height*0.055,
                     width: MediaQuery.of(context).size.width *0.7,
                     child: TextFormField(
                       enabled: false,
@@ -192,6 +192,9 @@ class _MyHomeState extends State<MyHome> {
                 )
               ],
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.01,
+            )
           ],
         ) ,
       ),

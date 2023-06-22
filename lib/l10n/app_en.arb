@@ -151,7 +151,7 @@
   "@searchSuggestions": {
     "description": "Search suggestions"
   },
-  "pleaseWaitSearching": "Searching suggestions, please wait",
+  "pleaseWaitSearching": "Searching suggestions...",
   "@pleaseWaitSearching": {
     "description": "Wait"
   },
