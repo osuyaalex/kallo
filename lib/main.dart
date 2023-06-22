@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -41,33 +42,32 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor:Colors.transparent,));
-    return MaterialApp(
+    return CupertinoApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedLabelStyle:TextStyle(
+      theme: CupertinoThemeData(
+        scaffoldBackgroundColor: CupertinoColors.systemBackground,
+        primaryColor: CupertinoColors.activeBlue,
+        textTheme: CupertinoTextThemeData(
+          tabLabelTextStyle: TextStyle(
             color: Color(0xff7F78D8),
-            fontWeight: FontWeight.w500,
-            fontSize: 20
-          )
+            fontWeight: FontWeight.w400,
+            fontSize: 13,
+          ),
         ),
-        primarySwatch: Colors.blue,
       ),
-            supportedLocales: L10n.all,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              CountryLocalizations.delegate
-            ],
-
-            home: user == null ?
-            isFirstLaunch?const GetStarted():const Home():Home(),
-            builder: EasyLoading.init(),
-
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        CountryLocalizations.delegate,
+      ],
+      home: user == null ? (isFirstLaunch ? const GetStarted() : const Home()) : Home(),
+      builder: EasyLoading.init(),
     );
+
   }
 
 }

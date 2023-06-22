@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -22,6 +23,9 @@ class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   bool isFlashOn = true;
+  Timer? _timer;
+  int _start = 5;
+  double _opacity = 1.0; // Initial opacity value
   // Future<File> _cropAndResizeImage(File imageFile) async {
   //   final originalImage = Img.decodeImage(imageFile.readAsBytesSync());
   //
@@ -91,14 +95,31 @@ class _CameraScreenState extends State<CameraScreen> {
     return resizedImageString;
   }
 
+  void _startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if(!mounted) return;
+        if (_start == 0) {
+          _timer?.cancel();
+          setState(() {
+            _opacity = 0.0;
+          });
+        }else {
+          setState(() {
+            _start--;
+          });
+        }
 
-
-
-
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
+    _startTimer();
     _controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
@@ -148,13 +169,17 @@ class _CameraScreenState extends State<CameraScreen> {
                             child: Center(
                               child: SizedBox(
                                 width: 200,
-                                child: Text(AppLocalizations.of(context)!.position,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 25
+                                child: AnimatedOpacity(
+                                  opacity: _opacity,
+                                  duration: Duration(milliseconds: 200),
+                                  child: Text(AppLocalizations.of(context)!.position,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 25
 
+                                    ),
                                   ),
                                 ),
                               ),

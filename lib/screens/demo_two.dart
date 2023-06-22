@@ -82,6 +82,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
+          fullscreenDialog: true,
           builder: (context) => CameraScreen(
             camera: firstCamera,
           ),
