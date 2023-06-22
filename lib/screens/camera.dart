@@ -171,7 +171,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                 width: 200,
                                 child: AnimatedOpacity(
                                   opacity: _opacity,
-                                  duration: Duration(milliseconds: 200),
+                                  duration: Duration(milliseconds: 600),
                                   child: Text(AppLocalizations.of(context)!.position,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
