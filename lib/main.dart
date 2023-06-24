@@ -40,24 +40,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor:Colors.transparent,));
-    return CupertinoApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: CupertinoThemeData(
-        scaffoldBackgroundColor: CupertinoColors.systemBackground,
-        primaryColor: CupertinoColors.activeBlue,
-        textTheme: CupertinoTextThemeData(
-          tabLabelTextStyle: TextStyle(
-            color: Color(0xff7F78D8),
-            fontWeight: FontWeight.w400,
-            fontSize: 13,
-          ),
-        ),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white, // Update with your desired scaffold background color
+        primaryColor: Colors.blue, // Update with your desired primary color
       ),
       supportedLocales: L10n.all,
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         CountryLocalizations.delegate,
