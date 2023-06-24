@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -45,29 +44,20 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedLabelStyle:TextStyle(
-            color: Color(0xff7F78D8),
-            fontWeight: FontWeight.w500,
-            fontSize: 20
-          )
-        ),
-        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white, // Update with your desired scaffold background color
+        primaryColor: Colors.blue, // Update with your desired primary color
       ),
-            supportedLocales: L10n.all,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              CountryLocalizations.delegate
-            ],
-
-            home: user == null ?
-            isFirstLaunch?const GetStarted():const Home():Home(),
-            builder: EasyLoading.init(),
-
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        CountryLocalizations.delegate,
+      ],
+      home: user == null ? (isFirstLaunch ? const GetStarted() : const Home()) : Home(),
+      builder: EasyLoading.init(),
     );
+
   }
 
 }

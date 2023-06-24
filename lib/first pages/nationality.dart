@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:job/first%20pages/home.dart';
+import 'package:job/first%20pages/kallo_login_page.dart';
 import 'package:job/first%20pages/signin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -189,7 +190,7 @@ class _NationalityState extends State<Nationality> {
                       onTap: ()async{
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isFirstLaunch', false);
-                        Navigator.push(context, MaterialPageRoute(
+                        Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) => const Home()));
                       },
                       child: Card(
@@ -215,7 +216,7 @@ class _NationalityState extends State<Nationality> {
                       TextButton(
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return SignUp();
+                              return KalloLoginPage();
                             }));
                           },
                           child: Text('LogIn',
@@ -225,7 +226,11 @@ class _NationalityState extends State<Nationality> {
                           )
                       ),
                       TextButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return SignUp();
+                            }));
+                          },
                           child: Text('SignUp',
                           style: TextStyle(
                             color: Color(0xff7F78D8)

@@ -45,8 +45,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
   Timer? _timer;
   int _start = 5;
   //RangeValues _selectedValues = RangeValues(0.0, 100000.0);
-  double _startValue = 0.0;
-  double _endValue = 100000.0;
+
 
   //final ImagePicker _picker = ImagePicker();
 
@@ -83,6 +82,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
+          fullscreenDialog: true,
           builder: (context) => CameraScreen(
             camera: firstCamera,
           ),
@@ -213,7 +213,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
         setState(() {
           imageSearch = Network().getProductsImage(_image, _code);
           _firstOpen = true;
-          _start = 5;
+          _start = 10;
         });
         _startTimer();
         prefs.setBool(('isLaunchCamera'), false);
@@ -261,19 +261,19 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
     return Form(
       key: _key,
       child: Scaffold(
-        backgroundColor:Colors.grey.shade50,
+        backgroundColor:Colors.grey.shade100,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.grey.shade50,
           elevation: 0,
-          toolbarHeight:MediaQuery.of(context).size.height*0.17,
+          toolbarHeight:MediaQuery.of(context).size.height*0.13,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Center(
                   child: SizedBox(
-                    height: 60,
-                    width: 60,
+                    height: 40,
+                    width: 40,
                     child: Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(7)
@@ -290,7 +290,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                   )
               ),
               const SizedBox(
-                height: 10,
+                height: 3,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -302,10 +302,11 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                       }));
                     },
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height*0.06,
+                      height: MediaQuery.of(context).size.height*0.055,
                       width: MediaQuery.of(context).size.width *0.7,
                       child: TextFormField(
                         enabled: false,
+
                         onChanged: null,
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)?.searchForProducts,
@@ -360,7 +361,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                           setState(() {
                             imageSearch = Network().getProductsImage(_image, _code);
                             _firstOpen = true;
-                            _start = 5;
+                            _start = 10;
                           });
                           _startTimer();
                         });
@@ -381,7 +382,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     return Center(
                       child: Column(
                         children: [
-                          //Text(snapshot.error.toString()),
+                         // Text(snapshot.error.toString()),
                           const SizedBox(
                             height: 40,
                           ),
@@ -429,7 +430,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style:  TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ):
@@ -438,7 +438,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style:  TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ):  _firstOpen?
@@ -447,7 +446,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style:  TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ):
@@ -456,7 +454,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style:  TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ),
@@ -472,9 +469,9 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               _pickImage().then((value){
                                 setState(() {
                                   imageSearch = Network().getProductsImage(_image,_code);
-                                  //  _start = 5;
+                                    _start = 12;
                                 });
-                                //_startTimer();
+                                _startTimer();
                               });
                             },
                             child: Padding(
@@ -504,13 +501,9 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style:TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ),
-
-
-
                         ],
                       ),
                     );
@@ -548,7 +541,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w700,
                                           fontSize: 17
                                       ),
                                     ),
@@ -561,7 +553,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               style: TextStyle(
                                   wordSpacing: 2,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w800,
                                   color: Colors.grey.shade600
                               ),
                             ): Container(),
@@ -608,7 +599,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               style: TextStyle(
                                   wordSpacing: 2,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w800,
                                   color: Colors.grey.shade600
                               ),
                             ): Text(AppLocalizations.of(context)!.processingData,
@@ -616,7 +606,6 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               style: TextStyle(
                                   wordSpacing: 2,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w800,
                                   color: Colors.grey.shade600
                               ),
                             ),
@@ -625,494 +614,133 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     );
                   }
                   if(snapshot.connectionState == ConnectionState.waiting){
-                    return const Center(
-                      child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                    return Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.8,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        Positioned(
+                          top:MediaQuery.of(context).size.height*0.4,
+                          left:MediaQuery.of(context).size.width*0.45,
+                          child: const Center(
+                            child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                          ),
+                        ),
+                      ],
                     );
                   }else if(snapshot.hasData){
                     return Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                          child: AppBar(
-                            automaticallyImplyLeading: false,
-                            backgroundColor: Colors.grey.shade50,
-                            elevation: 0,
-                            title:  Center(
-                              child: CustomSlidingSegmentedControl(
-                                //isStretch: true,
-                                initialValue: _selectedSegment.index,
-                                children:  {
-                                  Segment.onlineShops.index: SizedBox(
-                                    child: _selectedSegment == Segment.onlineShops?
-                                    Row(
-                                      children: [
-                                        Icon(Icons.location_on, color: Colors.white, size: 19,),
-                                        Text(
-                                          AppLocalizations.of(context)?.onlineShops??'',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w800
+                        Container(
+                          color:Colors.grey.shade50,
+                          child: Card(
+                            color:Colors.grey.shade50,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)
+                            ),
+                            elevation: 2,
+                            shadowColor: Color(0xff7F78D8).withOpacity(0.3),
+                            child: ClipRRect(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                child: AppBar(
+                                  elevation: 0,
+                                  automaticallyImplyLeading: false,
+                                  backgroundColor: Colors.grey.shade50,
+                                  title:  Center(
+                                    child: CustomSlidingSegmentedControl(
+                                      //isStretch: true,
+                                      initialValue: _selectedSegment.index,
+                                      children:  {
+                                        Segment.onlineShops.index: SizedBox(
+                                          child: _selectedSegment == Segment.onlineShops?
+                                          Row(
+                                            children: [
+                                              Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                              Text(
+                                                AppLocalizations.of(context)?.onlineShops??'',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400
+                                                ),
+                                              ),
+                                            ],
+                                          ): Row(
+                                            children: [
+                                              const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                              Text(
+                                                AppLocalizations.of(context)?.onlineShops??'',
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ): Row(
-                                      children: [
-                                        const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
-                                        Text(
-                                          AppLocalizations.of(context)?.onlineShops??'',
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w800
-                                          ),
-                                        ),
-                                      ],
-                                    ),
 
-                                  ),
-                                  Segment.shopsNearMe.index: SizedBox(
-                                    child: _selectedSegment == Segment.shopsNearMe?
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 4.0),
-                                          child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
                                         ),
-                                        Text(
-                                          AppLocalizations.of(context)?.shopsNearMe??'',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w800
+                                        Segment.shopsNearMe.index: SizedBox(
+                                          child: _selectedSegment == Segment.shopsNearMe?
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 4.0),
+                                                child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                              ),
+                                              Text(
+                                                AppLocalizations.of(context)?.shopsNearMe??'',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400
+                                                ),
+                                              ),
+                                            ],
+                                          ): Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 4.0),
+                                                child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                              ),Text(
+                                                AppLocalizations.of(context)?.shopsNearMe??'',
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ): Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 4.0),
-                                          child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
-                                        ),Text(
-                                          AppLocalizations.of(context)?.shopsNearMe??'',
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w800
-                                          ),
-                                        ),
-                                      ],
+                                      },
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey.shade400,
+                                          borderRadius: BorderRadius.circular(20)
+                                      ),
+                                      thumbDecoration: BoxDecoration(
+                                          color: const Color(0xff7F78D8),
+                                          borderRadius: BorderRadius.circular(20)
+                                      ),
+                                      duration: const Duration(milliseconds: 200),
+                                      curve: Curves.easeInToLinear,
+                                      onValueChanged: (value) {
+                                        setState(() {
+                                          _switchToSegment(Segment.values[value]);
+                                        });
+                                      },
                                     ),
                                   ),
-                                },
-                                decoration: BoxDecoration(
-                                    color: Colors.grey.shade400,
-                                    borderRadius: BorderRadius.circular(20)
                                 ),
-                                thumbDecoration: BoxDecoration(
-                                    color: const Color(0xff7F78D8),
-                                    borderRadius: BorderRadius.circular(20)
-                                ),
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.easeInToLinear,
-                                onValueChanged: (value) {
-                                  setState(() {
-                                    _switchToSegment(Segment.values[value]);
-                                  });
-                                },
                               ),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap:(){
-                                  showModalBottomSheet(
-                                      context: context,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30)
-                                      ),
-                                      builder: (context){
-                                        return StatefulBuilder(
-                                          builder: (BuildContext context, StateSetter setState) {
 
-                                            return Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 50,
-                                                  width: MediaQuery.of(context).size.width,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                    child: Row(
-                                                      children: [
-                                                        IconButton(
-                                                            onPressed: (){
-                                                              Navigator.pop(context);
-                                                            },
-                                                            icon: Icon(Icons.close)
-                                                        ),
-
-                                                        Text('Sort',
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w800,
-                                                            fontSize: 22
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 12,
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 20.0),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(right: 12.0),
-                                                        child: Text('Price:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.w800,
-                                                              fontSize: 22
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text('Low to high',
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight.w800,
-                                                            fontSize: 22
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 20.0),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(right: 12.0),
-                                                        child: Text('Price:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.w800,
-                                                              fontSize: 22
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text('High to low',
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight.w800,
-                                                            fontSize: 22
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 20.0),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(right: 12.0),
-                                                        child: Text('Distance:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.w800,
-                                                              fontSize: 22
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text('Closest first',
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight.w800,
-                                                            fontSize: 22
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          }
-                                        );
-                                      }
-                                  );
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 110,
-                                  padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border(
-                                        top: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                        left: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                        right: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                        bottom: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                      )
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text('Sort:',
-                                        style: TextStyle(
-                                            color: Color(0xff7f78d8),
-                                            fontWeight: FontWeight.w500
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text('',
-                                        style: TextStyle(
-                                            color: Color(0xff7f78d8),
-                                            fontWeight: FontWeight.w500
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 14,
-                              ),
-                              GestureDetector(
-                                onTap:(){
-                                  showModalBottomSheet(
-                                      context: context,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30)
-                                      ),
-                                      builder: (context){
-                                        return StatefulBuilder(
-                                            builder: (BuildContext context, StateSetter setState) {
-                                              String displayValue;
-                                              if (_startValue == _startValue.floor()) {
-                                                //.floor is basically used to convert doubles to integers
-                                                displayValue = _startValue.floor().toString();
-                                              } else {
-                                                displayValue = _startValue.toString();
-                                              }
-                                              if (_startValue >= 1000) {
-                                                final formatter = NumberFormat("#,###");
-                                                displayValue = formatter.format(_startValue);
-                                              }
-                                              String displaySecondValue;
-                                              if (_endValue == _endValue.floor()) {
-                                                //.floor is basically used to convert doubles to integers
-                                                displaySecondValue = _endValue.floor().toString();
-                                              } else {
-                                                displaySecondValue = _endValue.toString();
-                                              }
-                                              if (_endValue >= 1000) {
-                                                final formatter = NumberFormat("#,###");
-                                                displaySecondValue = formatter.format(_endValue);
-                                              }
-                                              return Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 50,
-                                                    width: MediaQuery.of(context).size.width,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                      child: Row(
-                                                        children: [
-                                                          IconButton(
-                                                              onPressed: (){
-                                                                Navigator.pop(context);
-                                                              },
-                                                              icon: Icon(Icons.close)
-                                                          ),
-
-                                                          Text('Filter',
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.w800,
-                                                                fontSize: 22
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 12,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 20.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Text('Price',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.w800,
-                                                              fontSize: 22
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 12,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Container(
-                                                        height: 40,
-                                                        width: 90,
-                                                        decoration:BoxDecoration(
-                                                            color: Colors.grey.shade400
-                                                        ),
-                                                        child: Center(child: Text("${snapshot.data?.data?.products?[1].currency??''} ${displayValue}",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight: FontWeight.w800
-                                                          ),
-                                                        )),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 14,
-                                                      ),
-                                                      Text('to'),
-                                                      SizedBox(
-                                                        width: 14,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: 90,
-                                                        decoration:BoxDecoration(
-                                                            color: Colors.grey.shade400
-                                                        ),
-                                                        child: Center(child: Text("${snapshot.data?.data?.products?[1].currency??''} ${displaySecondValue}",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight: FontWeight.w800
-                                                          ),
-                                                        )),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  RangeSlider(
-                                                    values: RangeValues(_startValue, _endValue),
-                                                    min: 0.0,
-                                                    max: 100000.0,
-                                                    activeColor:Color(0xff7f78d8),
-                                                    // inactiveColor:Colors.grey.shade500,
-                                                    onChanged: ( values) {
-                                                      setState(() {
-                                                        _startValue = values.start;
-                                                        _endValue = values.end;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 20.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Text('Select Merchants',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.w800,
-                                                              fontSize: 22
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 20.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Text('Select Categories',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.w800,
-                                                              fontSize: 22
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                            }
-                                        );
-                                      }
-                                  );
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 110,
-                                  padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border(
-                                        top: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                        left: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                        right: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                        bottom: BorderSide(
-                                            color: Color(0xff7f78d8)
-                                        ),
-                                      )
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text('Filter:',
-                                        style: TextStyle(
-                                            color: Color(0xff7f78d8),
-                                            fontWeight: FontWeight.w500
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text('',
-                                        style: TextStyle(
-                                            color: Color(0xff7f78d8),
-                                            fontWeight: FontWeight.w500
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*0.63,
+                          height: MediaQuery.of(context).size.height*0.69,
                           width: double.infinity,
                           child: Stack(
                             children: [
@@ -1190,7 +818,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style:  TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
+                               // fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ),
@@ -1242,7 +870,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style: TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
+                              //  fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ): Text(AppLocalizations.of(context)!.pictureInfo,
@@ -1250,7 +878,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style:TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
+                               // fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ): _firstOpen ?  Text(AppLocalizations.of(context)!.somethingWentWrong,
@@ -1258,14 +886,14 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                             style: TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
+                              //  fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ): Text(AppLocalizations.of(context)!.pictureInfo,
                             style:TextStyle(
                                 wordSpacing: 2,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
+                              //  fontWeight: FontWeight.w800,
                                 color: Colors.grey.shade600
                             ),
                           ),
@@ -1275,7 +903,21 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     );
                   }
                   if(!snapshot.hasData){
-                    return Center(
+                    return _start!= 0?Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.8,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        Positioned(
+                          top:MediaQuery.of(context).size.height*0.4,
+                          left:MediaQuery.of(context).size.width*0.45,
+                          child: const Center(
+                            child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                          ),
+                        ),
+                      ],
+                    ): Center(
                         child: Column(
                           children: [
                             const SizedBox(
@@ -1320,7 +962,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               style: TextStyle(
                                   wordSpacing: 2,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w800,
+                                //  fontWeight: FontWeight.w800,
                                   color: Colors.grey.shade600
                               ),
                             ): Container(),
@@ -1367,7 +1009,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               style: TextStyle(
                                   wordSpacing: 2,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w800,
+                                 // fontWeight: FontWeight.w800,
                                   color: Colors.grey.shade600
                               ),
                             ): Text(AppLocalizations.of(context)!.processingData,
@@ -1375,7 +1017,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               style: TextStyle(
                                   wordSpacing: 2,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w800,
+                                //  fontWeight: FontWeight.w800,
                                   color: Colors.grey.shade600
                               ),
                             ),
@@ -1384,105 +1026,131 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     );
                   }
                   if(snapshot.connectionState == ConnectionState.waiting){
-                    return const Center(
-                      child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                    return Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.8,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        Positioned(
+                          top:MediaQuery.of(context).size.height*0.4,
+                          left:MediaQuery.of(context).size.width*0.45,
+                          child: const Center(
+                            child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                          ),
+                        ),
+                      ],
                     );
                   }else if(snapshot.hasData){
                     return Column(
                       children: [
-                        AppBar(
-                          automaticallyImplyLeading: false,
-                          backgroundColor: const Color(0xfffafafa),
-                          elevation: 0,
-                          title:  Center(
-                            child: CustomSlidingSegmentedControl(
-                              //isStretch: true,
-                              initialValue: _selectedSegment.index,
-                              children:  {
-                                Segment.onlineShops.index: SizedBox(
-                                  child: _selectedSegment == Segment.onlineShops?
-                                  Row(
-                                    children: [
-                                      Icon(Icons.location_on, color: Colors.white, size: 19,),
-                                      Text(
-                                        AppLocalizations.of(context)?.onlineShops??'',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800
+                       Container(
+                         color:Colors.grey.shade50,
+                          child: Card(
+                            color:Colors.grey.shade50,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)
+                            ),
+                            elevation: 2,
+                            shadowColor: Color(0xff7F78D8).withOpacity(0.3),
+                            child: ClipRRect(
+                              child: AppBar(
+                                automaticallyImplyLeading: false,
+                                backgroundColor: const Color(0xfffafafa),
+                                elevation: 0,
+                                title:  Center(
+                                  child: CustomSlidingSegmentedControl(
+                                    //isStretch: true,
+                                    initialValue: _selectedSegment.index,
+                                    children:  {
+                                      Segment.onlineShops.index: SizedBox(
+                                        child: _selectedSegment == Segment.onlineShops?
+                                        Row(
+                                          children: [
+                                            Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                            Text(
+                                              AppLocalizations.of(context)?.onlineShops??'',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400
+                                              ),
+                                            ),
+                                          ],
+                                        ): Row(
+                                          children: [
+                                            const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                            Text(
+                                              AppLocalizations.of(context)?.onlineShops??'',
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ): Row(
-                                    children: [
-                                      const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
-                                      Text(
-                                        AppLocalizations.of(context)?.onlineShops??'',
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800
-                                        ),
-                                      ),
-                                    ],
-                                  ),
 
-                                ),
-                                Segment.shopsNearMe.index: SizedBox(
-                                  child: _selectedSegment == Segment.shopsNearMe?
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 4.0),
-                                        child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
                                       ),
-                                      Text(
-                                        AppLocalizations.of(context)?.shopsNearMe??'',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800
+                                      Segment.shopsNearMe.index: SizedBox(
+                                        child: _selectedSegment == Segment.shopsNearMe?
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 4.0),
+                                              child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                            ),
+                                            Text(
+                                              AppLocalizations.of(context)?.shopsNearMe??'',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400
+                                              ),
+                                            ),
+                                          ],
+                                        ): Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 4.0),
+                                              child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                            ),Text(
+                                              AppLocalizations.of(context)?.shopsNearMe??'',
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ): Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 4.0),
-                                        child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
-                                      ),Text(
-                                        AppLocalizations.of(context)?.shopsNearMe??'',
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800
-                                        ),
-                                      ),
-                                    ],
+                                    },
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey.shade400,
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    thumbDecoration: BoxDecoration(
+                                        color: const Color(0xff7F78D8),
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeInToLinear,
+                                    onValueChanged: (value) {
+                                      setState(() {
+                                        _switchToSegment(Segment.values[value]);
+                                      });
+                                    },
                                   ),
                                 ),
-                              },
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.shade400,
-                                  borderRadius: BorderRadius.circular(20)
                               ),
-                              thumbDecoration: BoxDecoration(
-                                  color: const Color(0xff7F78D8),
-                                  borderRadius: BorderRadius.circular(20)
-                              ),
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.easeInToLinear,
-                              onValueChanged: (value) {
-                                setState(() {
-                                  _switchToSegment(Segment.values[value]);
-                                });
-                              },
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height*0.65,
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.69,
                           width: double.infinity,
+                          color:Colors.grey.shade100,
                           child: Stack(
                             children: [
                               SlideTransition(
