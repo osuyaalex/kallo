@@ -1,0 +1,25 @@
+CupertinoApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: CupertinoThemeData(
+        scaffoldBackgroundColor: CupertinoColors.systemBackground,
+        primaryColor: CupertinoColors.activeBlue,
+        textTheme: CupertinoTextThemeData(
+          tabLabelTextStyle: TextStyle(
+            color: Color(0xff7F78D8),
+            fontWeight: FontWeight.w400,
+            fontSize: 13,
+          ),
+        ),
+      ),
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        CountryLocalizations.delegate,
+      ],
+      home: user == null ? (isFirstLaunch ? const GetStarted() : const Home()) : Home(),
+      builder: EasyLoading.init(),
+    );

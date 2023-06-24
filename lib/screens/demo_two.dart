@@ -266,7 +266,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
           automaticallyImplyLeading: false,
           backgroundColor: Colors.grey.shade50,
           elevation: 0,
-          toolbarHeight:MediaQuery.of(context).size.height*0.11,
+          toolbarHeight:MediaQuery.of(context).size.height*0.13,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

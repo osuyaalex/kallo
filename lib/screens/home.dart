@@ -118,7 +118,7 @@ class _MyHomeState extends State<MyHome> {
         backgroundColor: Colors.grey.shade100,
         shadowColor: Color(0xff7F78D8).withOpacity(0.3),
         elevation: 2,
-        toolbarHeight:MediaQuery.of(context).size.height*0.12,
+        toolbarHeight:MediaQuery.of(context).size.height*0.13,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -193,7 +193,7 @@ class _MyHomeState extends State<MyHome> {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height*0.01,
+              height: MediaQuery.of(context).size.height*0.0002,
             )
           ],
         ) ,

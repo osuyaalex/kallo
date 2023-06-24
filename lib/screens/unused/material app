@@ -1,0 +1,17 @@
+MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white, // Update with your desired scaffold background color
+        primaryColor: Colors.blue, // Update with your desired primary color
+      ),
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        CountryLocalizations.delegate,
+      ],
+      home: user == null ? (isFirstLaunch ? const GetStarted() : const Home()) : Home(),
+      builder: EasyLoading.init(),
+    );

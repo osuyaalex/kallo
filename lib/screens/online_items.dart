@@ -47,7 +47,7 @@ class _OnlineState extends State<Online> {
   @override
   Widget build(BuildContext context) {
     String breakUnwantedPart(String name) {
-      if (name.length > 55) {
+      if (name.length > 40) {
         return name.trim().replaceRange(25, null, '...');
       }
       return name;
@@ -71,6 +71,7 @@ class _OnlineState extends State<Online> {
                 return false;
               },
               child: StaggeredGridView.countBuilder(
+                physics: ClampingScrollPhysics(),
                   crossAxisCount: 2,
                   itemCount: online?.length,
                   itemBuilder: (context, index){
@@ -121,7 +122,7 @@ class _OnlineState extends State<Online> {
                         }
                       },
                       child: SizedBox(
-                        height: 270,
+                        height: 290,
                         width: 250,
                         child: Card(
                           elevation: 1,

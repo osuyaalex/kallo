@@ -1,140 +1,379 @@
-import 'package:country_code_picker/country_code_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:job/screens/settings.dart';
+import 'kallo_profile_signup.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  final VoidCallback? onGoogleSignPressed;
+  const Profile({Key? key, required this.onGoogleSignPressed}) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  String _getInitialCountry = '';
-  final List<String> _allowedCountryCodes = [
-    'US',
-    'GB',
-    'NG',
-    'BR',
-    'IN',
-    'ZA',
-    'TR',
-    'RU',
-    'PL',
-    'JP',
-    'AR',
-    'DE',
-    'EG',
-    'FR',
-    'VN',
-    'IT',
-    'ID',
-    'MX',
-    'KR',
-    'ES',
-    'CA'
-  ];
- // Add the country codes you want to allow
-  void _loadCountryCode() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? savedCode = prefs.getString('countryCode');
-    setState(() {
-         _getInitialCountry = savedCode??'NG';
-    });
-  }
 
+  CollectionReference users = FirebaseFirestore.instance.collection('Users');
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadCountryCode();
-
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.grey.shade50,
-        toolbarHeight: MediaQuery.of(context).size.height*0.1,
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
-                ),
+    return FirebaseAuth.instance.currentUser != null?
+    FutureBuilder<DocumentSnapshot>(
+      future: users.doc(FirebaseAuth.instance.currentUser!.uid).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          return  Scaffold(
+              backgroundColor: Colors.grey.shade100,
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.grey.shade100,
+                toolbarHeight: MediaQuery.of(context).size.height*0.1,
+              ),
+              body: Center(
                 child: Column(
                   children: [
-                    ExpansionTile(
-                      textColor: Colors.black,
-                        iconColor: Colors.black,
-                        leading: const Icon(Icons.remove_red_eye_outlined, color: Colors.black,),
-                        title: Text(AppLocalizations.of(context)!.pickWatchItems),
-                      shape: Border.all(color: Colors.transparent),
-                      children: [],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('Logged in as ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16
+                          ),
+                          ),
+                          data['email']!= null?
+                          Text( data['email'],
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16
+                            ),
+                          ):Text('')
+                        ],
+                      ),
                     ),
-                    ExpansionTile(
-                      textColor: Colors.black,
-                      iconColor: Colors.black,
-                      leading: const Icon(Icons.phone, color: Colors.black,),
-                      title: Text(AppLocalizations.of(context)!.contactAndFeedback),
-                      shape: Border.all(color: Colors.transparent),
-                      children: [],
+                    SizedBox(
+                      height: 20,
                     ),
-                    ExpansionTile(
-                      textColor: Colors.black,
-                      iconColor: Colors.black,
-                      leading: const Icon(Icons.settings, color: Colors.black,),
-                      title: Text(AppLocalizations.of(context)!.settings),
-                      shape: Border.all(color: Colors.transparent),
-                      children: [],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.remove_red_eye_outlined, color: Colors.black,),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Text(AppLocalizations.of(context)!.pickWatchItems),
+                                    ],
+                                  ),
+
+                                  Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.phone, color: Colors.black,),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Text(AppLocalizations.of(context)!.contactAndFeedback),
+                                    ],
+                                  ),
+
+                                  Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                                ],
+                              ),
+                            ),
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return SettingsScreen();
+                                }));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.settings, color: Colors.black,),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(AppLocalizations.of(context)!.settings),
+                                      ],
+                                    ),
+
+                                    Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+
                   ],
                 ),
+              )
+          );
+        }
+
+        return Center(
+          child: CircularProgressIndicator(color: Color(0xff7F78D8)),
+        );
+      },
+    ):Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.grey.shade100,
+          toolbarHeight: MediaQuery.of(context).size.height*0.1,
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
               ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(AppLocalizations.of(context)!.region,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 17
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.remove_red_eye_outlined, color: Colors.black,),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text(AppLocalizations.of(context)!.pickWatchItems),
+                              ],
+                            ),
+
+                            Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.phone, color: Colors.black,),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text(AppLocalizations.of(context)!.contactAndFeedback),
+                              ],
+                            ),
+
+                            Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return SettingsScreen();
+                          }));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.settings, color: Colors.black,),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(AppLocalizations.of(context)!.settings),
+                                ],
+                              ),
+
+                              Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                CountryCodePicker(
-                  onChanged: (code)async{
-                    setState(() {
-                      _getInitialCountry = code.code!;
-                    });
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.setString('countryCode', _getInitialCountry);
-                  },
-                  showCountryOnly: true,
-                  showFlagMain: true,
-                  showFlag: true,
-                  countryFilter: _allowedCountryCodes,
-                  initialSelection:_getInitialCountry,
-                  hideSearch: false,
-                  showOnlyCountryWhenClosed: true,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              InkWell(
+                onTap: widget.onGoogleSignPressed,
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.7,
+                  height: 60,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border(
+                        top: BorderSide(
+                            color: Colors.black
+                        ),
+                        bottom: BorderSide(
+                            color: Colors.black
+                        ),
+                        left: BorderSide(
+                            color: Colors.black
+                        ),
+                        right: BorderSide(
+                            color: Colors.black
+                        ),
+                      )
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset('asset/google_logo.png', height: 35,),
+                        Text('Sign in with Google',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 17
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ],
-            ),
-
-          ],
-        ),
-      )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 1,
+                    width: MediaQuery.of(context).size.width*0.35,
+                    color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text('or',
+                      style: TextStyle(
+                          color: Colors.grey
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 1,
+                    width: MediaQuery.of(context).size.width*0.35,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return KalloProfileSignUpPage();
+                  }));
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.7,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Color(0xff7F78D8),
+                  ),
+                  child: Center(
+                    child: Text('Create an account',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 17
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('Already have an account?'),
+                  TextButton(
+                      onPressed: (){},
+                      child: Text('Log in')
+                  )
+                ],
+              )
+            ],
+          ),
+        )
     );
+
+
+
   }
 }

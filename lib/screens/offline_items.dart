@@ -75,6 +75,7 @@ class _OfflineState extends State<Offline> {
                 return false;
               },
               child: StaggeredGridView.countBuilder(
+                physics: ClampingScrollPhysics(),
                   crossAxisCount: 2,
                   itemCount: offline?.length,
                   itemBuilder: (context, index){

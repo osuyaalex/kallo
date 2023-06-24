@@ -62,15 +62,17 @@ class _ImageOnlineState extends State<ImageOnline> {
           children: [
             NotificationListener<ScrollNotification>(
               onNotification: (notification){
-                if(notification is ScrollUpdateNotification){
-                  // Check the direction of scroll and update the visibility of the container
+                if (notification is ScrollUpdateNotification &&
+                    !notification.metrics.outOfRange) {
                   setState(() {
+                    // Check the direction of scroll and update the visibility of the container
                     _isContainerVisible = notification.scrollDelta! < 0;
                   });
                 }
                 return false;
               },
               child: StaggeredGridView.countBuilder(
+                physics: ClampingScrollPhysics(),
                   crossAxisCount: 2,
                   itemCount: online?.length,
                   itemBuilder: (context, index){
@@ -96,7 +98,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                         }
                       },
                       child: SizedBox(
-                        height: 270,
+                        height: 290,
                         width: 250,
                         child: Card(
                           elevation: 1,

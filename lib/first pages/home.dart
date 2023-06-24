@@ -1,14 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:job/screens/home.dart';
 import 'package:job/screens/idealo.dart';
 import 'dart:ui';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:job/utilities/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Authentication/google_sign_in.dart';
 import '../screens/demo_two.dart';
+
 
 
 class Home extends StatefulWidget {
@@ -19,8 +24,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
-
   int _selectedItem = 1;
   @override
   Widget build(BuildContext context) {
@@ -73,9 +76,23 @@ class _HomeState extends State<Home> {
         },
       ),
       Dems(),
-      Profile()
+      Profile(
+        onGoogleSignPressed: ()async{
+          EasyLoading.show(status: 'Please wait');
+          User? user = await GoogleAuthentication.signInWithGoogle(context);
+          EasyLoading.dismiss();
+          if(user != null){
+            snack(context, 'you are successfully signed in');
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+              return Home();
+            }));
+
+          }
+        },
+      )
     ];
     return CupertinoTabScaffold(
+
       tabBar: CupertinoTabBar(
         height: MediaQuery.of(context).size.height*0.08,
         activeColor: const Color(0xff7F78D8),
