@@ -56,6 +56,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.initState();
     _loadCountryCode();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

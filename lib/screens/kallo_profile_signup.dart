@@ -1,4 +1,3 @@
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:job/utilities/snackbar.dart';
@@ -6,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/kallo_sign_up.dart';
 import '../first pages/home.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
 
 class KalloProfileSignUpPage extends StatefulWidget {
   const KalloProfileSignUpPage({super.key});
@@ -37,11 +38,12 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
         String res = await _kalloSignUp.signUpUsers(
             _email,
             _password,
-            _selectGender!
+            _selectGender!,
+            context
         );
 
         EasyLoading.dismiss();
-        if(res != 'You\'re successfully signed in'){
+        if(res != AppLocalizations.of(context)!.successfullySignedIn){
           EasyLoading.dismiss();
           snack(context, res);
         }else{
@@ -50,8 +52,9 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isFirstLaunch', false);
           snack(context, res);
-          Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => const Home()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+            return Home();
+          }));
         }
       }else{
         EasyLoading.dismiss();
@@ -65,22 +68,7 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
 
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    BackButtonInterceptor.add(myInterceptor);
-  }
 
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    Navigator.pop(context); // Do some stuff.
-    return true;
-  }
   @override
   Widget build(BuildContext context) {
     return  Form(

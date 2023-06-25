@@ -1,64 +1,63 @@
-
-
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart' as http;
-import 'package:job/network/email_json.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
 
 class KalloSignUp{
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  Future<String> signUpUsers(String email, String password, String gender) async {
-    String res = 'something went wrong';
+  Future<String> signUpUsers(String email, String password, String gender, BuildContext context) async {
+    String res = AppLocalizations.of(context)!.somethingWentWrong;
 
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
-        // Verify the email using the MailboxValidator API
-        final String apiKey ='at_Rf0ROT7Alq1gPzcdUDW8vA5y1bZBk';
-        final response = await http.get(Uri.parse('https://emailverification.whoisxmlapi.com/api/v2?apiKey=$apiKey&emailAddress=$email'));
-
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-          final emailValidation = EmailValidation.fromJson(data);
-
-          if (emailValidation.smtpCheck == 'true') {
-            // Proceed with user sign up
-            UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-            await _firebaseFirestore.collection('Users').doc(cred.user!.uid).set({
-              'email': email,
-              'password': password,
-              'gender': gender
-            });
-            res = 'You\'re successfully signed in';
-          } else if(emailValidation.smtpCheck == 'false') {
-            res = 'Email does not exist';
-          }else{
-            res = 'something went wrong';
-          }
-        } else {
-          res = 'Email verification failed';
-        }
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+        await _firebaseFirestore.collection('Users').doc(cred.user!.uid).set({
+          'email': email,
+          'password': password,
+          'gender': gender
+        });
+        res = AppLocalizations.of(context)!.successfullySignedIn;
       }
     } catch (e) {
-      res = e.toString();
-      print(e.toString());
+      String errorMessage = e.toString();
+      print(errorMessage);
+
+      if (errorMessage.contains('email address is already in use')) {
+        res = AppLocalizations.of(context)!.accountAlreadyExists;
+      } else if (errorMessage.contains('A network error')) {
+        res = AppLocalizations.of(context)!.connectionIsDown;
+      } else {
+        res = errorMessage;
+      }
     }
 
     return res;
   }
 
 
-  loginUsers(String email, String password)async{
-    String res = 'Something went wrong';
+  loginUsers(String email, String password, BuildContext context)async{
+    String res = AppLocalizations.of(context)!.somethingWentWrong;
     try{
       if(email.isNotEmpty && password.isNotEmpty){
         await _auth.signInWithEmailAndPassword(email: email, password: password);
-        res = 'You\'re successfully logged in';
+        res = AppLocalizations.of(context)!.successfullyLoggedIn;
       }
 
-    }catch(e){
-      res = e.toString();
+    }catch (e) {
+      String errorMessage = e.toString();
+      print(errorMessage);
+
+      if (errorMessage.contains('no user record')) {
+        res = AppLocalizations.of(context)!.invalidEmailOrPassword;
+      } else if (errorMessage.contains('A network error')) {
+        res = AppLocalizations.of(context)!.connectionIsDown;
+      }else if(errorMessage.contains('password is invalid')){
+        res = AppLocalizations.of(context)!.invalidEmailOrPassword;
+      } else {
+        res = errorMessage;
+      }
     }
     return res;
   }

@@ -38,5 +38,25 @@
   "recentSearches": "Onlangse soekopdragte",
   "searchSuggestions": "Soek voorstelle",
   "pleaseWaitSearching": "Soek na voorstelle, wag asseblief",
-  "noSuggestions": "Geen voorstelle beskikbaar nie"
+  "noSuggestions": "Geen voorstelle beskikbaar nie",
+  "signInWithGoogle": "Teken in met Google",
+  "or": "of",
+  "createAnAccount": "Skep 'n rekening",
+  "alreadyHaveAnAccount": "Het jy alreeds 'n rekening?",
+  "logIn": "Teken in",
+  "signUp": "Registreer",
+  "enterYourEmail": "Voer jou e-posadres in",
+  "enterYourPassword": "Voer jou wagwoord in",
+  "male": "Manlik",
+  "female": "Vroulik",
+  "noThanks": "Nee dankie",
+  "kalloAccount": "Kallo-rekening",
+  "shoppingMadeEasier": "Boodskap maak makliker",
+  "successfullySignedIn": "Jy is suksesvol aangemeld",
+  "accountAlreadyExists": "Rekening bestaan reeds, meld eerder aan",
+  "connectionIsDown": "Jammer, die verbinding is af. Kontroleer jou internetverbinding en probeer weer",
+  "successfullyLoggedIn": "Jy is suksesvol ingeteken",
+  "invalidEmailOrPassword": "Ongeldige e-pos of wagwoord"
+
+
 }

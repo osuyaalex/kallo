@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:job/screens/kallo_profile_login.dart';
 import 'package:job/screens/settings.dart';
 import 'kallo_profile_signup.dart';
 
@@ -260,7 +261,9 @@ class _ProfileState extends State<Profile> {
                 height: 50,
               ),
               InkWell(
-                onTap: widget.onGoogleSignPressed,
+                onTap: (){
+                  widget.onGoogleSignPressed!();
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width*0.7,
                   height: 60,
@@ -363,7 +366,11 @@ class _ProfileState extends State<Profile> {
                 children: [
                   Text('Already have an account?'),
                   TextButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return KalloProfileLoginPage();
+                        }));
+                      },
                       child: Text('Log in')
                   )
                 ],

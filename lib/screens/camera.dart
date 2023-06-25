@@ -133,6 +133,7 @@ class _CameraScreenState extends State<CameraScreen> {
     super.dispose();
   }
 
+
   Future<void> _toggleFlash() async {
     if (_controller.value.isInitialized) {
       if (isFlashOn) {

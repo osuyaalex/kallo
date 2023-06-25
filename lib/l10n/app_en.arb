@@ -158,6 +158,29 @@
   "noSuggestions": "No suggestions available",
   "@noSuggestions": {
     "description": "No"
-  }
-
+  },
+  "signInWithGoogle": "Sign in with Google",
+  "@signInWithGoogle": {
+    "description": "Sign in"
+  },
+  "or": "or",
+  "@or": {
+    "description": "or"
+  },
+  "createAnAccount": "Create an account",
+  "alreadyHaveAnAccount": "Already have an account?",
+  "logIn": "Log in",
+  "signUp": "Sign up",
+  "enterYourEmail": "Enter your email",
+  "enterYourPassword": "Enter your password",
+  "male": "Male",
+  "female": "Female",
+  "noThanks": "No Thanks",
+  "kalloAccount": "Kallo Account",
+  "shoppingMadeEasier": "shopping made easier",
+  "successfullySignedIn": "You're successfully signed in",
+  "accountAlreadyExists": "Account already exists, log in instead",
+  "connectionIsDown": "Sorry, connection is down. Check your internet connection and try again",
+  "successfullyLoggedIn": "You're successfully logged in",
+  "invalidEmailOrPassword": "invalid email or password"
 }

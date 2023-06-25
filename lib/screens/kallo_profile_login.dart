@@ -1,71 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:job/first%20pages/home.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Authentication/kallo_sign_up.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 
-import '../Authentication/kallo_sign_up.dart';
-import 'home.dart';
-
-class KalloSignUpPage extends StatefulWidget {
-  const KalloSignUpPage({super.key});
+class KalloProfileLoginPage extends StatefulWidget {
+  const KalloProfileLoginPage({super.key});
 
   @override
-  State<KalloSignUpPage> createState() => _KalloSignUpPageState();
+  State<KalloProfileLoginPage> createState() => _KalloProfileLoginPageState();
 }
 
-class _KalloSignUpPageState extends State<KalloSignUpPage> {
+class _KalloProfileLoginPageState extends State<KalloProfileLoginPage> {
   final KalloSignUp _kalloSignUp = KalloSignUp();
   late String _email;
   late String _password;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   bool _obscureText = true;
-  String? _selectGender;
-  bool _genderValidation = false;
+  bool isInterceptorAdded = false;
 
-  void _genderSelect(String gender) {
-    setState(() {
-      _selectGender = gender;
-      _genderValidation = false;
-    });
-  }
-
-  _signUp()async{
+  _login()async{
     EasyLoading.show(status: 'please wait');
     if(_globalKey.currentState!.validate()){
-      if(_selectGender != null){
-        String res = await _kalloSignUp.signUpUsers(
+      String res = await _kalloSignUp.loginUsers(
           _email,
           _password,
-          _selectGender!,
-          context
-        );
-
+        context
+      );
+      if(res != AppLocalizations.of(context)!.successfullyLoggedIn){
         EasyLoading.dismiss();
-        if(res != AppLocalizations.of(context)!.successfullySignedIn){
-          EasyLoading.dismiss();
-          snack(context, res);
-        }else{
-          EasyLoading.dismiss();
-          snack(context, res);
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setBool('isFirstLaunch', false);
-          snack(context, res);
-          Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => const Home()));
-        }
+        snack(context, res);
       }else{
         EasyLoading.dismiss();
-        setState(() {
-          _genderValidation = true;
-        });
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isFirstLaunch', false);
+        snack(context, res);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+          return Home();
+        }));
       }
     }else{
       EasyLoading.dismiss();
     }
-
   }
+
+
   @override
   Widget build(BuildContext context) {
     return  Form(
@@ -108,10 +91,10 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Sign up',
+                        Text('Log in',
                           style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700
                           ),
                         ),
                       ],
@@ -164,15 +147,6 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                       if (v!.isEmpty) {
                         return 'Field must not be empty';
                       }
-                      if (v.length < 8) {
-                        return 'Password must be at least 8 characters';
-                      }
-                      if (!v.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-                        return 'Password must contain a special character';
-                      }
-                      if (!v.contains(RegExp(r'[0-9]'))) {
-                        return 'Password must contain a number';
-                      }
                       return null; // Return null if validation passes
                     },
                     decoration: InputDecoration(
@@ -206,81 +180,11 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('Select Gender',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _genderSelect('female');
-                            },
-                            child: Container(
-                              width: 100,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: _selectGender == 'female' ? Colors.pink.shade700 : Colors.grey,
-                                  borderRadius: BorderRadius.circular(12)
-                              ),
-                              child: Center(
-                                child: Icon(Icons.female, size: 30, color: Colors.white,)
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () {
-                              _genderSelect('male');
-                            },
-                            child: Container(
-                              width: 100,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: _selectGender == 'male' ? Colors.blue : Colors.grey,
-                                  borderRadius: BorderRadius.circular(12)
-                              ),
-                              child: Center(
-                                child: Icon(Icons.male, size: 30, color: Colors.white,)
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  if (_genderValidation)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Please select a gender',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.w400
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  SizedBox(
                     height: MediaQuery.of(context).size.height*0.1,
                   ),
                   InkWell(
                     onTap: (){
-                      _signUp();
+                      _login();
                     },
                     child: Container(
                       height: 40,
@@ -290,10 +194,10 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
-                        child: Text('Sign up',
+                        child: Text('Log in',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600
                           ),
                         ),
                       ),

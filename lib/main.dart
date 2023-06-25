@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: L10n.all,
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
         GlobalWidgetsLocalizations.delegate,
         CountryLocalizations.delegate,
       ],

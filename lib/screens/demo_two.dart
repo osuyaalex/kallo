@@ -617,7 +617,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     return Stack(
                       children: [
                         Container(
-                          height: MediaQuery.of(context).size.height*0.8,
+                          height: MediaQuery.of(context).size.height*0.685,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Positioned(
@@ -740,7 +740,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                         ),
 
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*0.69,
+                          height: MediaQuery.of(context).size.height*0.685,
                           width: double.infinity,
                           child: Stack(
                             children: [
@@ -906,7 +906,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     return _start!= 0?Stack(
                       children: [
                         Container(
-                          height: MediaQuery.of(context).size.height*0.8,
+                          height: MediaQuery.of(context).size.height*0.686,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Positioned(
@@ -1029,7 +1029,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                     return Stack(
                       children: [
                         Container(
-                          height: MediaQuery.of(context).size.height*0.8,
+                          height: MediaQuery.of(context).size.height*0.686,
                           width: MediaQuery.of(context).size.width,
                         ),
                         Positioned(
@@ -1148,7 +1148,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                           ),
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height*0.69,
+                          height: MediaQuery.of(context).size.height*0.685,
                           width: double.infinity,
                           color:Colors.grey.shade100,
                           child: Stack(

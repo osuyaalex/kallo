@@ -25,6 +25,21 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedItem = 1;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
@@ -91,41 +106,36 @@ class _HomeState extends State<Home> {
         },
       )
     ];
-    return CupertinoTabScaffold(
-
-      tabBar: CupertinoTabBar(
-        height: MediaQuery.of(context).size.height*0.08,
-        activeColor: const Color(0xff7F78D8),
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        selectedItemColor: const Color(0xff7F78D8),
         currentIndex: _selectedItem,
         onTap: (index) {
           setState(() {
             _selectedItem = index;
           });
         },
-        items:   [
+        items: [
           BottomNavigationBarItem(
-            icon: const Icon(CupertinoIcons.home),
+            icon: const Icon(Icons.home),
             label: AppLocalizations.of(context)?.home,
-            tooltip: AppLocalizations.of(context)?.home,
           ),
-           BottomNavigationBarItem(
-            icon: const Icon(CupertinoIcons.search),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.search),
             label: AppLocalizations.of(context)?.search,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(CupertinoIcons.person),
-            label:AppLocalizations.of(context)?.profile,
+            icon: const Icon(Icons.person),
+            label: AppLocalizations.of(context)?.profile,
           ),
         ],
       ),
-      tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (context) {
-            return _screens[index];
-          },
-
-        );
-      },
+      body: IndexedStack(
+        index: _selectedItem,
+        children: _screens,
+      ),
     );
   }
 }

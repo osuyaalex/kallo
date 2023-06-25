@@ -5,7 +5,6 @@ import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
@@ -31,8 +30,6 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   String _name = '';
   late String _code = '';
   bool _firstpage = true;
-  double _startValue = 0.0;
-  double _endValue = 100000.0;
   List<String> _suggestion = [];
   bool _type = false;
   String? _currentLocale;
@@ -224,6 +221,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
     controller.dispose();
     _animationController.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -423,7 +421,6 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                             height: 10,
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height*0.74,
                             width: double.infinity,
                             child: Stack(
                               children: [

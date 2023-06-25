@@ -49,7 +49,6 @@ class _NationalityState extends State<Nationality> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
   @override
   Widget build(BuildContext context) {
@@ -219,7 +218,7 @@ class _NationalityState extends State<Nationality> {
                               return KalloLoginPage();
                             }));
                           },
-                          child: Text('LogIn',
+                          child: Text(AppLocalizations.of(context)!.logIn,
                           style: TextStyle(
                             color: Color(0xff7F78D8)
                           ),
@@ -231,7 +230,7 @@ class _NationalityState extends State<Nationality> {
                               return SignUp();
                             }));
                           },
-                          child: Text('SignUp',
+                          child: Text(AppLocalizations.of(context)!.signUp,
                           style: TextStyle(
                             color: Color(0xff7F78D8)
                           ),

@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/kallo_sign_up.dart';
 import 'home.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
 
 class KalloLoginPage extends StatefulWidget {
   const KalloLoginPage({super.key});
@@ -25,9 +27,10 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
     if(_globalKey.currentState!.validate()){
      String res = await _kalloSignUp.loginUsers(
           _email,
-          _password
+          _password,
+       context
       );
-     if(res != 'You\'re successfully logged in'){
+     if(res != AppLocalizations.of(context)!.successfullyLoggedIn){
        EasyLoading.dismiss();
        snack(context, res);
      }else{

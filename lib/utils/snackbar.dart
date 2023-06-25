@@ -21,7 +21,6 @@ void showCupertinoSnackBar({
             message,
             style: TextStyle(
               fontSize: 15.0,
-              color: Color(0xff7F78D8),
             ),
             textAlign: TextAlign.center,
           ),
