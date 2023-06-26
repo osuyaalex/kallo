@@ -56,7 +56,16 @@
   "accountAlreadyExists": "Rekening bestaan reeds, meld eerder aan",
   "connectionIsDown": "Jammer, die verbinding is af. Kontroleer jou internetverbinding en probeer weer",
   "successfullyLoggedIn": "Jy is suksesvol ingeteken",
-  "invalidEmailOrPassword": "Ongeldige e-pos of wagwoord"
-
-
+  "invalidEmailOrPassword": "Ongeldige e-pos of wagwoord",
+  "signOut": "Teken uit",
+  "fieldMustNotBeEmpty": "Veld mag nie leeg wees nie",
+  "passwordMustBeEight": "Wagwoord moet minstens 8 karakters lank wees",
+  "passwordMustContainSpecial": "Wagwoord moet 'n spesiale karakter bevat",
+  "passwordMustBeNumber": "Wagwoord moet 'n nommer bevat",
+  "selectGender": "Kies Geslag",
+  "loggedInAs": "Aangemeld as",
+  "signingOut": "Teken Uit",
+  "areYouSure": "Is u seker dat u wil uitteken?",
+  "yes": "Ja",
+  "no": "Nee"
 }

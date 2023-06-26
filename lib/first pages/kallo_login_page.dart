@@ -23,7 +23,7 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
   bool _obscureText = true;
 
   _login()async{
-    EasyLoading.show(status: 'please wait');
+    EasyLoading.show();
     if(_globalKey.currentState!.validate()){
      String res = await _kalloSignUp.loginUsers(
           _email,
@@ -87,9 +87,9 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Log in',
+                        Text(AppLocalizations.of(context)!.logIn,
                           style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 28,
                               fontWeight: FontWeight.w700
                           ),
                         ),
@@ -105,12 +105,12 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
                     },
                     validator: (v){
                       if(v!.isEmpty){
-                        return 'field must not be empty';
+                        return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: AppLocalizations.of(context)!.enterYourEmail,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                           borderSide: const BorderSide(
@@ -141,7 +141,7 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
                     },
                     validator: (v){
                       if (v!.isEmpty) {
-                        return 'Field must not be empty';
+                        return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
                       }
                       return null; // Return null if validation passes
                     },
@@ -154,7 +154,7 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
                           },
                           icon: _obscureText?Icon(Icons.visibility):Icon(Icons.visibility_off)
                       ),
-                      hintText: 'Enter your password',
+                      hintText: AppLocalizations.of(context)!.enterYourPassword,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                           borderSide: const BorderSide(
@@ -190,7 +190,7 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
-                        child: Text('Log in',
+                        child: Text(AppLocalizations.of(context)!.logIn,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600

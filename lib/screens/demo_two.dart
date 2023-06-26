@@ -740,7 +740,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                         ),
 
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*0.685,
+                          height: MediaQuery.of(context).size.height*0.67,
                           width: double.infinity,
                           child: Stack(
                             children: [
@@ -1148,7 +1148,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                           ),
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height*0.685,
+                          height: MediaQuery.of(context).size.height*0.67,
                           width: double.infinity,
                           color:Colors.grey.shade100,
                           child: Stack(

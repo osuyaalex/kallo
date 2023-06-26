@@ -56,5 +56,16 @@
   "accountAlreadyExists": "アカウントはすでに存在しています。代わりにログインしてください",
   "connectionIsDown": "申し訳ありませんが、接続が切断されています。インターネット接続を確認して、もう一度やり直してください",
   "successfullyLoggedIn": "ログインに成功しました",
-  "invalidEmailOrPassword": "無効なメールアドレスまたはパスワード"
+  "invalidEmailOrPassword": "無効なメールアドレスまたはパスワード",
+  "signOut": "ログアウト",
+  "fieldMustNotBeEmpty": "フィールドは空であってはなりません",
+  "passwordMustBeEight": "パスワードは8文字以上である必要があります",
+  "passwordMustContainSpecial": "パスワードには特殊文字が含まれている必要があります",
+  "passwordMustBeNumber": "パスワードには数字が含まれている必要があります",
+  "selectGender": "性別を選択",
+  "loggedInAs": "ログイン中",
+  "signingOut": "ログアウト中",
+  "areYouSure": "ログアウトしますか？",
+  "yes": "はい",
+  "no": "いいえ"
 }

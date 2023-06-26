@@ -56,5 +56,16 @@
  "accountAlreadyExists": "Konto już istnieje, zaloguj się zamiast tego",
  "connectionIsDown": "Przepraszamy, połączenie jest przerwane. Sprawdź swoje połączenie internetowe i spróbuj ponownie",
  "successfullyLoggedIn": "Zalogowano pomyślnie",
- "invalidEmailOrPassword": "Nieprawidłowy adres email lub hasło"
+ "invalidEmailOrPassword": "Nieprawidłowy adres email lub hasło",
+ "signOut": "Wyloguj",
+ "fieldMustNotBeEmpty": "Pole nie może być puste",
+ "passwordMustBeEight": "Hasło musi mieć co najmniej 8 znaków",
+ "passwordMustContainSpecial": "Hasło musi zawierać znak specjalny",
+ "passwordMustBeNumber": "Hasło musi zawierać liczbę",
+ "selectGender": "Wybierz Płeć",
+ "loggedInAs": "Zalogowany jako",
+ "signingOut": "Wylogowywanie",
+ "areYouSure": "Czy na pewno chcesz się wylogować?",
+ "yes": "Tak",
+ "no": "Nie"
 }

@@ -182,5 +182,16 @@
   "accountAlreadyExists": "Account already exists, log in instead",
   "connectionIsDown": "Sorry, connection is down. Check your internet connection and try again",
   "successfullyLoggedIn": "You're successfully logged in",
-  "invalidEmailOrPassword": "invalid email or password"
+  "invalidEmailOrPassword": "invalid email or password",
+  "signOut": "Sign out",
+  "fieldMustNotBeEmpty": "field must not be empty",
+  "passwordMustBeEight": "Password must be at least 8 characters",
+  "passwordMustContainSpecial": "Password must contain a special character",
+  "passwordMustBeNumber": "Password must contain a number",
+  "selectGender": "Select Gender",
+  "loggedInAs": "logged in as",
+  "signingOut": "Signing Out",
+  "areYouSure": "Are you sure you want to sign out?",
+  "yes": "yes",
+  "no": "no"
 }

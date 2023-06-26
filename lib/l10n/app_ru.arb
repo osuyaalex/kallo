@@ -56,5 +56,16 @@
  "accountAlreadyExists": "Учетная запись уже существует, выполните вход",
  "connectionIsDown": "Извините, соединение прервано. Проверьте подключение к интернету и повторите попытку",
  "successfullyLoggedIn": "Вы успешно вошли в систему",
- "invalidEmailOrPassword": "Неверный адрес электронной почты или пароль"
+ "invalidEmailOrPassword": "Неверный адрес электронной почты или пароль",
+ "signOut": "Выйти",
+ "fieldMustNotBeEmpty": "Поле не должно быть пустым",
+ "passwordMustBeEight": "Пароль должен содержать не менее 8 символов",
+ "passwordMustContainSpecial": "Пароль должен содержать специальный символ",
+ "passwordMustBeNumber": "Пароль должен содержать число",
+ "selectGender": "Выбрать Пол",
+ "loggedInAs": "Выполнен вход как",
+ "signingOut": "Выход",
+ "areYouSure": "Вы уверены, что хотите выйти?",
+ "yes": "Да",
+ "no": "Нет"
 }

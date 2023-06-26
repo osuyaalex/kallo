@@ -55,11 +55,14 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text('Logged in as ',
+                          Text(AppLocalizations.of(context)!.loggedInAs,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16
                           ),
+                          ),
+                          SizedBox(
+                            width: 3,
                           ),
                           data['email']!= null?
                           Text( data['email'],
@@ -290,7 +293,7 @@ class _ProfileState extends State<Profile> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset('asset/google_logo.png', height: 35,),
-                        Text('Sign in with Google',
+                        Text(AppLocalizations.of(context)!.signInWithGoogle,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w800,
@@ -318,7 +321,7 @@ class _ProfileState extends State<Profile> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('or',
+                    child: Text(AppLocalizations.of(context)!.or,
                       style: TextStyle(
                           color: Colors.grey
                       ),
@@ -348,7 +351,7 @@ class _ProfileState extends State<Profile> {
                     color: Color(0xff7F78D8),
                   ),
                   child: Center(
-                    child: Text('Create an account',
+                    child: Text(AppLocalizations.of(context)!.createAnAccount,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
@@ -364,14 +367,14 @@ class _ProfileState extends State<Profile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text('Already have an account?'),
+                  Text(AppLocalizations.of(context)!.alreadyHaveAnAccount),
                   TextButton(
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context){
                           return KalloProfileLoginPage();
                         }));
                       },
-                      child: Text('Log in')
+                      child: Text(AppLocalizations.of(context)!.logIn)
                   )
                 ],
               )

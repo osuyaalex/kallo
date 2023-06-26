@@ -28,19 +28,6 @@ class _HomeState extends State<Home> {
 
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       MyHome(
@@ -93,11 +80,11 @@ class _HomeState extends State<Home> {
       Dems(),
       Profile(
         onGoogleSignPressed: ()async{
-          EasyLoading.show(status: 'Please wait');
+          EasyLoading.show();
           User? user = await GoogleAuthentication.signInWithGoogle(context);
           EasyLoading.dismiss();
           if(user != null){
-            snack(context, 'you are successfully signed in');
+            snack(context, AppLocalizations.of(context)!.successfullySignedIn);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
               return Home();
             }));

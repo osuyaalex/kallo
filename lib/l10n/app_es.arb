@@ -56,5 +56,16 @@
   "accountAlreadyExists": "La cuenta ya existe, inicia sesión en su lugar",
   "connectionIsDown": "Lo sentimos, la conexión está caída. Verifica tu conexión a internet e intenta nuevamente",
   "successfullyLoggedIn": "Has iniciado sesión correctamente",
-  "invalidEmailOrPassword": "Correo electrónico o contraseña inválidos"
+  "invalidEmailOrPassword": "Correo electrónico o contraseña inválidos",
+  "signOut": "Cerrar sesión",
+  "fieldMustNotBeEmpty": "El campo no debe estar vacío",
+  "passwordMustBeEight": "La contraseña debe tener al menos 8 caracteres",
+  "passwordMustContainSpecial": "La contraseña debe contener un carácter especial",
+  "passwordMustBeNumber": "La contraseña debe contener un número",
+  "selectGender": "Seleccionar Género",
+  "loggedInAs": "Conectado como",
+  "signingOut": "Cerrando sesión",
+  "areYouSure": "¿Estás seguro de que quieres cerrar sesión?",
+  "yes": "Sí",
+  "no": "No"
 }

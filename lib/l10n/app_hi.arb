@@ -56,5 +56,16 @@
   "accountAlreadyExists": "खाता पहले से मौजूद है, इसके बजाय लॉग इन करें",
   "connectionIsDown": "क्षमा करें, कनेक्शन डाउन है। अपने इंटरनेट कनेक्शन की जांच करें और पुनः प्रयास करें",
   "successfullyLoggedIn": "आप सफलतापूर्वक लॉग इन हुए हैं",
-  "invalidEmailOrPassword": "अमान्य ईमेल या पासवर्ड"
+  "invalidEmailOrPassword": "अमान्य ईमेल या पासवर्ड",
+  "signOut": "लॉगआउट करें",
+  "fieldMustNotBeEmpty": "फ़ील्ड खाली नहीं होनी चाहिए",
+  "passwordMustBeEight": "पासवर्ड कम से कम 8 अक्षर होना चाहिए",
+  "passwordMustContainSpecial": "पासवर्ड में एक विशेष वर्ण होना चाहिए",
+  "passwordMustBeNumber": "पासवर्ड में एक संख्या होनी चाहिए",
+  "selectGender": "लिंग चुनें",
+  "loggedInAs": "लॉग इन किया हुआ",
+  "signingOut": "साइन आउट हो रहा है",
+  "areYouSure": "क्या आप वाकई साइन आउट करना चाहते हैं?",
+  "yes": "हाँ",
+  "no": "नहीं"
 }

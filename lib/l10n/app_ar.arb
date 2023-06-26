@@ -56,5 +56,16 @@
   "accountAlreadyExists": "الحساب موجود بالفعل، قم بتسجيل الدخول بدلاً من ذلك",
   "connectionIsDown": "عذرًا، توجد مشكلة في الاتصال. تحقق من اتصالك بالإنترنت وحاول مرة أخرى",
   "successfullyLoggedIn": "لقد تم تسجيل الدخول بنجاح",
-  "invalidEmailOrPassword": "البريد الإلكتروني أو كلمة المرور غير صالحة"
+  "invalidEmailOrPassword": "البريد الإلكتروني أو كلمة المرور غير صالحة",
+  "signOut": "تسجيل الخروج",
+  "fieldMustNotBeEmpty": "يجب ألا يكون الحقل فارغًا",
+  "passwordMustBeEight": "يجب أن يحتوي كلمة المرور على 8 أحرف على الأقل",
+  "passwordMustContainSpecial": "يجب أن تحتوي كلمة المرور على حرف خاص",
+  "passwordMustBeNumber": "يجب أن تحتوي كلمة المرور على رقم",
+  "selectGender": "اختر الجنس",
+  "loggedInAs": "تسجيل الدخول كـ",
+  "signingOut": "جارٍ تسجيل الخروج",
+  "areYouSure": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "yes": "نعم",
+  "no": "لا"
 }

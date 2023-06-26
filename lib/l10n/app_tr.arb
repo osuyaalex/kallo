@@ -56,5 +56,16 @@
  "accountAlreadyExists": "Hesap zaten mevcut, bunun yerine giriş yapın",
  "connectionIsDown": "Üzgünüz, bağlantı kesildi. İnternet bağlantınızı kontrol edip tekrar deneyin",
  "successfullyLoggedIn": "Başarıyla giriş yaptınız",
- "invalidEmailOrPassword": "Geçersiz e-posta veya şifre"
+ "invalidEmailOrPassword": "Geçersiz e-posta veya şifre",
+ "signOut": "Çıkış yap",
+ "fieldMustNotBeEmpty": "Alan boş olmamalıdır",
+ "passwordMustBeEight": "Şifre en az 8 karakter olmalıdır",
+ "passwordMustContainSpecial": "Şifre özel bir karakter içermelidir",
+ "passwordMustBeNumber": "Şifre bir sayı içermelidir",
+ "selectGender": "Cinsiyet Seçin",
+ "loggedInAs": "Olarak giriş yapıldı",
+ "signingOut": "Oturumu Kapatıyor",
+ "areYouSure": "Çıkış yapmak istediğinize emin misiniz?",
+ "yes": "Evet",
+ "no": "Hayır"
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image/image.dart' as Img;
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
@@ -22,9 +23,9 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  bool isFlashOn = true;
+  bool isFlashOff = true;
   Timer? _timer;
-  int _start = 5;
+  int _start = 4;
   double _opacity = 1.0; // Initial opacity value
   // Future<File> _cropAndResizeImage(File imageFile) async {
   //   final originalImage = Img.decodeImage(imageFile.readAsBytesSync());
@@ -136,10 +137,10 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _toggleFlash() async {
     if (_controller.value.isInitialized) {
-      if (isFlashOn) {
-        await _controller.setFlashMode(FlashMode.always);
-      } else {
+      if (isFlashOff) {
         await _controller.setFlashMode(FlashMode.off);
+      } else {
+        await _controller.setFlashMode(FlashMode.always);
       }
     }
   }
@@ -246,9 +247,9 @@ class _CameraScreenState extends State<CameraScreen> {
                     child: IconButton(
                         onPressed: (){
                           setState(() {
-                            isFlashOn = !isFlashOn;
+                            isFlashOff = !isFlashOff;
                           });
-                        }, icon: isFlashOn ? Icon(Icons.flash_auto, color: Colors.white,):Icon(Icons.flash_off, color: Colors.white,)
+                        }, icon: isFlashOff ? Icon(Icons.flash_off, color: Colors.white,):Icon(Icons.flash_auto, color: Colors.white,)
                     )
 
                 )

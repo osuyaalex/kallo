@@ -5,8 +5,10 @@ import 'package:job/Authentication/google_sign_in.dart';
 import 'package:job/first%20pages/home.dart';
 import 'package:job/first%20pages/kallo_login_page.dart';
 import 'package:job/first%20pages/kallo_signup_page.dart';
+import 'package:job/utilities/snackbar.dart';
 import 'package:job/utils/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -50,12 +52,12 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height*0.45,
+              height: MediaQuery.of(context).size.height*0.43,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('Kallo Account',
+                Text(AppLocalizations.of(context)!.kalloAccount,
                   style: TextStyle(
                     fontSize: 27,
                     fontWeight: FontWeight.bold
@@ -66,7 +68,7 @@ class _SignUpState extends State<SignUp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('shopping made easier',
+                Text(AppLocalizations.of(context)!.shoppingMadeEasier,
                   style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 14
@@ -79,13 +81,13 @@ class _SignUpState extends State<SignUp> {
             ),
             InkWell(
               onTap: ()async{
-                EasyLoading.show(status: 'Please wait');
+                EasyLoading.show();
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setBool('isFirstLaunch', false);
                 User? user = await GoogleAuthentication.signInWithGoogle(context);
                 EasyLoading.dismiss();
                 if(user != null){
-                  showCupertinoSnackBar(context: context, message: 'You are successfully signed in');
+                  snack(context, AppLocalizations.of(context)!.successfullySignedIn);
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
                     return Home();
                   }));
@@ -94,7 +96,7 @@ class _SignUpState extends State<SignUp> {
 
               },
               child: Container(
-                width: MediaQuery.of(context).size.width*0.7,
+                width: MediaQuery.of(context).size.width*0.75,
                 height: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -119,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset('asset/google_logo.png', height: 35,),
-                      Text('Sign in with Google',
+                      Text(AppLocalizations.of(context)!.signInWithGoogle,
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w800,
@@ -147,7 +149,7 @@ class _SignUpState extends State<SignUp> {
                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('or',
+                  child: Text(AppLocalizations.of(context)!.or,
                     style: TextStyle(
                       color: Colors.grey
                     ),
@@ -177,7 +179,7 @@ class _SignUpState extends State<SignUp> {
                   color: Color(0xff7F78D8),
                 ),
                 child: Center(
-                  child: Text('Create an account',
+                  child: Text(AppLocalizations.of(context)!.createAnAccount,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w800,
@@ -205,7 +207,7 @@ class _SignUpState extends State<SignUp> {
                     return KalloLoginPage();
                   }));
                 },
-                child: Text('Log in',
+                child: Text(AppLocalizations.of(context)!.logIn,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: Color(0xff7F78D8),
@@ -219,7 +221,7 @@ class _SignUpState extends State<SignUp> {
                   Navigator.push(context, MaterialPageRoute(
                       builder: (context) => const Home()));
                 },
-                child: Text('No Thanks',
+                child: Text(AppLocalizations.of(context)!.noThanks,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: Color(0xff7F78D8),

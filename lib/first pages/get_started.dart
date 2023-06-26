@@ -15,24 +15,16 @@ class GetStarted extends StatefulWidget {
 
 class _GetStartedState extends State<GetStarted> {
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // Hide the system overlays (buttons)
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    // Show the system overlays (buttons) when the page is disposed
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  }
   int _activeIndex = 0;
   CarouselController _carouselController = CarouselController();
   @override
   Widget build(BuildContext context) {
+    // Set navigation bar color to a specific color
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Color(0xff161b22), // Set your desired color here
+      ),
+    );
     final List<Widget> screens = [
       Container(
         width: double.infinity,
@@ -232,8 +224,8 @@ class _GetStartedState extends State<GetStarted> {
             bottom: MediaQuery.of(context).size.height*0.05,
             right: MediaQuery.of(context).size.width*0.206,
             child: GestureDetector(
-            onTap: ()async{
-              Navigator.push(
+            onTap: (){
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const Nationality()));
             },
@@ -259,5 +251,4 @@ class _GetStartedState extends State<GetStarted> {
       ),
     );
   }
-
 }

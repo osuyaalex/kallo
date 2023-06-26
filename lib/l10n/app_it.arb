@@ -56,5 +56,16 @@
   "accountAlreadyExists": "L'account esiste già, accedi invece",
   "connectionIsDown": "Spiacenti, connessione interrotta. Controlla la tua connessione internet e riprova",
   "successfullyLoggedIn": "Accesso effettuato con successo",
-  "invalidEmailOrPassword": "Email o password non valide"
+  "invalidEmailOrPassword": "Email o password non valide",
+  "signOut": "Esci",
+  "fieldMustNotBeEmpty": "Il campo non deve essere vuoto",
+  "passwordMustBeEight": "La password deve contenere almeno 8 caratteri",
+  "passwordMustContainSpecial": "La password deve contenere un carattere speciale",
+  "passwordMustBeNumber": "La password deve contenere un numero",
+  "selectGender": "Seleziona Genere",
+  "loggedInAs": "Accesso come",
+  "signingOut": "Disconnessione",
+  "areYouSure": "Sei sicuro di voler effettuare la disconnessione?",
+  "yes": "Sì",
+  "no": "No"
 }

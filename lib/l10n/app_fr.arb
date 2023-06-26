@@ -56,5 +56,16 @@
   "accountAlreadyExists": "Le compte existe déjà, connectez-vous à la place",
   "connectionIsDown": "Désolé, la connexion est interrompue. Vérifiez votre connexion internet et réessayez",
   "successfullyLoggedIn": "Vous êtes connecté avec succès",
-  "invalidEmailOrPassword": "Email ou mot de passe invalide"
+  "invalidEmailOrPassword": "Email ou mot de passe invalide",
+  "signOut": "Déconnexion",
+  "fieldMustNotBeEmpty": "Le champ ne doit pas être vide",
+  "passwordMustBeEight": "Le mot de passe doit comporter au moins 8 caractères",
+  "passwordMustContainSpecial": "Le mot de passe doit contenir un caractère spécial",
+  "passwordMustBeNumber": "Le mot de passe doit contenir un chiffre",
+  "selectGender": "Sélectionner le Genre",
+  "loggedInAs": "Connecté en tant que",
+  "signingOut": "Déconnexion",
+  "areYouSure": "Êtes-vous sûr de vouloir vous déconnecter ?",
+  "yes": "Oui",
+  "no": "Non"
 }

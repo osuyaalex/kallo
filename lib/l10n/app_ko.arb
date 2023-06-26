@@ -56,5 +56,16 @@
   "accountAlreadyExists": "계정이 이미 존재합니다. 대신 로그인하십시오",
   "connectionIsDown": "죄송합니다. 연결이 끊어졌습니다. 인터넷 연결을 확인하고 다시 시도하십시오",
   "successfullyLoggedIn": "로그인에 성공했습니다",
-  "invalidEmailOrPassword": "유효하지 않은 이메일 또는 비밀번호"
+  "invalidEmailOrPassword": "유효하지 않은 이메일 또는 비밀번호",
+  "signOut": "로그아웃",
+  "fieldMustNotBeEmpty": "필드를 비워 둘 수 없습니다",
+  "passwordMustBeEight": "비밀번호는 최소 8자 이상이어야 합니다",
+  "passwordMustContainSpecial": "비밀번호에 특수 문자가 포함되어야 합니다",
+  "passwordMustBeNumber": "비밀번호에 숫자가 포함되어야 합니다",
+  "selectGender": "성별 선택",
+  "loggedInAs": "로그인된 사용자",
+  "signingOut": "로그아웃 중",
+  "areYouSure": "정말로 로그아웃 하시겠습니까?",
+  "yes": "예",
+  "no": "아니오"
 }
