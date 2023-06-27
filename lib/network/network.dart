@@ -9,7 +9,7 @@ import 'package:job/network/search_suggestion_json.dart';
 
 
 class Network{
-  Future<Koye> getProducts(String barcode,String countryCode) async {
+  Future<Koye> getProducts(String barcode,String countryCode, int priceMin, int priceMax) async {
     var jsonResponse;
 
     try {
@@ -23,7 +23,12 @@ class Network{
         body:  jsonEncode({
           "action": "gpd_and_sd",
           "barcode": barcode,
-          "country": countryCode
+          "country": countryCode,
+          "filter_criteria": {
+            "price_min": priceMin,
+            "price_max": priceMax,
+            "product_category": null
+          }
           }),
 
       );
@@ -43,7 +48,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
   }
 
-  Future<Koye> getProductsName(String name, String countryCode,) async {
+  Future<Koye> getProductsName(String name, String countryCode,int priceMin, int priceMax) async {
     var jsonResponse;
 
     try {
@@ -57,7 +62,12 @@ class Network{
         body:  jsonEncode({
           "action": "gpd_and_sd",
           "query_txt": name,
-          "country": countryCode
+          "country": countryCode,
+          "filter_criteria": {
+            "price_min": priceMin,
+            "price_max": priceMax,
+            "product_category": null
+          }
         }),
 
       );
@@ -77,7 +87,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
 
   }
-  Future<KalloImageSearch> getProductsImage(String image, String countryCode,) async {
+  Future<KalloImageSearch> getProductsImage(String image, String countryCode, int priceMin, int priceMax) async {
     var jsonResponse;
 
     try {
@@ -91,7 +101,12 @@ class Network{
         body:  jsonEncode({
           "action": "gpd_and_sd",
           "image_pixels": image,
-          "country": countryCode
+          "country": countryCode,
+          "filter_criteria": {
+            "price_min": priceMin,
+            "price_max": priceMax,
+            "product_category": null
+          }
         }),
 
       );

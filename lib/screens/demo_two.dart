@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:job/network/image_json.dart';
 import 'package:job/network/json.dart';
 import 'package:job/network/network.dart';
+import 'package:job/providers/animated.dart';
 import 'package:job/screens/demo.dart';
 import 'package:job/screens/image_offline.dart';
 import 'package:job/screens/image_online.dart';
@@ -17,6 +18,7 @@ import 'package:job/screens/offline_items.dart';
 import 'package:job/screens/online_items.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
@@ -33,8 +35,8 @@ class Dems extends StatefulWidget {
 
 enum Segment { shopsNearMe, onlineShops }
 class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
-  late Future<Koye> products = Network().getProducts(_scanBarcode, '');
-  late Future<KalloImageSearch> imageSearch = Network().getProductsImage(_image, '');
+  late Future<Koye> products = Network().getProducts(_scanBarcode, '',0,100000000);
+  late Future<KalloImageSearch> imageSearch = Network().getProductsImage(_image, '', 0, 1000000);
   late AnimationController _animationController;
   Segment _selectedSegment = Segment.onlineShops;
   String _scanBarcode = 'Unknown';
@@ -44,6 +46,8 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
   String _image = '';
   Timer? _timer;
   int _start = 5;
+  double _startValue = 0.0;
+  double _endValue = 100000.0;
   //RangeValues _selectedValues = RangeValues(0.0, 100000.0);
 
 
@@ -159,7 +163,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
     }
   }
 
-  void _loadCountryCode() async {
+  Future<void> _loadCountryCode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? savedCode = prefs.getString('countryCode');
     setState(() {
@@ -192,7 +196,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
       _loadCountryCode();
       scanBarcodeNormal().then((value)async{
         setState(() {
-          products = Network().getProducts(_scanBarcode, _code);
+          products = Network().getProducts(_scanBarcode, _code,0,100000000);
           _firstOpen = true;
           _start = 5;
         });
@@ -211,7 +215,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
       _loadCountryCode();
       _pickImage().then((value){
         setState(() {
-          imageSearch = Network().getProductsImage(_image, _code);
+          imageSearch = Network().getProductsImage(_image, _code, 0, 100000000);
           _firstOpen = true;
           _start = 10;
         });
@@ -238,8 +242,8 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
     _shiftCamera();
     _shiftSearchBar();
     _loadCountryCode();
-    imageSearch = Network().getProductsImage(_image, _code);
-    products = Network().getProducts(_scanBarcode, _code);
+    imageSearch = Network().getProductsImage(_image, _code, 0,  100000000);
+    products = Network().getProducts(_scanBarcode, _code,0,100000000);
     products.then((value){
       print('the prducy issssssssssssssss ${value.data}');
       //snack(context, value.data.)
@@ -258,6 +262,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
   }
   @override
   Widget build(BuildContext context) {
+    final animatedProvider = Provider.of<AnimatedProvider>(context);
     return Form(
       key: _key,
       child: Scaffold(
@@ -342,7 +347,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                         _loadCountryCode();
                         scanBarcodeNormal().then((value){
                           setState(() {
-                            products = Network().getProducts(_scanBarcode, _code);
+                            products = Network().getProducts(_scanBarcode, _code,0,100000000);
                             _firstOpen = true;
                             _start = 5;
                           });
@@ -359,7 +364,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                         _loadCountryCode();
                         _pickImage().then((value){
                           setState(() {
-                            imageSearch = Network().getProductsImage(_image, _code);
+                            imageSearch = Network().getProductsImage(_image, _code, 0, 100000000);
                             _firstOpen = true;
                             _start = 10;
                           });
@@ -394,7 +399,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               _loadCountryCode();
                               scanBarcodeNormal().then((value){
                                 setState(() {
-                                  products = Network().getProducts(_scanBarcode,_code);
+                                  products = Network().getProducts(_scanBarcode,_code,0,100000000);
                                   _firstOpen = true;
                                   _start = 5;
                                 });
@@ -468,7 +473,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               _loadCountryCode();
                               _pickImage().then((value){
                                 setState(() {
-                                  imageSearch = Network().getProductsImage(_image,_code);
+                                  imageSearch = Network().getProductsImage(_image,_code, 0, 100000000);
                                     _start = 12;
                                 });
                                 _startTimer();
@@ -523,7 +528,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                 _loadCountryCode();
                                 scanBarcodeNormal().then((value){
                                   setState(() {
-                                    products = Network().getProducts(_scanBarcode,_code);
+                                    products = Network().getProducts(_scanBarcode,_code, 0, 100000000);
                                   });
                                 });
                               },
@@ -567,7 +572,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                 _loadCountryCode();
                                 _pickImage().then((value){
                                   setState(() {
-                                    imageSearch = Network().getProductsImage(_image,_code);
+                                    imageSearch = Network().getProductsImage(_image,_code, 0, 100000000);
                                     _firstOpen = true;
                                   });
                                 });
@@ -740,7 +745,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                         ),
 
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*0.67,
+                          height: MediaQuery.of(context).size.height*0.676,
                           width: double.infinity,
                           child: Stack(
                             children: [
@@ -757,6 +762,373 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                   end: Offset(-1, 0),
                                 ).animate(_animationController),
                                 child: Online(snapshot: snapshot,),
+                              ),
+                              AnimatedPositioned(
+                                duration: Duration(milliseconds: 400),
+                                top: animatedProvider.myVariable ? 0 : -100, // Adjust the value to control the sliding distance
+                                left: 0,
+                                right: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap:(){
+                                          showModalBottomSheet(
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                              ),
+                                              builder: (context){
+                                                return StatefulBuilder(
+                                                    builder: (BuildContext context, StateSetter setState) {
+
+                                                      return Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 50,
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      icon: Icon(Icons.close)
+                                                                  ),
+
+                                                                  Text('Sort',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(right: 12.0),
+                                                                  child: Text('Price:',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Text('Low to high',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(right: 12.0),
+                                                                  child: Text('Price:',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Text('High to low',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(right: 12.0),
+                                                                  child: Text('Distance:',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Text('Closest first',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 80,
+                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              color: Colors.grey.shade400
+                                          ),
+                                          child: Center(
+                                            child: Text('Sort',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 14,
+                                      ),
+                                      GestureDetector(
+                                        onTap:(){
+                                          showModalBottomSheet(
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+
+                                              ),
+                                              builder: (context){
+                                                return StatefulBuilder(
+                                                    builder: (BuildContext context, StateSetter setState) {
+                                                      String displayValue;
+                                                      if (_startValue == _startValue.floor()) {
+                                                        //.floor is basically used to convert doubles to integers
+                                                        displayValue = _startValue.floor().toString();
+                                                      } else {
+                                                        displayValue = _startValue.toString();
+                                                      }
+                                                      if (_startValue >= 1000) {
+                                                        final formatter = NumberFormat("#,###");
+                                                        displayValue = formatter.format(_startValue);
+                                                      }
+                                                      String displaySecondValue;
+                                                      if (_endValue == _endValue.floor()) {
+                                                        //.floor is basically used to convert doubles to integers
+                                                        displaySecondValue = _endValue.floor().toString();
+                                                      } else {
+                                                        displaySecondValue = _endValue.toString();
+                                                      }
+                                                      if (_endValue >= 1000) {
+                                                        final formatter = NumberFormat("#,###");
+                                                        displaySecondValue = formatter.format(_endValue);
+                                                      }
+                                                      return Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 50,
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      icon: Icon(Icons.close)
+                                                                  ),
+
+                                                                  Text('Filter',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Text('Price',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              Container(
+                                                                height: 40,
+                                                                width: 90,
+                                                                decoration:BoxDecoration(
+                                                                    color: Colors.grey.shade400
+                                                                ),
+                                                                child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displayValue}",
+                                                                  style: TextStyle(
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.w800
+                                                                  ),
+                                                                )),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 14,
+                                                              ),
+                                                              Text('to'),
+                                                              SizedBox(
+                                                                width: 14,
+                                                              ),
+                                                              Container(
+                                                                height: 40,
+                                                                width: 90,
+                                                                decoration:BoxDecoration(
+                                                                    color: Colors.grey.shade400
+                                                                ),
+                                                                child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displaySecondValue}",
+                                                                  style: TextStyle(
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.w800
+                                                                  ),
+                                                                )),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          RangeSlider(
+                                                            values: RangeValues(_startValue, _endValue),
+                                                            min: 0.0,
+                                                            max: 100000.0,
+                                                            activeColor:Color(0xff7f78d8),
+                                                            // inactiveColor:Colors.grey.shade500,
+                                                            onChanged: ( values) {
+                                                              setState(() {
+                                                                _startValue = values.start;
+                                                                _endValue = values.end;
+                                                              });
+                                                            },
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Text('Select Merchants',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Text('Select Categories',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                              child: Container()
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(bottom: 15.0),
+                                                            child: SizedBox(
+                                                              height: 40,
+                                                              width: MediaQuery.of(context).size.width*0.5,
+                                                              child: FloatingActionButton(
+                                                                  onPressed: (){
+                                                                    _loadCountryCode().then((value){
+                                                                      setState((){
+                                                                        products = Network().getProducts(_scanBarcode, _code, _startValue.toInt(), _endValue.toInt());
+                                                                      });
+                                                                    });
+                                                                  },
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                                  ),
+                                                                  backgroundColor:Color(0xff7F78D8),
+                                                                  child: Text('Show Results')
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 80,
+                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              color: Colors.grey.shade400
+                                          ),
+                                          child: Center(
+                                            child: Text('Filter',
+                                              style: TextStyle(
+
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -784,7 +1156,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               _loadCountryCode();
                               scanBarcodeNormal().then((value){
                                 setState(() {
-                                  products = Network().getProducts(_scanBarcode,_code);
+                                  products = Network().getProducts(_scanBarcode,_code, 0, 100000000);
                                   _image = '';
                                   _start = 5;
                                 });
@@ -835,7 +1207,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               _loadCountryCode();
                               _pickImage().then((value){
                                 setState(() {
-                                  imageSearch = Network().getProductsImage(_image,_code);
+                                  imageSearch = Network().getProductsImage(_image,_code, 0, 100000000);
                                   _firstOpen = true;
                                   _start = 5;
                                 });
@@ -931,7 +1303,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                 _loadCountryCode();
                                 scanBarcodeNormal().then((value){
                                   setState(() {
-                                    products = Network().getProducts(_scanBarcode,_code);
+                                    products = Network().getProducts(_scanBarcode,_code, 0, 100000000);
                                   });
                                 });
                               },
@@ -977,7 +1349,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                 _loadCountryCode();
                                 _pickImage().then((value){
                                   setState(() {
-                                    imageSearch = Network().getProductsImage(_image,_code);
+                                    imageSearch = Network().getProductsImage(_image,_code, 0, 100000000);
                                     _firstOpen = true;
                                   });
                                 });
@@ -1148,7 +1520,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                           ),
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height*0.67,
+                          height: MediaQuery.of(context).size.height*0.676,
                           width: double.infinity,
                           color:Colors.grey.shade100,
                           child: Stack(
@@ -1166,6 +1538,373 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                   end: Offset(-1, 0),
                                 ).animate(_animationController),
                                 child: ImageOnline(snapshot: snapshot,),
+                              ),
+                              AnimatedPositioned(
+                                duration: Duration(milliseconds: 400),
+                                top: animatedProvider.myVariable ? 0 : -100, // Adjust the value to control the sliding distance
+                                left: 0,
+                                right: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap:(){
+                                          showModalBottomSheet(
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                              ),
+                                              builder: (context){
+                                                return StatefulBuilder(
+                                                    builder: (BuildContext context, StateSetter setState) {
+
+                                                      return Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 50,
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      icon: Icon(Icons.close)
+                                                                  ),
+
+                                                                  Text('Sort',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(right: 12.0),
+                                                                  child: Text('Price:',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Text('Low to high',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(right: 12.0),
+                                                                  child: Text('Price:',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Text('High to low',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(right: 12.0),
+                                                                  child: Text('Distance:',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Text('Closest first',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 80,
+                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              color: Colors.grey.shade400
+                                          ),
+                                          child: Center(
+                                            child: Text('Sort',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 14,
+                                      ),
+                                      GestureDetector(
+                                        onTap:(){
+                                          showModalBottomSheet(
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+
+                                              ),
+                                              builder: (context){
+                                                return StatefulBuilder(
+                                                    builder: (BuildContext context, StateSetter setState) {
+                                                      String displayValue;
+                                                      if (_startValue == _startValue.floor()) {
+                                                        //.floor is basically used to convert doubles to integers
+                                                        displayValue = _startValue.floor().toString();
+                                                      } else {
+                                                        displayValue = _startValue.toString();
+                                                      }
+                                                      if (_startValue >= 1000) {
+                                                        final formatter = NumberFormat("#,###");
+                                                        displayValue = formatter.format(_startValue);
+                                                      }
+                                                      String displaySecondValue;
+                                                      if (_endValue == _endValue.floor()) {
+                                                        //.floor is basically used to convert doubles to integers
+                                                        displaySecondValue = _endValue.floor().toString();
+                                                      } else {
+                                                        displaySecondValue = _endValue.toString();
+                                                      }
+                                                      if (_endValue >= 1000) {
+                                                        final formatter = NumberFormat("#,###");
+                                                        displaySecondValue = formatter.format(_endValue);
+                                                      }
+                                                      return Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 50,
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      icon: Icon(Icons.close)
+                                                                  ),
+
+                                                                  Text('Filter',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Text('Price',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              Container(
+                                                                height: 40,
+                                                                width: 90,
+                                                                decoration:BoxDecoration(
+                                                                    color: Colors.grey.shade400
+                                                                ),
+                                                                child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displayValue}",
+                                                                  style: TextStyle(
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.w800
+                                                                  ),
+                                                                )),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 14,
+                                                              ),
+                                                              Text('to'),
+                                                              SizedBox(
+                                                                width: 14,
+                                                              ),
+                                                              Container(
+                                                                height: 40,
+                                                                width: 90,
+                                                                decoration:BoxDecoration(
+                                                                    color: Colors.grey.shade400
+                                                                ),
+                                                                child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displaySecondValue}",
+                                                                  style: TextStyle(
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.w800
+                                                                  ),
+                                                                )),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          RangeSlider(
+                                                            values: RangeValues(_startValue, _endValue),
+                                                            min: 0.0,
+                                                            max: 100000.0,
+                                                            activeColor:Color(0xff7f78d8),
+                                                            // inactiveColor:Colors.grey.shade500,
+                                                            onChanged: ( values) {
+                                                              setState(() {
+                                                                _startValue = values.start;
+                                                                _endValue = values.end;
+                                                              });
+                                                            },
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Text('Select Merchants',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Text('Select Categories',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                              child: Container()
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(bottom: 15.0),
+                                                            child: SizedBox(
+                                                              height: 40,
+                                                              width: MediaQuery.of(context).size.width*0.5,
+                                                              child: FloatingActionButton(
+                                                                  onPressed: (){
+                                                                    _loadCountryCode().then((value){
+                                                                      setState((){
+                                                                        imageSearch = Network().getProductsImage(_image, _code, _startValue.toInt(), _endValue.toInt());
+                                                                      });
+                                                                    });
+                                                                  },
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                                  ),
+                                                                  backgroundColor:Color(0xff7F78D8),
+                                                                  child: Text('Show Results')
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 80,
+                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                            color: Colors.grey.shade400
+                                          ),
+                                          child: Center(
+                                            child: Text('Filter',
+                                              style: TextStyle(
+
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),

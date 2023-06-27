@@ -5,11 +5,14 @@ import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import '../network/json.dart';
 import '../network/network.dart';
+import '../providers/animated.dart';
 import 'offline_items.dart';
 import 'online_items.dart';
 
@@ -24,7 +27,7 @@ enum Shops { shopsNearMe, onlineShops }
 class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMixin{
   late AnimationController _animationController;
   Shops _selectedShop = Shops.onlineShops;
-  late Future<Koye> productName = Network().getProductsName(_name, _code);
+  late Future<Koye> productName = Network().getProductsName(_name, _code,0,100000000);
   late FloatingSearchBarController controller;
   List<String>? _filteredSearchHistory;
   String _name = '';
@@ -36,6 +39,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   String? _timeTakenText;
   Timer? _timer;
   int _start = 5;
+  double _startValue = 0.0;
+  double _endValue = 100000.0;
 
   void _switchToShop(Shops segment) {
     if (_selectedShop == segment) return;
@@ -203,7 +208,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   @override
   void initState() {
     // TODO: implement initState
-    productName = Network().getProductsName(_name, _code);
+    productName = Network().getProductsName(_name, _code,0,100000000);
     controller = FloatingSearchBarController();
     _animationController = AnimationController(
       vsync: this,
@@ -225,6 +230,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
+    final animatedProvider = Provider.of<AnimatedProvider>(context);
+
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -417,11 +424,10 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                              ),
                            ),
                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
+
                           SizedBox(
                             width: double.infinity,
+                            height: MediaQuery.of(context).size.height*0.8,
                             child: Stack(
                               children: [
                                 SlideTransition(
@@ -437,6 +443,373 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                     end: Offset(-1, 0),
                                   ).animate(_animationController),
                                   child: Online(snapshot: snapshot,),
+                                ),
+                                AnimatedPositioned(
+                                  duration: Duration(milliseconds: 400),
+                                  top: animatedProvider.myVariable ? 0 : -100, // Adjust the value to control the sliding distance
+                                  left: 0,
+                                  right: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap:(){
+                                            showModalBottomSheet(
+                                                context: context,
+                                                shape: RoundedRectangleBorder(
+                                                ),
+                                                builder: (context){
+                                                  return StatefulBuilder(
+                                                      builder: (BuildContext context, StateSetter setState) {
+
+                                                        return Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: 50,
+                                                              width: MediaQuery.of(context).size.width,
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                                child: Row(
+                                                                  children: [
+                                                                    IconButton(
+                                                                        onPressed: (){
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        icon: Icon(Icons.close)
+                                                                    ),
+
+                                                                    Text('Sort',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight.w800,
+                                                                          fontSize: 22
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 12,
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left: 20.0),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.only(right: 12.0),
+                                                                    child: Text('Price:',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight.w800,
+                                                                          fontSize: 22
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Text('Low to high',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left: 20.0),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.only(right: 12.0),
+                                                                    child: Text('Price:',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight.w800,
+                                                                          fontSize: 22
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Text('High to low',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left: 20.0),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.only(right: 12.0),
+                                                                    child: Text('Distance:',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight.w800,
+                                                                          fontSize: 22
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Text('Closest first',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  );
+                                                }
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 40,
+                                            width: 80,
+                                            padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(15),
+                                                color: Colors.grey.shade400
+                                            ),
+                                            child: Center(
+                                              child: Text('Sort',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 14,
+                                        ),
+                                        GestureDetector(
+                                          onTap:(){
+                                            showModalBottomSheet(
+                                                context: context,
+                                                shape: RoundedRectangleBorder(
+
+                                                ),
+                                                builder: (context){
+                                                  return StatefulBuilder(
+                                                      builder: (BuildContext context, StateSetter setState) {
+                                                        String displayValue;
+                                                        if (_startValue == _startValue.floor()) {
+                                                          //.floor is basically used to convert doubles to integers
+                                                          displayValue = _startValue.floor().toString();
+                                                        } else {
+                                                          displayValue = _startValue.toString();
+                                                        }
+                                                        if (_startValue >= 1000) {
+                                                          final formatter = NumberFormat("#,###");
+                                                          displayValue = formatter.format(_startValue);
+                                                        }
+                                                        String displaySecondValue;
+                                                        if (_endValue == _endValue.floor()) {
+                                                          //.floor is basically used to convert doubles to integers
+                                                          displaySecondValue = _endValue.floor().toString();
+                                                        } else {
+                                                          displaySecondValue = _endValue.toString();
+                                                        }
+                                                        if (_endValue >= 1000) {
+                                                          final formatter = NumberFormat("#,###");
+                                                          displaySecondValue = formatter.format(_endValue);
+                                                        }
+                                                        return Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: 50,
+                                                              width: MediaQuery.of(context).size.width,
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                                child: Row(
+                                                                  children: [
+                                                                    IconButton(
+                                                                        onPressed: (){
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        icon: Icon(Icons.close)
+                                                                    ),
+
+                                                                    Text('Filter',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight.w800,
+                                                                          fontSize: 22
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 12,
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left: 20.0),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                children: [
+                                                                  Text('Price',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 12,
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                Container(
+                                                                  height: 40,
+                                                                  width: 90,
+                                                                  decoration:BoxDecoration(
+                                                                      color: Colors.grey.shade400
+                                                                  ),
+                                                                  child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displayValue}",
+                                                                    style: TextStyle(
+                                                                        fontSize: 14,
+                                                                        fontWeight: FontWeight.w800
+                                                                    ),
+                                                                  )),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 14,
+                                                                ),
+                                                                Text('to'),
+                                                                SizedBox(
+                                                                  width: 14,
+                                                                ),
+                                                                Container(
+                                                                  height: 40,
+                                                                  width: 90,
+                                                                  decoration:BoxDecoration(
+                                                                      color: Colors.grey.shade400
+                                                                  ),
+                                                                  child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displaySecondValue}",
+                                                                    style: TextStyle(
+                                                                        fontSize: 14,
+                                                                        fontWeight: FontWeight.w800
+                                                                    ),
+                                                                  )),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            RangeSlider(
+                                                              values: RangeValues(_startValue, _endValue),
+                                                              min: 0.0,
+                                                              max: 100000.0,
+                                                              activeColor:Color(0xff7f78d8),
+                                                              // inactiveColor:Colors.grey.shade500,
+                                                              onChanged: ( values) {
+                                                                setState(() {
+                                                                  _startValue = values.start;
+                                                                  _endValue = values.end;
+                                                                });
+                                                              },
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left: 20.0),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                children: [
+                                                                  Text('Select Merchants',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left: 20.0),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                children: [
+                                                                  Text('Select Categories',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w800,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                                child: Container()
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(bottom: 15.0),
+                                                              child: SizedBox(
+                                                                height: 40,
+                                                                width: MediaQuery.of(context).size.width*0.5,
+                                                                child: FloatingActionButton(
+                                                                    onPressed: (){
+                                                                      _loadCountryCode().then((value){
+                                                                        setState((){
+                                                                          productName = Network().getProductsName(_name, _code, _startValue.toInt(), _endValue.toInt());
+                                                                        });
+                                                                      });
+                                                                    },
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                                    ),
+                                                                    backgroundColor:Color(0xff7F78D8),
+                                                                    child: Text('Show Results')
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  );
+                                                }
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 40,
+                                            width: 80,
+                                            padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(15),
+                                                color: Colors.grey.shade400
+                                            ),
+                                            child: Center(
+                                              child: Text('Filter',
+                                                style: TextStyle(
+
+                                                    fontWeight: FontWeight.w500
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -471,7 +844,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
               setState(() {
                 _firstpage = false;
                 _name = v;
-                productName = Network().getProductsName(v, _code);
+                productName = Network().getProductsName(v, _code,0, 100000000);
               });
               controller.close();
             });
@@ -549,7 +922,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                 setState(() {
                                   _firstpage = false;
                                   _name = suggestion;
-                                  productName = Network().getProductsName(suggestion, _code);
+                                  productName = Network().getProductsName(suggestion, _code,0,100000000);
                                 });
                                 controller.close();
                                 putSearchTermFirst(suggestion);
@@ -562,7 +935,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                   _saveToRecentSearches(suggestion);
                                   setState(() {
                                     _name = suggestion;
-                                    productName = Network().getProductsName(suggestion, _code);
+                                    productName = Network().getProductsName(suggestion, _code,0,100000000);
                                   });
                                   controller.close();
                                   putSearchTermFirst(suggestion);
@@ -607,7 +980,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                 setState(() {
                                   _firstpage = false;
                                   _name = controller.query;
-                                  productName = Network().getProductsName(controller.query, _code);
+                                  productName = Network().getProductsName(controller.query, _code,0,100000000);
                                 });
                                 controller.close();
                               });
@@ -620,7 +993,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                   _saveToRecentSearches(controller.query);
                                   setState(() {
                                     _name = controller.query;
-                                    productName = Network().getProductsName(controller.query, _code);
+                                    productName = Network().getProductsName(controller.query, _code,0,100000000);
                                   });
                                   controller.close();
                                   putSearchTermFirst(controller.query);
@@ -669,7 +1042,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                           setState(() {
                                             _firstpage = false;
                                             _name = term;
-                                            productName = Network().getProductsName(term, _code);
+                                            productName = Network().getProductsName(term, _code,0,100000000);
                                           });
                                           controller.close();
                                           putSearchTermFirst(term);
@@ -683,7 +1056,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         setState(() {
                                           _firstpage = false;
                                           _name = term;
-                                          productName = Network().getProductsName(term, _code);
+                                          productName = Network().getProductsName(term, _code,0,100000000);
                                         });
                                         controller.close();
                                         putSearchTermFirst(term);
