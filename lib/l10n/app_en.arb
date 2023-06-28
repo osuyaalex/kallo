@@ -180,7 +180,7 @@
   "shoppingMadeEasier": "shopping made easier",
   "successfullySignedIn": "You're successfully signed in",
   "accountAlreadyExists": "Account already exists, log in instead",
-  "connectionIsDown": "Sorry, connection is down. Check your internet connection and try again",
+  "connectionIsDown": "Network connection error. Please check your network connectivity",
   "successfullyLoggedIn": "You're successfully logged in",
   "invalidEmailOrPassword": "invalid email or password",
   "signOut": "Sign out",

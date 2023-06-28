@@ -27,7 +27,7 @@ enum Shops { shopsNearMe, onlineShops }
 class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMixin{
   late AnimationController _animationController;
   Shops _selectedShop = Shops.onlineShops;
-  late Future<Koye> productName = Network().getProductsName(_name, _code,0,100000000);
+  late Future<Koye> productName = Network().getProductsName(_name, _code,0,100000000, context);
   late FloatingSearchBarController controller;
   List<String>? _filteredSearchHistory;
   String _name = '';
@@ -208,7 +208,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   @override
   void initState() {
     // TODO: implement initState
-    productName = Network().getProductsName(_name, _code,0,100000000);
+    productName = Network().getProductsName(_name, _code,0,100000000, context);
     controller = FloatingSearchBarController();
     _animationController = AnimationController(
       vsync: this,
@@ -304,7 +304,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                       return  Stack(
                         children: [
                           Container(
-                            height: MediaQuery.of(context).size.height*0.8,
+                            height: MediaQuery.of(context).size.height*0.83,
                             width: MediaQuery.of(context).size.width,
                           ),
                           Positioned(
@@ -427,7 +427,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
 
                           SizedBox(
                             width: double.infinity,
-                            height: MediaQuery.of(context).size.height*0.8,
+                            height: MediaQuery.of(context).size.height*0.84,
                             child: Stack(
                               children: [
                                 SlideTransition(
@@ -456,6 +456,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         GestureDetector(
                                           onTap:(){
                                             showModalBottomSheet(
+                                              isDismissible: false,
                                                 context: context,
                                                 shape: RoundedRectangleBorder(
                                                 ),
@@ -598,6 +599,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         GestureDetector(
                                           onTap:(){
                                             showModalBottomSheet(
+                                              isDismissible: false,
                                                 context: context,
                                                 shape: RoundedRectangleBorder(
 
@@ -639,6 +641,10 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                     IconButton(
                                                                         onPressed: (){
                                                                           Navigator.pop(context);
+                                                                          setState((){
+                                                                            _startValue = 0.0;
+                                                                            _endValue = 100000.0;
+                                                                          });
                                                                         },
                                                                         icon: Icon(Icons.close)
                                                                     ),
@@ -682,12 +688,20 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                   decoration:BoxDecoration(
                                                                       color: Colors.grey.shade400
                                                                   ),
-                                                                  child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displayValue}",
+                                                                  child: Center(child:
+                                                                  snapshot.data!.data!.products!.isNotEmpty?
+                                                                  Text("${snapshot.data!.data!.products![1].currency} ${displayValue}",
                                                                     style: TextStyle(
                                                                         fontSize: 14,
                                                                         fontWeight: FontWeight.w800
                                                                     ),
-                                                                  )),
+                                                                  ): Text("${displayValue}",
+                                                                    style: TextStyle(
+                                                                        fontSize: 14,
+                                                                        fontWeight: FontWeight.w800
+                                                                    ),
+                                                                  )
+                                                                  ),
                                                                 ),
                                                                 SizedBox(
                                                                   width: 14,
@@ -702,12 +716,20 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                   decoration:BoxDecoration(
                                                                       color: Colors.grey.shade400
                                                                   ),
-                                                                  child: Center(child: Text("${snapshot.data!.data!.products?[1].currency??''} ${displaySecondValue}",
+                                                                  child: Center(child:
+                                                                  snapshot.data!.data!.products!.isNotEmpty?
+                                                                  Text("${snapshot.data!.data!.products![1].currency} ${displaySecondValue}",
                                                                     style: TextStyle(
                                                                         fontSize: 14,
                                                                         fontWeight: FontWeight.w800
                                                                     ),
-                                                                  )),
+                                                                  ): Text("${displayValue}",
+                                                                    style: TextStyle(
+                                                                        fontSize: 14,
+                                                                        fontWeight: FontWeight.w800
+                                                                    ),
+                                                                  )
+                                                                  ),
                                                                 ),
                                                               ],
                                                             ),
@@ -770,7 +792,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                     onPressed: (){
                                                                       _loadCountryCode().then((value){
                                                                         setState((){
-                                                                          productName = Network().getProductsName(_name, _code, _startValue.toInt(), _endValue.toInt());
+                                                                          productName = Network().getProductsName(_name, _code, _startValue.toInt(), _endValue.toInt(),context);
                                                                         });
                                                                       });
                                                                     },
@@ -844,7 +866,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
               setState(() {
                 _firstpage = false;
                 _name = v;
-                productName = Network().getProductsName(v, _code,0, 100000000);
+                productName = Network().getProductsName(v, _code,0, 100000000,context);
               });
               controller.close();
             });
@@ -922,7 +944,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                 setState(() {
                                   _firstpage = false;
                                   _name = suggestion;
-                                  productName = Network().getProductsName(suggestion, _code,0,100000000);
+                                  productName = Network().getProductsName(suggestion, _code,0,100000000,context);
                                 });
                                 controller.close();
                                 putSearchTermFirst(suggestion);
@@ -935,7 +957,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                   _saveToRecentSearches(suggestion);
                                   setState(() {
                                     _name = suggestion;
-                                    productName = Network().getProductsName(suggestion, _code,0,100000000);
+                                    productName = Network().getProductsName(suggestion, _code,0,100000000,context);
                                   });
                                   controller.close();
                                   putSearchTermFirst(suggestion);
@@ -980,7 +1002,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                 setState(() {
                                   _firstpage = false;
                                   _name = controller.query;
-                                  productName = Network().getProductsName(controller.query, _code,0,100000000);
+                                  productName = Network().getProductsName(controller.query, _code,0,100000000,context);
                                 });
                                 controller.close();
                               });
@@ -993,7 +1015,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                   _saveToRecentSearches(controller.query);
                                   setState(() {
                                     _name = controller.query;
-                                    productName = Network().getProductsName(controller.query, _code,0,100000000);
+                                    productName = Network().getProductsName(controller.query, _code,0,100000000,context);
                                   });
                                   controller.close();
                                   putSearchTermFirst(controller.query);
@@ -1042,7 +1064,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                           setState(() {
                                             _firstpage = false;
                                             _name = term;
-                                            productName = Network().getProductsName(term, _code,0,100000000);
+                                            productName = Network().getProductsName(term, _code,0,100000000,context);
                                           });
                                           controller.close();
                                           putSearchTermFirst(term);
@@ -1056,7 +1078,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         setState(() {
                                           _firstpage = false;
                                           _name = term;
-                                          productName = Network().getProductsName(term, _code,0,100000000);
+                                          productName = Network().getProductsName(term, _code,0,100000000,context);
                                         });
                                         controller.close();
                                         putSearchTermFirst(term);
