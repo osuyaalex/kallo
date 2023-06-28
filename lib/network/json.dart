@@ -27,7 +27,7 @@ class Data {
   Null? thisPrice;
   Null? thisCurrency;
   Null? thisAvailability;
-  List<Products>? products;
+  List<Pproducts>? products;
   List? cprs;
   List? cprsTruncated;
   List? cprsWithinRange;
@@ -50,9 +50,9 @@ class Data {
     thisCurrency = json['this_currency'];
     thisAvailability = json['this_availability'];
     if (json['products'] != null) {
-      products = <Products>[];
+      products = <Pproducts>[];
       json['products'].forEach((v) {
-        products!.add(new Products.fromJson(v));
+        products!.add(new Pproducts.fromJson(v));
       });
     }
     if (json['cprs'] != null) {
@@ -101,7 +101,7 @@ class Data {
   }
 }
 
-class Products {
+class Pproducts {
   String? currency;
   String? productLink;
   String? productName;
@@ -113,7 +113,7 @@ class Products {
   String? merchantName;
   String? merchantType;
 
-  Products(
+  Pproducts(
       {this.currency,
         this.productLink,
         this.productName,
@@ -125,7 +125,7 @@ class Products {
         this.merchantName,
         this.merchantType});
 
-  Products.fromJson(Map<String, dynamic> json) {
+  Pproducts.fromJson(Map<String, dynamic> json) {
     currency = json['currency'];
     productLink = json['product_link'];
     productName = json['product_name'];

@@ -71,7 +71,7 @@ class _OfflineState extends State<Offline> {
                 if(notification is ScrollUpdateNotification){
                   // Check the direction of scroll and update the visibility of the container
                   setState(() {
-                    animatedProvider.myVariable = notification.scrollDelta! < 0;
+                    animatedProvider.myVariable = false;
                   });
                 }
                 return false;

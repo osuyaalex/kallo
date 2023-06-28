@@ -53,161 +53,155 @@ class _OnlineState extends State<Online> {
       }
       return name;
     }
-    List<Products>? products = widget.snapshot.data!.data!.products;
+    List<Pproducts>? products = widget.snapshot.data!.data!.products;
     var online = products?.where((element) => element.merchantType == "online").toList();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          children: [
-            NotificationListener<ScrollNotification>(
-              onNotification: (notification){
-                if(notification is ScrollUpdateNotification){
-                  // Check the direction of scroll and update the visibility of the container
-                  setState(() {
-                    animatedProvider.myVariable = notification.scrollDelta! < 0;
-                  });
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (notification){
+          if(notification is ScrollUpdateNotification){
+            // Check the direction of scroll and update the visibility of the container
+              if(online!.isNotEmpty){
+                animatedProvider.myVariable = notification.scrollDelta! < 0;
+              }else{
+                animatedProvider.myVariable = notification.scrollDelta! > 0;
+              }
+          }
+          return false;
+        },
+        child: StaggeredGridView.countBuilder(
+          physics: ClampingScrollPhysics(),
+            crossAxisCount: 2,
+            itemCount: online?.length,
+            itemBuilder: (context, index){
+              // final doubleValue = offline[index]['price'];
+              // // the indexOf() method is to check if there are any digits after the decimal point
+              // // If there is no decimal point, it will be set to -1.
+              // final decimalIndex = doubleValue.toString().indexOf('.');
+              // final textToDisplay = decimalIndex == -1
+              //     ? doubleValue.toStringAsFixed(0)
+              //     : doubleValue.toStringAsFixed(2);
+              final item = online?[index].price;
+              String displayValue;
+
+              if (item is double) {
+                final double number = item;
+                if (number == number.floor()) {
+                  displayValue = number.floor().toString();
+                } else {
+                  displayValue = number.toString();
                 }
-                return false;
-              },
-              child: StaggeredGridView.countBuilder(
-                physics: ClampingScrollPhysics(),
-                  crossAxisCount: 2,
-                  itemCount: online?.length,
-                  itemBuilder: (context, index){
-                    // final doubleValue = offline[index]['price'];
-                    // // the indexOf() method is to check if there are any digits after the decimal point
-                    // // If there is no decimal point, it will be set to -1.
-                    // final decimalIndex = doubleValue.toString().indexOf('.');
-                    // final textToDisplay = decimalIndex == -1
-                    //     ? doubleValue.toStringAsFixed(0)
-                    //     : doubleValue.toStringAsFixed(2);
-                    final item = online?[index].price;
-                    String displayValue;
-
-                    if (item is double) {
-                      final double number = item;
-                      if (number == number.floor()) {
-                        displayValue = number.floor().toString();
-                      } else {
-                        displayValue = number.toString();
-                      }
-                      if (number >= 1000) {
-                        final formatter = NumberFormat("#,###");
-                        displayValue = formatter.format(number);
-                      }
-                    } else if (item is String) {
-                      final double number = double.tryParse(item) ?? 0.0;
-                      if (number == number.floor()) {
-                        displayValue = number.floor().toString();
-                      } else {
-                        displayValue = number.toString();
-                      }
-                      if (number >= 1000) {
-                        final formatter = NumberFormat("#,###");
-                        displayValue = formatter.format(number);
-                      }
-                    } else {
-                      displayValue = 'N/A'; // Handle the case when item is neither a double nor a string
-                    }
-                    final addRow = online?[index];
-                    return GestureDetector(
-                      onTap: (){
-                        String url = addRow?.productLink??'';
-                        Uri uri = Uri.parse(url);
-                        try{
-                          launchUrl(uri);
-                        }catch(e){
-                          print(e.toString());
-                        }
-                      },
-                      child: SizedBox(
-                        height: 290,
-                        width: 250,
-                        child: Card(
-                          elevation: 1,
-                          shadowColor: Colors.grey.shade300,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(17)
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 160,
-                                width: 180,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(17),
-                                    image: DecorationImage(
-                                        image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
-                                        online![index].imageThumbnailUrl!:
-                                            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
-                                        ),
-                                        fit: BoxFit.fill
-                                    )
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(breakUnwantedPart(addRow?.productName??''),
-                                  style: const TextStyle(
-                                      fontSize: 15,
+                if (number >= 1000) {
+                  final formatter = NumberFormat("#,###");
+                  displayValue = formatter.format(number);
+                }
+              } else if (item is String) {
+                final double number = double.tryParse(item) ?? 0.0;
+                if (number == number.floor()) {
+                  displayValue = number.floor().toString();
+                } else {
+                  displayValue = number.toString();
+                }
+                if (number >= 1000) {
+                  final formatter = NumberFormat("#,###");
+                  displayValue = formatter.format(number);
+                }
+              } else {
+                displayValue = 'N/A'; // Handle the case when item is neither a double nor a string
+              }
+              final addRow = online?[index];
+              return GestureDetector(
+                onTap: (){
+                  String url = addRow?.productLink??'';
+                  Uri uri = Uri.parse(url);
+                  try{
+                    launchUrl(uri);
+                  }catch(e){
+                    print(e.toString());
+                  }
+                },
+                child: SizedBox(
+                  height: 290,
+                  width: 250,
+                  child: Card(
+                    elevation: 1,
+                    shadowColor: Colors.grey.shade300,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(17)
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 160,
+                          width: 180,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(17),
+                              image: DecorationImage(
+                                  image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
+                                  online![index].imageThumbnailUrl!:
+                                      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
                                   ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(addRow?.merchantName??'',
-                                      style: const TextStyle(
-                                          color: Color(0xff161b22),
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 12
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                child: SizedBox(
-                                  height: 20,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(addRow?.currency??'',
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xff7F78D8)
-                                        ),
-                                      ),
-                                      Text(displayValue,
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xff7F78D8)
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                                  fit: BoxFit.fill
                               )
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(breakUnwantedPart(addRow?.productName??''),
+                            style: const TextStyle(
+                                fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(addRow?.merchantName??'',
+                                style: const TextStyle(
+                                    color: Color(0xff161b22),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12
+                                ),
+                              ),
+
                             ],
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  staggeredTileBuilder: (context) => const StaggeredTile.fit(1)
-              ),
-            ),
 
-          ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: SizedBox(
+                            height: 20,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(addRow?.currency??'',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xff7F78D8)
+                                  ),
+                                ),
+                                Text(displayValue,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xff7F78D8)
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            staggeredTileBuilder: (context) => const StaggeredTile.fit(1)
         ),
       ),
     );

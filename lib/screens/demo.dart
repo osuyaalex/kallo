@@ -248,49 +248,24 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
           transitionDuration: const Duration(milliseconds: 800),
           transition: CircularFloatingSearchBarTransition(),
           debounceDelay: const Duration(milliseconds: 500),
-          body:  SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0,60,0,10),
-              child: FutureBuilder(
-                  future: productName,
-                  builder: (context, snapshot){
-                    if(snapshot.hasError){
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
-                        child: Center(
-                          child: _firstpage?Text(AppLocalizations.of(context)!.searchItem,
-                              style: const TextStyle(
-                                  color: Color(0xff7F78D8),
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14
-                              )
-                          ):Padding(
-                            padding: const EdgeInsets.only(top: 30.0),
-                            child: Text(AppLocalizations.of(context)!.somethingWentWrong,
-                                style: const TextStyle(
-                                    color: Color(0xff7F78D8),
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 14
-                                )
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                    if(!snapshot.hasData){
-                      return Center(
-                        child: _firstpage?Padding(
-                          padding: const EdgeInsets.only(top: 30.0),
-                          child: Text(AppLocalizations.of(context)!.processingData,
-                              style: const TextStyle(
-                                  color: Color(0xff7F78D8),
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14
-                              )
-                          ),
+          body:  Padding(
+            padding: const EdgeInsets.fromLTRB(0,60,0,10),
+            child: FutureBuilder(
+                future: productName,
+                builder: (context, snapshot){
+                  if(snapshot.hasError){
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Center(
+                        child: _firstpage?Text(AppLocalizations.of(context)!.searchItem,
+                            style: const TextStyle(
+                                color: Color(0xff7F78D8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14
+                            )
                         ):Padding(
                           padding: const EdgeInsets.only(top: 30.0),
-                          child: Text(AppLocalizations.of(context)!.noProductsAvailable,
+                          child: Text(AppLocalizations.of(context)!.somethingWentWrong,
                               style: const TextStyle(
                                   color: Color(0xff7F78D8),
                                   fontWeight: FontWeight.w800,
@@ -298,136 +273,161 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                               )
                           ),
                         ),
-                      );
-                    }
-                    if(snapshot.connectionState == ConnectionState.waiting){
-                      return  Stack(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height*0.83,
-                            width: MediaQuery.of(context).size.width,
+                      ),
+                    );
+                  }
+                  if(!snapshot.hasData){
+                    return Center(
+                      child: _firstpage?Padding(
+                        padding: const EdgeInsets.only(top: 30.0),
+                        child: Text(AppLocalizations.of(context)!.processingData,
+                            style: const TextStyle(
+                                color: Color(0xff7F78D8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14
+                            )
+                        ),
+                      ):Padding(
+                        padding: const EdgeInsets.only(top: 30.0),
+                        child: Text(AppLocalizations.of(context)!.noProductsAvailable,
+                            style: const TextStyle(
+                                color: Color(0xff7F78D8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14
+                            )
+                        ),
+                      ),
+                    );
+                  }
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return  Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.83,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        Positioned(
+                          top:MediaQuery.of(context).size.height*0.4,
+                          left:MediaQuery.of(context).size.width*0.45,
+                          child: const Center(
+                            child: CircularProgressIndicator(color: Color(0xff7F78D8),),
                           ),
-                          Positioned(
-                            top:MediaQuery.of(context).size.height*0.4,
-                            left:MediaQuery.of(context).size.width*0.45,
-                            child: const Center(
-                              child: CircularProgressIndicator(color: Color(0xff7F78D8),),
-                            ),
-                          ),
-                        ],
-                      );
-                    }else if(snapshot.hasData){
-                      return Column(
-                        children: [
-                         Container(
+                        ),
+                      ],
+                    );
+                  }else if(snapshot.hasData){
+                    return Column(
+                      children: [
+                       Container(
+                         color:Colors.grey.shade50,
+                         child: Card(
                            color:Colors.grey.shade50,
-                           child: Card(
-                             color:Colors.grey.shade50,
-                             shape: RoundedRectangleBorder(
-                                 borderRadius: BorderRadius.circular(7)
-                             ),
-                             elevation: 2,
-                             shadowColor: Color(0xff7F78D8).withOpacity(0.3),
-                             child: ClipRRect(
-                               child: Padding(
-                                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                                 child: AppBar(
-                                   automaticallyImplyLeading: false,
-                                   backgroundColor: Colors.grey.shade50,
-                                   elevation: 0,
-                                   title: Center(
-                                     child: CustomSlidingSegmentedControl(
-                                       //isStretch: true,
-                                       initialValue: _selectedShop.index,
-                                       children:  {
-                                         Shops.onlineShops.index: SizedBox(
-                                           child: _selectedShop == Shops.onlineShops?
-                                           Row(
-                                             children: [
-                                               const Icon(Icons.location_on, color: Colors.white, size: 19,),
-                                               Text(
-                                                 AppLocalizations.of(context)?.onlineShops??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.white,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
+                           shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(7)
+                           ),
+                           elevation: 2,
+                           shadowColor: Color(0xff7F78D8).withOpacity(0.3),
+                           child: ClipRRect(
+                             child: Padding(
+                               padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                               child: AppBar(
+                                 automaticallyImplyLeading: false,
+                                 backgroundColor: Colors.grey.shade50,
+                                 elevation: 0,
+                                 title: Center(
+                                   child: CustomSlidingSegmentedControl(
+                                     //isStretch: true,
+                                     initialValue: _selectedShop.index,
+                                     children:  {
+                                       Shops.onlineShops.index: SizedBox(
+                                         child: _selectedShop == Shops.onlineShops?
+                                         Row(
+                                           children: [
+                                             const Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                             Text(
+                                               AppLocalizations.of(context)?.onlineShops??'',
+                                               style: const TextStyle(
+                                                   color: Colors.white,
+                                                   fontSize: 16,
+                                                   fontWeight: FontWeight.w800
                                                ),
-                                             ],
-                                           ): Row(
-                                             children: [
-                                               const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
-                                               Text(
-                                                 AppLocalizations.of(context)?.onlineShops??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.black,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
+                                             ),
+                                           ],
+                                         ): Row(
+                                           children: [
+                                             const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                             Text(
+                                               AppLocalizations.of(context)?.onlineShops??'',
+                                               style: const TextStyle(
+                                                   color: Colors.black,
+                                                   fontSize: 16,
+                                                   fontWeight: FontWeight.w800
                                                ),
-                                             ],
-                                           ),
+                                             ),
+                                           ],
                                          ),
-                                         Shops.shopsNearMe.index: SizedBox(
-                                           child: _selectedShop == Shops.shopsNearMe?
-                                           Row(
-                                             children: [
-                                               Padding(
-                                                 padding: const EdgeInsets.only(right: 4.0),
-                                                 child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                       ),
+                                       Shops.shopsNearMe.index: SizedBox(
+                                         child: _selectedShop == Shops.shopsNearMe?
+                                         Row(
+                                           children: [
+                                             Padding(
+                                               padding: const EdgeInsets.only(right: 4.0),
+                                               child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                             ),
+                                             Text(
+                                               AppLocalizations.of(context)?.shopsNearMe??'',
+                                               style: const TextStyle(
+                                                   color: Colors.white,
+                                                   fontSize: 16,
+                                                   fontWeight: FontWeight.w800
                                                ),
-                                               Text(
-                                                 AppLocalizations.of(context)?.shopsNearMe??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.white,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
+                                             ),
+                                           ],
+                                         ): Row(
+                                           children: [
+                                             Padding(
+                                               padding: const EdgeInsets.only(right: 4.0),
+                                               child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                             ),                                  Text(
+                                               AppLocalizations.of(context)?.shopsNearMe??'',
+                                               style: const TextStyle(
+                                                   color: Colors.black,
+                                                   fontSize: 16,
+                                                   fontWeight: FontWeight.w800
                                                ),
-                                             ],
-                                           ): Row(
-                                             children: [
-                                               Padding(
-                                                 padding: const EdgeInsets.only(right: 4.0),
-                                                 child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
-                                               ),                                  Text(
-                                                 AppLocalizations.of(context)?.shopsNearMe??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.black,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
-                                               ),
-                                             ],
-                                           ),
+                                             ),
+                                           ],
                                          ),
-                                       },
-                                       decoration: BoxDecoration(
-                                           color: Colors.grey.shade400,
-                                           borderRadius: BorderRadius.circular(20)
                                        ),
-                                       thumbDecoration: BoxDecoration(
-                                           color: const Color(0xff7F78D8),
-                                           borderRadius: BorderRadius.circular(20)
-                                       ),
-                                       duration: const Duration(milliseconds: 200),
-                                       curve: Curves.easeInToLinear,
-                                       onValueChanged: (value) {
-                                         setState(() {
-                                           _switchToShop(Shops.values[value]);
-                                         });
-                                       },
+                                     },
+                                     decoration: BoxDecoration(
+                                         color: Colors.grey.shade400,
+                                         borderRadius: BorderRadius.circular(20)
                                      ),
+                                     thumbDecoration: BoxDecoration(
+                                         color: const Color(0xff7F78D8),
+                                         borderRadius: BorderRadius.circular(20)
+                                     ),
+                                     duration: const Duration(milliseconds: 200),
+                                     curve: Curves.easeInToLinear,
+                                     onValueChanged: (value) {
+                                       setState(() {
+                                         _switchToShop(Shops.values[value]);
+                                       });
+                                     },
                                    ),
                                  ),
                                ),
                              ),
                            ),
                          ),
+                       ),
 
-                          SizedBox(
+                        Expanded(
+                          child: SizedBox(
                             width: double.infinity,
-                            height: MediaQuery.of(context).size.height*0.84,
+
                             child: Stack(
                               children: [
                                 SlideTransition(
@@ -835,17 +835,17 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                 ),
                               ],
                             ),
-                          )
-                        ],
-                      );
+                          ),
+                        )
+                      ],
+                    );
 
-                    }else{
-                      return const Center(
-                        child: CircularProgressIndicator(color: Colors.black,),
-                      );
-                    }
+                  }else{
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.black,),
+                    );
                   }
-              ),
+                }
             ),
           ),
           physics: const BouncingScrollPhysics(),

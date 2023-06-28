@@ -9,9 +9,11 @@ import 'dart:ui';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/google_sign_in.dart';
+import '../providers/animated.dart';
 import '../screens/demo_two.dart';
 
 
@@ -29,6 +31,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final animatedProvider = Provider.of<AnimatedProvider>(context);
+
     final List<Widget> _screens = [
       MyHome(
         onProductPressed: () async{
@@ -94,30 +98,35 @@ class _HomeState extends State<Home> {
       )
     ];
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        selectedItemColor: const Color(0xff7F78D8),
-        currentIndex: _selectedItem,
-        onTap: (index) {
-          setState(() {
-            _selectedItem = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            label: AppLocalizations.of(context)?.home,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.search),
-            label: AppLocalizations.of(context)?.search,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person),
-            label: AppLocalizations.of(context)?.profile,
-          ),
-        ],
+      bottomNavigationBar: AnimatedContainer(
+        curve: Curves.fastOutSlowIn,
+        duration: Duration(milliseconds: 400),
+        height: animatedProvider.myVariable ? 70 : 0,
+        child: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          selectedItemColor: const Color(0xff7F78D8),
+          currentIndex: _selectedItem,
+          onTap: (index) {
+            setState(() {
+              _selectedItem = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home),
+              label: AppLocalizations.of(context)?.home,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.search),
+              label: AppLocalizations.of(context)?.search,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person),
+              label: AppLocalizations.of(context)?.profile,
+            ),
+          ],
+        ),
       ),
       body: IndexedStack(
         index: _selectedItem,
