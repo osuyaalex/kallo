@@ -99,7 +99,7 @@ class _HomeState extends State<Home> {
     ];
     return Scaffold(
       bottomNavigationBar: AnimatedContainer(
-        curve: Curves.fastOutSlowIn,
+        curve: Curves.ease,
         duration: Duration(milliseconds: 400),
         height: animatedProvider.myVariable ? 70 : 0,
         child: BottomNavigationBar(

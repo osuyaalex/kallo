@@ -39,8 +39,13 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   String? _timeTakenText;
   Timer? _timer;
   int _start = 5;
-  double _startValue = 0.0;
-  double _endValue = 100000.0;
+  late double _startValue = 0;
+  late double _endValue = 1;
+  late double _endPoint;
+  bool _hasCalculatedEndPoint = false;
+  double _startPoint = 0;
+  final startController = TextEditingController();
+  final endController = TextEditingController();
 
   void _switchToShop(Shops segment) {
     if (_selectedShop == segment) return;
@@ -203,8 +208,51 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
     );
   }
 
+  _setStartValue() {
+    try {
+      String startValueText = startController.text.replaceAll(',', ''); // Remove commas from the text
 
+      if (startValueText.isNotEmpty) {
+        double startValue = double.parse(startValueText).roundToDouble();
 
+        if (startValue <= double.parse(endController.text.replaceAll(',', '')).roundToDouble() &&
+            startValue >= _startPoint &&
+            double.parse(endController.text.replaceAll(',', '')).roundToDouble() >= _startPoint &&
+            startValue <= _endPoint &&
+            double.parse(endController.text.replaceAll(',', '')).roundToDouble() <= _endPoint) {
+          setState(() {
+            _startValue = startValue;
+          });
+        }
+      }
+      print("first text field: ${startController.text}");
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  _setEndValue() {
+    try {
+      String endValueText = endController.text.replaceAll(',', ''); // Remove commas from the text
+
+      if (endValueText.isNotEmpty) {
+        double endValue = double.parse(endValueText).roundToDouble();
+
+        if (double.parse(startController.text.replaceAll(',', '')).roundToDouble() <= endValue &&
+            double.parse(startController.text.replaceAll(',', '')).roundToDouble() >= _startPoint &&
+            endValue >= _startPoint &&
+            double.parse(startController.text.replaceAll(',', '')).roundToDouble() <= _endPoint &&
+            endValue <= _endPoint) {
+          setState(() {
+            _endValue = endValue;
+          });
+        }
+      }
+      print("Second text field: ${endController.text}");
+    } catch (e) {
+      print(e.toString());
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -217,6 +265,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
     _loadCountryCode();
     _getCurrentLocale();
     super.initState();
+    startController.addListener(_setStartValue);
+    endController.addListener(_setEndValue);
   }
 
   @override
@@ -225,6 +275,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
     super.dispose();
     controller.dispose();
     _animationController.dispose();
+    startController.dispose();
+    endController.dispose();
   }
 
 
@@ -466,8 +518,16 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
 
                                                         return Column(
                                                           children: [
-                                                            SizedBox(
+                                                            Container(
                                                               height: 50,
+                                                              // color: Colors.grey,
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius.circular(25),
+                                                                    topRight: Radius.circular(25),
+                                                                  ),
+                                                                  color: Colors.grey.shade200
+                                                              ),
                                                               width: MediaQuery.of(context).size.width,
                                                               child: Padding(
                                                                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -476,13 +536,19 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                     IconButton(
                                                                         onPressed: (){
                                                                           Navigator.pop(context);
+                                                                          // setState((){
+                                                                          //   _startValue = 0.0;
+                                                                          //   _endValue = _endPoint;
+                                                                          // });
                                                                         },
                                                                         icon: Icon(Icons.close)
                                                                     ),
-
+                                                                    SizedBox(
+                                                                      width: 10,
+                                                                    ),
                                                                     Text('Sort',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.w800,
+                                                                          fontWeight: FontWeight.w600,
                                                                           fontSize: 22
                                                                       ),
                                                                     )
@@ -581,8 +647,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                             width: 80,
                                             padding: EdgeInsets.symmetric(horizontal: 14.0),
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
-                                                color: Colors.grey.shade400
+                                                borderRadius: BorderRadius.circular(25),
+                                                color: Colors.grey.shade300
                                             ),
                                             child: Center(
                                               child: Text('Sort',
@@ -598,8 +664,37 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         ),
                                         GestureDetector(
                                           onTap:(){
+                                            if (!_hasCalculatedEndPoint) {
+                                              List<Pproducts>? listProducts = snapshot.data!.data!.products;
+                                              double totalPrices = 0;
+                                              if (listProducts != null) {
+                                                for (Pproducts product in listProducts) {
+                                                  if (product.price != null) {
+                                                    if (product.price is String) {
+                                                      double? parsedPrice = double.tryParse(product.price as String);
+                                                      if (parsedPrice != null) {
+                                                        totalPrices += parsedPrice;
+                                                      }
+                                                    } else if (product.price is num) {
+                                                      totalPrices += product.price as num;
+                                                    }
+                                                  }
+                                                }
+                                              }
+
+                                              setState(() {
+                                                _endPoint = totalPrices * 3;
+                                                _hasCalculatedEndPoint = true; // Set the flag to true once _endPoint is calculated
+                                              });
+                                            }
+
+                                            setState((){
+                                              _startValue = 0.0;
+                                              _endValue = _endPoint;
+                                              startController.clear();
+                                              endController.clear();
+                                            });
                                             showModalBottomSheet(
-                                              isDismissible: false,
                                                 context: context,
                                                 shape: RoundedRectangleBorder(
 
@@ -631,8 +726,16 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                         }
                                                         return Column(
                                                           children: [
-                                                            SizedBox(
+                                                            Container(
                                                               height: 50,
+                                                              // color: Colors.grey,
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius.circular(25),
+                                                                    topRight: Radius.circular(25),
+                                                                  ),
+                                                                  color: Colors.grey.shade200
+                                                              ),
                                                               width: MediaQuery.of(context).size.width,
                                                               child: Padding(
                                                                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -641,17 +744,19 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                     IconButton(
                                                                         onPressed: (){
                                                                           Navigator.pop(context);
-                                                                          setState((){
-                                                                            _startValue = 0.0;
-                                                                            _endValue = 100000.0;
-                                                                          });
+                                                                          // setState((){
+                                                                          //   _startValue = 0.0;
+                                                                          //   _endValue = _endPoint;
+                                                                          // });
                                                                         },
                                                                         icon: Icon(Icons.close)
                                                                     ),
-
+                                                                    SizedBox(
+                                                                      width: 10,
+                                                                    ),
                                                                     Text('Filter',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.w800,
+                                                                          fontWeight: FontWeight.w600,
                                                                           fontSize: 22
                                                                       ),
                                                                     )
@@ -683,23 +788,32 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
                                                                 Container(
-                                                                  height: 40,
-                                                                  width: 90,
+                                                                  height: 60,
+                                                                  width: 130,
+                                                                  padding:EdgeInsets.symmetric(horizontal: 12),
                                                                   decoration:BoxDecoration(
                                                                       color: Colors.grey.shade400
                                                                   ),
-                                                                  child: Center(child:
-                                                                  snapshot.data!.data!.products!.isNotEmpty?
-                                                                  Text("${snapshot.data!.data!.products![1].currency} ${displayValue}",
-                                                                    style: TextStyle(
-                                                                        fontSize: 14,
-                                                                        fontWeight: FontWeight.w800
+                                                                  child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
+                                                                  TextField(
+                                                                    decoration: InputDecoration(
+                                                                        prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
+                                                                          style: TextStyle(
+                                                                              fontSize: 18
+                                                                          ),
+                                                                        ),
+                                                                        border: InputBorder.none,
+                                                                        hintText: displayValue
                                                                     ),
-                                                                  ): Text("${displayValue}",
-                                                                    style: TextStyle(
-                                                                        fontSize: 14,
-                                                                        fontWeight: FontWeight.w800
+                                                                    controller: startController,
+                                                                    keyboardType: TextInputType.number,
+                                                                  )
+                                                                      : TextField(
+                                                                    decoration: InputDecoration(
+                                                                        border: InputBorder.none, hintText: displayValue
                                                                     ),
+                                                                    controller: startController,
+                                                                    keyboardType: TextInputType.number,
                                                                   )
                                                                   ),
                                                                 ),
@@ -711,38 +825,49 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                   width: 14,
                                                                 ),
                                                                 Container(
-                                                                  height: 40,
-                                                                  width: 90,
+                                                                  height: 60,
+                                                                  width: 130,
+                                                                  padding:EdgeInsets.symmetric(horizontal: 12),
                                                                   decoration:BoxDecoration(
                                                                       color: Colors.grey.shade400
                                                                   ),
-                                                                  child: Center(child:
-                                                                  snapshot.data!.data!.products!.isNotEmpty?
-                                                                  Text("${snapshot.data!.data!.products![1].currency} ${displaySecondValue}",
-                                                                    style: TextStyle(
-                                                                        fontSize: 14,
-                                                                        fontWeight: FontWeight.w800
-                                                                    ),
-                                                                  ): Text("${displayValue}",
-                                                                    style: TextStyle(
-                                                                        fontSize: 14,
-                                                                        fontWeight: FontWeight.w800
-                                                                    ),
-                                                                  )
-                                                                  ),
+                                                                  child: Center(
+                                                                      child: snapshot.data!.data!.products!.isNotEmpty?
+                                                                      TextField(
+                                                                        decoration: InputDecoration(
+                                                                            prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
+                                                                              style: TextStyle(
+                                                                                  fontSize: 18
+                                                                              ),
+                                                                            ),
+                                                                            border: InputBorder.none, hintText: displaySecondValue
+                                                                        ),
+                                                                        controller: endController,
+                                                                        keyboardType: TextInputType.number,
+                                                                      )
+                                                                          : TextField(
+                                                                        decoration: InputDecoration(
+                                                                            border: InputBorder.none, hintText: displaySecondValue
+                                                                        ),
+                                                                        controller: endController,
+                                                                        keyboardType: TextInputType.number,
+                                                                      )),
                                                                 ),
                                                               ],
                                                             ),
                                                             RangeSlider(
                                                               values: RangeValues(_startValue, _endValue),
-                                                              min: 0.0,
-                                                              max: 100000.0,
+                                                              min: _startPoint,
+                                                              max: _endPoint,
                                                               activeColor:Color(0xff7f78d8),
                                                               // inactiveColor:Colors.grey.shade500,
                                                               onChanged: ( values) {
                                                                 setState(() {
                                                                   _startValue = values.start;
                                                                   _endValue = values.end;
+                                                                  startController.text = NumberFormat.decimalPattern().format(values.start.floor());
+                                                                  endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+
                                                                 });
                                                               },
                                                             ),
@@ -816,8 +941,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                             width: 80,
                                             padding: EdgeInsets.symmetric(horizontal: 14.0),
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
-                                                color: Colors.grey.shade400
+                                                borderRadius: BorderRadius.circular(25),
+                                                color: Colors.grey.shade300
                                             ),
                                             child: Center(
                                               child: Text('Filter',
@@ -852,6 +977,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
           onQueryChanged: (query) async {
             var searches = await _getRecentSearchesLike(query);
             setState(() {
+              _hasCalculatedEndPoint = false;
               _filteredSearchHistory = searches;
             });
             _fetchSearchSuggestions(query);
@@ -864,6 +990,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
             _loadCountryCode().then((value){
               _saveToRecentSearches(v);
               setState(() {
+                _hasCalculatedEndPoint = false;
                 _firstpage = false;
                 _name = v;
                 productName = Network().getProductsName(v, _code,0, 100000000,context);
@@ -937,6 +1064,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                             title: suggestionWithHighlightedLetters,
                             onTap: () {
                               setState(() {
+                                _hasCalculatedEndPoint = false;
                                 _type = false;
                               });
                               _loadCountryCode().then((value) {
@@ -952,10 +1080,11 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                             },
                             trailing: IconButton(
                               onPressed: () {
-                                _firstpage = false;
                                 _loadCountryCode().then((value) {
                                   _saveToRecentSearches(suggestion);
                                   setState(() {
+                                    _hasCalculatedEndPoint = false;
+                                    _firstpage = false;
                                     _name = suggestion;
                                     productName = Network().getProductsName(suggestion, _code,0,100000000,context);
                                   });
@@ -1000,6 +1129,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                               _loadCountryCode().then((value){
                                 _saveToRecentSearches(controller.query);
                                 setState(() {
+                                  _hasCalculatedEndPoint = false;
                                   _firstpage = false;
                                   _name = controller.query;
                                   productName = Network().getProductsName(controller.query, _code,0,100000000,context);
@@ -1010,10 +1140,12 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                             },
                             trailing: IconButton(
                               onPressed: () {
-                                _firstpage = false;
+
                                 _loadCountryCode().then((value){
                                   _saveToRecentSearches(controller.query);
                                   setState(() {
+                                    _firstpage = false;
+                                    _hasCalculatedEndPoint = false;
                                     _name = controller.query;
                                     productName = Network().getProductsName(controller.query, _code,0,100000000,context);
                                   });
@@ -1062,6 +1194,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         _loadCountryCode().then((value){
                                           _saveToRecentSearches(term);
                                           setState(() {
+                                            _hasCalculatedEndPoint = false;
                                             _firstpage = false;
                                             _name = term;
                                             productName = Network().getProductsName(term, _code,0,100000000,context);
@@ -1076,6 +1209,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                       _loadCountryCode().then((value){
                                         _saveToRecentSearches(term);
                                         setState(() {
+                                          _hasCalculatedEndPoint = false;
                                           _firstpage = false;
                                           _name = term;
                                           productName = Network().getProductsName(term, _code,0,100000000,context);

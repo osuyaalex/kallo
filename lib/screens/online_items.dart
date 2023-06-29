@@ -48,7 +48,7 @@ class _OnlineState extends State<Online> {
   Widget build(BuildContext context) {
     final animatedProvider = Provider.of<AnimatedProvider>(context);
     String breakUnwantedPart(String name) {
-      if (name.length > 40) {
+      if (name.length > 35) {
         return name.trim().replaceRange(25, null, '...');
       }
       return name;

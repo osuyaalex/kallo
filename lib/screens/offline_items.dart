@@ -53,7 +53,7 @@ class _OfflineState extends State<Offline> {
   Widget build(BuildContext context) {
     final animatedProvider = Provider.of<AnimatedProvider>(context);
     String breakUnwantedPart(String name) {
-      if (name.length > 40) {
+      if (name.length > 35) {
         return name.trim().replaceRange(25, null, '...');
       }
       return name;
@@ -71,7 +71,7 @@ class _OfflineState extends State<Offline> {
                 if(notification is ScrollUpdateNotification){
                   // Check the direction of scroll and update the visibility of the container
                   setState(() {
-                    animatedProvider.myVariable = false;
+                    animatedProvider.myVariable = notification.scrollDelta! < 0;
                   });
                 }
                 return false;
