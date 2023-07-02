@@ -115,6 +115,7 @@ class _MyHomeState extends State<MyHome> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.grey.shade100,
         shadowColor: Color(0xff7F78D8).withOpacity(0.3),
         elevation: 2,
@@ -142,7 +143,7 @@ class _MyHomeState extends State<MyHome> {
                 )
             ),
             const SizedBox(
-              height: 3,
+              height: 2,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

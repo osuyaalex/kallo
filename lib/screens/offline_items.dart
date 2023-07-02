@@ -3,8 +3,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:job/classes/putables.dart';
 import 'package:job/network/json.dart';
+import 'package:provider/provider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+
+import '../providers/animated.dart';
 
 
 class Offline extends StatefulWidget {
@@ -18,9 +21,7 @@ class Offline extends StatefulWidget {
 class _OfflineState extends State<Offline> {
   String _latitude = '';
   String _longitude = '';
-  double _startValue = 0.0;
-  double _endValue = 100000.0;
-  bool _isContainerVisible = true;
+
 
   Functions _functions = Functions();
   void _getCurrentLocation() async {
@@ -50,8 +51,9 @@ class _OfflineState extends State<Offline> {
   }
   @override
   Widget build(BuildContext context) {
+    final animatedProvider = Provider.of<AnimatedProvider>(context);
     String breakUnwantedPart(String name) {
-      if (name.length > 40) {
+      if (name.length > 35) {
         return name.trim().replaceRange(25, null, '...');
       }
       return name;
@@ -69,7 +71,7 @@ class _OfflineState extends State<Offline> {
                 if(notification is ScrollUpdateNotification){
                   // Check the direction of scroll and update the visibility of the container
                   setState(() {
-                    _isContainerVisible = notification.scrollDelta! < 0;
+                    animatedProvider.myVariable = notification.scrollDelta! < 0;
                   });
                 }
                 return false;
@@ -200,408 +202,7 @@ class _OfflineState extends State<Offline> {
                   staggeredTileBuilder: (context) => const StaggeredTile.fit(1)
               ),
             ),
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 200),
-              top: _isContainerVisible ? 0 : -100, // Adjust the value to control the sliding distance
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(5)
-                  ),
-                  color:Colors.white.withOpacity(0.9),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap:(){
-                          showModalBottomSheet(
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)
-                              ),
-                              builder: (context){
-                                return StatefulBuilder(
-                                    builder: (BuildContext context, StateSetter setState) {
 
-                                      return Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 50,
-                                            width: MediaQuery.of(context).size.width,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                              child: Row(
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: (){
-                                                        Navigator.pop(context);
-                                                      },
-                                                      icon: Icon(Icons.close)
-                                                  ),
-
-                                                  Text('Sort',
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.w800,
-                                                        fontSize: 22
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 12,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 12.0),
-                                                  child: Text('Price:',
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.w800,
-                                                        fontSize: 22
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text('Low to high',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w800,
-                                                      fontSize: 22
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 12.0),
-                                                  child: Text('Price:',
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.w800,
-                                                        fontSize: 22
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text('High to low',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w800,
-                                                      fontSize: 22
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 12.0),
-                                                  child: Text('Distance:',
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.w800,
-                                                        fontSize: 22
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text('Closest first',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w800,
-                                                      fontSize: 22
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                );
-                              }
-                          );
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 110,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border(
-                                top: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                                left: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                                right: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                                bottom: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                              )
-                          ),
-                          child: Row(
-                            children: [
-                              Text('Sort:',
-                                style: TextStyle(
-                                    color: Color(0xff7f78d8),
-                                    fontWeight: FontWeight.w500
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text('',
-                                style: TextStyle(
-                                    color: Color(0xff7f78d8),
-                                    fontWeight: FontWeight.w500
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 14,
-                      ),
-                      GestureDetector(
-                        onTap:(){
-                          showModalBottomSheet(
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)
-                              ),
-                              builder: (context){
-                                return StatefulBuilder(
-                                    builder: (BuildContext context, StateSetter setState) {
-                                      String displayValue;
-                                      if (_startValue == _startValue.floor()) {
-                                        //.floor is basically used to convert doubles to integers
-                                        displayValue = _startValue.floor().toString();
-                                      } else {
-                                        displayValue = _startValue.toString();
-                                      }
-                                      if (_startValue >= 1000) {
-                                        final formatter = NumberFormat("#,###");
-                                        displayValue = formatter.format(_startValue);
-                                      }
-                                      String displaySecondValue;
-                                      if (_endValue == _endValue.floor()) {
-                                        //.floor is basically used to convert doubles to integers
-                                        displaySecondValue = _endValue.floor().toString();
-                                      } else {
-                                        displaySecondValue = _endValue.toString();
-                                      }
-                                      if (_endValue >= 1000) {
-                                        final formatter = NumberFormat("#,###");
-                                        displaySecondValue = formatter.format(_endValue);
-                                      }
-                                      return Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 50,
-                                            width: MediaQuery.of(context).size.width,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                              child: Row(
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: (){
-                                                        Navigator.pop(context);
-                                                      },
-                                                      icon: Icon(Icons.close)
-                                                  ),
-
-                                                  Text('Filter',
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.w800,
-                                                        fontSize: 22
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 12,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Text('Price',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w800,
-                                                      fontSize: 22
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 12,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                height: 40,
-                                                width: 90,
-                                                decoration:BoxDecoration(
-                                                    color: Colors.grey.shade400
-                                                ),
-                                                child: Center(child: Text("${offline?[1].currency??''} ${displayValue}",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.w800
-                                                  ),
-                                                )),
-                                              ),
-                                              SizedBox(
-                                                width: 14,
-                                              ),
-                                              Text('to'),
-                                              SizedBox(
-                                                width: 14,
-                                              ),
-                                              Container(
-                                                height: 40,
-                                                width: 90,
-                                                decoration:BoxDecoration(
-                                                    color: Colors.grey.shade400
-                                                ),
-                                                child: Center(child: Text("${offline?[1].currency??''} ${displaySecondValue}",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.w800
-                                                  ),
-                                                )),
-                                              ),
-                                            ],
-                                          ),
-                                          RangeSlider(
-                                            values: RangeValues(_startValue, _endValue),
-                                            min: 0.0,
-                                            max: 100000.0,
-                                            activeColor:Color(0xff7f78d8),
-                                            // inactiveColor:Colors.grey.shade500,
-                                            onChanged: ( values) {
-                                              setState(() {
-                                                _startValue = values.start;
-                                                _endValue = values.end;
-                                              });
-                                            },
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Text('Select Merchants',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w800,
-                                                      fontSize: 22
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Text('Select Categories',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w800,
-                                                      fontSize: 22
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                );
-                              }
-                          );
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 110,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border(
-                                top: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                                left: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                                right: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                                bottom: BorderSide(
-                                    color: Color(0xff7f78d8)
-                                ),
-                              )
-                          ),
-                          child: Row(
-                            children: [
-                              Text('Filter:',
-                                style: TextStyle(
-                                    color: Color(0xff7f78d8),
-                                    fontWeight: FontWeight.w500
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text('',
-                                style: TextStyle(
-                                    color: Color(0xff7f78d8),
-                                    fontWeight: FontWeight.w500
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

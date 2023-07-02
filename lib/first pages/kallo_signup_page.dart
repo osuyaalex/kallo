@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
 
 import '../Authentication/kallo_sign_up.dart';
 import 'home.dart';
@@ -36,11 +38,12 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
         String res = await _kalloSignUp.signUpUsers(
           _email,
           _password,
-          _selectGender!
+          _selectGender!,
+          context
         );
 
         EasyLoading.dismiss();
-        if(res != 'You\'re successfully signed in'){
+        if(res != AppLocalizations.of(context)!.successfullySignedIn){
           EasyLoading.dismiss();
           snack(context, res);
         }else{
@@ -105,9 +108,9 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Sign up',
+                        Text(AppLocalizations.of(context)!.signUp,
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 28,
                             fontWeight: FontWeight.w700
                           ),
                         ),
@@ -123,12 +126,12 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                     },
                     validator: (v){
                       if(v!.isEmpty){
-                        return 'field must not be empty';
+                        return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: AppLocalizations.of(context)!.enterYourEmail,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                           borderSide: const BorderSide(
@@ -159,16 +162,16 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                     },
                     validator: (v){
                       if (v!.isEmpty) {
-                        return 'Field must not be empty';
+                        return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
                       }
                       if (v.length < 8) {
-                        return 'Password must be at least 8 characters';
+                        return AppLocalizations.of(context)!.passwordMustBeEight;
                       }
                       if (!v.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-                        return 'Password must contain a special character';
+                        return AppLocalizations.of(context)!.passwordMustContainSpecial;
                       }
                       if (!v.contains(RegExp(r'[0-9]'))) {
-                        return 'Password must contain a number';
+                        return AppLocalizations.of(context)!.passwordMustBeNumber;
                       }
                       return null; // Return null if validation passes
                     },
@@ -181,7 +184,7 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                           },
                           icon: _obscureText?Icon(Icons.visibility):Icon(Icons.visibility_off)
                       ),
-                      hintText: 'Enter your password',
+                      hintText: AppLocalizations.of(context)!.enterYourPassword,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                           borderSide: const BorderSide(
@@ -208,7 +211,7 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text('Select Gender',
+                      Text(AppLocalizations.of(context)!.selectGender,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 18
@@ -228,7 +231,12 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                                   borderRadius: BorderRadius.circular(12)
                               ),
                               child: Center(
-                                child: Icon(Icons.female, size: 30, color: Colors.white,)
+                                child: Text(AppLocalizations.of(context)!.female,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 16
+                                  ),
+                                )
                               ),
                             ),
                           ),
@@ -245,7 +253,12 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                                   borderRadius: BorderRadius.circular(12)
                               ),
                               child: Center(
-                                child: Icon(Icons.male, size: 30, color: Colors.white,)
+                                child: Text(AppLocalizations.of(context)!.male,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 16
+                                  ),
+                                )
                               ),
                             ),
                           ),
@@ -263,7 +276,7 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Please select a gender',
+                            AppLocalizations.of(context)!.selectGender,
                             style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.w400
@@ -287,7 +300,7 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
-                        child: Text('Sign up',
+                        child: Text(AppLocalizations.of(context)!.signUp,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600

@@ -158,6 +158,40 @@
   "noSuggestions": "No suggestions available",
   "@noSuggestions": {
     "description": "No"
-  }
-
+  },
+  "signInWithGoogle": "Sign in with Google",
+  "@signInWithGoogle": {
+    "description": "Sign in"
+  },
+  "or": "or",
+  "@or": {
+    "description": "or"
+  },
+  "createAnAccount": "Create an account",
+  "alreadyHaveAnAccount": "Already have an account?",
+  "logIn": "Log in",
+  "signUp": "Sign up",
+  "enterYourEmail": "Enter your email",
+  "enterYourPassword": "Enter your password",
+  "male": "Male",
+  "female": "Female",
+  "noThanks": "No Thanks",
+  "kalloAccount": "Kallo Account",
+  "shoppingMadeEasier": "shopping made easier",
+  "successfullySignedIn": "You're successfully signed in",
+  "accountAlreadyExists": "Account already exists, log in instead",
+  "connectionIsDown": "Network connection error. Please check your network connectivity",
+  "successfullyLoggedIn": "You're successfully logged in",
+  "invalidEmailOrPassword": "invalid email or password",
+  "signOut": "Sign out",
+  "fieldMustNotBeEmpty": "field must not be empty",
+  "passwordMustBeEight": "Password must be at least 8 characters",
+  "passwordMustContainSpecial": "Password must contain a special character",
+  "passwordMustBeNumber": "Password must contain a number",
+  "selectGender": "Select Gender",
+  "loggedInAs": "logged in as",
+  "signingOut": "Signing Out",
+  "areYouSure": "Are you sure you want to sign out?",
+  "yes": "yes",
+  "no": "no"
 }

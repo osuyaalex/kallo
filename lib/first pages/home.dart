@@ -9,9 +9,11 @@ import 'dart:ui';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/google_sign_in.dart';
+import '../providers/animated.dart';
 import '../screens/demo_two.dart';
 
 
@@ -25,8 +27,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedItem = 1;
+
+
   @override
   Widget build(BuildContext context) {
+    final animatedProvider = Provider.of<AnimatedProvider>(context);
+
     final List<Widget> _screens = [
       MyHome(
         onProductPressed: () async{
@@ -78,11 +84,11 @@ class _HomeState extends State<Home> {
       Dems(),
       Profile(
         onGoogleSignPressed: ()async{
-          EasyLoading.show(status: 'Please wait');
+          EasyLoading.show();
           User? user = await GoogleAuthentication.signInWithGoogle(context);
           EasyLoading.dismiss();
           if(user != null){
-            snack(context, 'you are successfully signed in');
+            snack(context, AppLocalizations.of(context)!.successfullySignedIn);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
               return Home();
             }));
@@ -91,41 +97,49 @@ class _HomeState extends State<Home> {
         },
       )
     ];
-    return CupertinoTabScaffold(
-
-      tabBar: CupertinoTabBar(
-        height: MediaQuery.of(context).size.height*0.08,
-        activeColor: const Color(0xff7F78D8),
-        currentIndex: _selectedItem,
-        onTap: (index) {
-          setState(() {
-            _selectedItem = index;
-          });
-        },
-        items:   [
-          BottomNavigationBarItem(
-            icon: const Icon(CupertinoIcons.home),
-            label: AppLocalizations.of(context)?.home,
-            tooltip: AppLocalizations.of(context)?.home,
-          ),
-           BottomNavigationBarItem(
-            icon: const Icon(CupertinoIcons.search),
-            label: AppLocalizations.of(context)?.search,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(CupertinoIcons.person),
-            label:AppLocalizations.of(context)?.profile,
-          ),
-        ],
-      ),
-      tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (context) {
-            return _screens[index];
+    return Scaffold(
+      bottomNavigationBar: AnimatedContainer(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade500
+            )
+          )
+        ),
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 400),
+        height: animatedProvider.myVariable ? 70 : 0,
+        child: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          selectedItemColor: const Color(0xff7F78D8),
+          currentIndex: _selectedItem,
+          onTap: (index) {
+            setState(() {
+              _selectedItem = index;
+            });
           },
+          items: [
+            BottomNavigationBarItem(
 
-        );
-      },
+              icon: const Icon(Icons.home),
+              label: AppLocalizations.of(context)?.home,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.search),
+              label: AppLocalizations.of(context)?.search,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person),
+              label: AppLocalizations.of(context)?.profile,
+            ),
+          ],
+        ),
+      ),
+      body: IndexedStack(
+        index: _selectedItem,
+        children: _screens,
+      ),
     );
   }
 }

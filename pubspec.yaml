@@ -68,7 +68,6 @@ dependencies:
   google_sign_in: ^6.1.4
   flutter_easyloading: ^3.0.5
   google_fonts: ^4.0.4
-  back_button_interceptor: ^6.0.2
 
 dev_dependencies:
   flutter_test:

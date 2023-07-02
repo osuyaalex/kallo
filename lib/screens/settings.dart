@@ -56,6 +56,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.initState();
     _loadCountryCode();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,107 +77,130 @@ class _SettingsScreenState extends State<SettingsScreen> {
         backgroundColor: Colors.grey.shade50,
         elevation: 0,
       ),
-      body:  Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(AppLocalizations.of(context)!.region,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 17
-                ),
-              ),
-              CountryCodePicker(
-                onChanged: (code)async{
-                  setState(() {
-                    _getInitialCountry = code.code!;
-                  });
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('countryCode', _getInitialCountry);
-                },
-                showCountryOnly: true,
-                showFlagMain: true,
-                showFlag: true,
-                countryFilter: _allowedCountryCodes,
-                initialSelection:_getInitialCountry,
-                hideSearch: false,
-                showOnlyCountryWhenClosed: true,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          user != null? GestureDetector(
-            onTap: (){
-              showDialog(
-                  context: context,
-                  builder: (context){
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      title: Text('Signing out',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                      content: Text('Are you sure you want to sign out?',
-                      ),
-                      actions: [
-                        TextButton(
-                            onPressed: ()async{
-                              EasyLoading.show();
-                              await FirebaseAuth.instance.signOut()
-                                  .then(
-                                      (value){
-                                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                                         return Home();
-                                       })) ;
-                                      }
-                              );
-                              EasyLoading.dismiss();
-                            },
-                            child: Text('Yes',
-                        style: TextStyle(
-                          color:  Color(0xff7F78D8),
-                        ),
-                        )
-                        ),
-                        TextButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                            }, child: Text('No',
-                          style: TextStyle(
-                            color:  Colors.red,
-                          ),
-                        )
-                        )
-                      ],
-                    );
-                  }
-              );
-            },
-            child: Container(
-              height: 40,
+      body:  Center(
+        child: Column(
+          children: [
+            Container(
+              height: 55,
               width: MediaQuery.of(context).size.width*0.8,
               decoration: BoxDecoration(
-                color: Color(0xff7F78D8),
-                borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(5),
+                  border: const Border(
+                    top: BorderSide(
+                        color: Colors.grey
+                    ),
+                    bottom: BorderSide(
+                        color: Colors.grey
+                    ),
+                    left: BorderSide(
+                        color: Colors.grey
+                    ),
+                    right: BorderSide(
+                        color: Colors.grey
+                    ),
+                  )
               ),
-              child: Center(
-                child: Text('Sign out',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(AppLocalizations.of(context)!.region,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17
+                    ),
+                  ),
+                  CountryCodePicker(
+                    onChanged: (code)async{
+                      setState(() {
+                        _getInitialCountry = code.code!;
+                      });
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('countryCode', _getInitialCountry);
+                    },
+                    showCountryOnly: true,
+                    showFlagMain: true,
+                    showFlag: true,
+                    countryFilter: _allowedCountryCodes,
+                    initialSelection:_getInitialCountry,
+                    hideSearch: false,
+                    showOnlyCountryWhenClosed: true,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            user != null? GestureDetector(
+              onTap: (){
+                showDialog(
+                    context: context,
+                    builder: (context){
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)
+                        ),
+                        title: Text(AppLocalizations.of(context)!.signingOut,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        content: Text(AppLocalizations.of(context)!.areYouSure,
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: ()async{
+                                EasyLoading.show();
+                                await FirebaseAuth.instance.signOut()
+                                    .then(
+                                        (value){
+                                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                                           return Home();
+                                         })) ;
+                                        }
+                                );
+                                EasyLoading.dismiss();
+                              },
+                              child: Text(AppLocalizations.of(context)!.yes,
+                          style: TextStyle(
+                            color:  Color(0xff7F78D8),
+                          ),
+                          )
+                          ),
+                          TextButton(
+                              onPressed: (){
+                                Navigator.pop(context);
+                              }, child: Text(AppLocalizations.of(context)!.no,
+                            style: TextStyle(
+                              color:  Colors.red,
+                            ),
+                          )
+                          )
+                        ],
+                      );
+                    }
+                );
+              },
+              child: Container(
+                height: 40,
+                width: MediaQuery.of(context).size.width*0.8,
+                decoration: BoxDecoration(
+                  color: Color(0xff7F78D8),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(AppLocalizations.of(context)!.signOut,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16
+                    ),
                   ),
                 ),
               ),
-            ),
-          ): Container()
-        ],
+            ): Container()
+          ],
+        ),
       ),
     );
   }

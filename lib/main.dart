@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:job/first%20pages/home.dart';
-import 'package:job/providers/country_provider.dart';
+import 'package:job/providers/animated.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -24,7 +24,7 @@ void main() async{
   runApp( MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_){
-        return CountryProvider();
+        return AnimatedProvider();
       })
     ],
       child: MyApp(isFirstLaunch: isFirstLaunch, user:  user,)
@@ -39,7 +39,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor:Colors.transparent,));
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor:Colors.transparent,
+          systemNavigationBarColor: Colors.transparent
+        )
+    );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: L10n.all,
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
         GlobalWidgetsLocalizations.delegate,
         CountryLocalizations.delegate,
       ],

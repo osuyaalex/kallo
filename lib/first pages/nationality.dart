@@ -8,7 +8,8 @@ import 'package:job/first%20pages/signin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Nationality extends StatefulWidget {
-  const Nationality({Key? key}) : super(key: key);
+
+  const Nationality({Key? key,}) : super(key: key);
 
   @override
   State<Nationality> createState() => _NationalityState();
@@ -39,20 +40,14 @@ class _NationalityState extends State<Nationality> {
     'CA'
   ]; // Add the country codes you want to allow
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  }
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white, // Set your desired color here
+      ),
+    );
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
@@ -175,9 +170,9 @@ class _NationalityState extends State<Nationality> {
         ),
       ),
       bottomSheet: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height*0.13,
+        padding: const EdgeInsets.only(bottom: 45.0),
+        child: Container(
+          height: MediaQuery.of(context).size.height*0.14,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -219,7 +214,7 @@ class _NationalityState extends State<Nationality> {
                               return KalloLoginPage();
                             }));
                           },
-                          child: Text('LogIn',
+                          child: Text(AppLocalizations.of(context)!.logIn,
                           style: TextStyle(
                             color: Color(0xff7F78D8)
                           ),
@@ -231,7 +226,7 @@ class _NationalityState extends State<Nationality> {
                               return SignUp();
                             }));
                           },
-                          child: Text('SignUp',
+                          child: Text(AppLocalizations.of(context)!.signUp,
                           style: TextStyle(
                             color: Color(0xff7F78D8)
                           ),

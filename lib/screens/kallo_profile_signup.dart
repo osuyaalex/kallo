@@ -1,4 +1,3 @@
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:job/utilities/snackbar.dart';
@@ -6,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/kallo_sign_up.dart';
 import '../first pages/home.dart';
+import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
 
 class KalloProfileSignUpPage extends StatefulWidget {
   const KalloProfileSignUpPage({super.key});
@@ -37,11 +38,12 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
         String res = await _kalloSignUp.signUpUsers(
             _email,
             _password,
-            _selectGender!
+            _selectGender!,
+            context
         );
 
         EasyLoading.dismiss();
-        if(res != 'You\'re successfully signed in'){
+        if(res != AppLocalizations.of(context)!.successfullySignedIn){
           EasyLoading.dismiss();
           snack(context, res);
         }else{
@@ -50,8 +52,9 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isFirstLaunch', false);
           snack(context, res);
-          Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => const Home()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+            return Home();
+          }));
         }
       }else{
         EasyLoading.dismiss();
@@ -65,22 +68,7 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
 
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    BackButtonInterceptor.add(myInterceptor);
-  }
 
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    Navigator.pop(context); // Do some stuff.
-    return true;
-  }
   @override
   Widget build(BuildContext context) {
     return  Form(
@@ -123,9 +111,9 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Sign up',
+                        Text(AppLocalizations.of(context)!.signUp,
                           style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 28,
                               fontWeight: FontWeight.w700
                           ),
                         ),
@@ -141,12 +129,12 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                     },
                     validator: (v){
                       if(v!.isEmpty){
-                        return 'field must not be empty';
+                        return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: AppLocalizations.of(context)!.enterYourEmail,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                           borderSide: const BorderSide(
@@ -177,16 +165,16 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                     },
                     validator: (v){
                       if (v!.isEmpty) {
-                        return 'Field must not be empty';
+                        return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
                       }
                       if (v.length < 8) {
-                        return 'Password must be at least 8 characters';
+                        return AppLocalizations.of(context)!.passwordMustBeEight;
                       }
                       if (!v.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-                        return 'Password must contain a special character';
+                        return AppLocalizations.of(context)!.passwordMustContainSpecial;
                       }
                       if (!v.contains(RegExp(r'[0-9]'))) {
-                        return 'Password must contain a number';
+                        return AppLocalizations.of(context)!.passwordMustBeNumber;
                       }
                       return null; // Return null if validation passes
                     },
@@ -199,7 +187,7 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                           },
                           icon: _obscureText?Icon(Icons.visibility):Icon(Icons.visibility_off)
                       ),
-                      hintText: 'Enter your password',
+                      hintText: AppLocalizations.of(context)!.enterYourPassword,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                           borderSide: const BorderSide(
@@ -226,7 +214,7 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text('Select Gender',
+                      Text(AppLocalizations.of(context)!.selectGender,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 18
@@ -246,7 +234,12 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                                   borderRadius: BorderRadius.circular(12)
                               ),
                               child: Center(
-                                  child: Icon(Icons.female, size: 30, color: Colors.white,)
+                                  child: Text(AppLocalizations.of(context)!.female,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 16
+                                    ),
+                                  )
                               ),
                             ),
                           ),
@@ -263,7 +256,12 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                                   borderRadius: BorderRadius.circular(12)
                               ),
                               child: Center(
-                                  child: Icon(Icons.male, size: 30, color: Colors.white,)
+                                  child: Text(AppLocalizations.of(context)!.male,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 16
+                                    ),
+                                  )
                               ),
                             ),
                           ),
@@ -281,7 +279,7 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Please select a gender',
+                            AppLocalizations.of(context)!.selectGender,
                             style: TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.w400
@@ -305,7 +303,7 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
-                        child: Text('Sign up',
+                        child: Text(AppLocalizations.of(context)!.signUp,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600

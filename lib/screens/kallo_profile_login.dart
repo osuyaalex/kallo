@@ -1,50 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:job/first%20pages/home.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/kallo_sign_up.dart';
-import 'home.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 
-class KalloLoginPage extends StatefulWidget {
-  const KalloLoginPage({super.key});
+class KalloProfileLoginPage extends StatefulWidget {
+  const KalloProfileLoginPage({super.key});
 
   @override
-  State<KalloLoginPage> createState() => _KalloLoginPageState();
+  State<KalloProfileLoginPage> createState() => _KalloProfileLoginPageState();
 }
 
-class _KalloLoginPageState extends State<KalloLoginPage> {
+class _KalloProfileLoginPageState extends State<KalloProfileLoginPage> {
   final KalloSignUp _kalloSignUp = KalloSignUp();
   late String _email;
   late String _password;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   bool _obscureText = true;
+  bool isInterceptorAdded = false;
 
   _login()async{
-    EasyLoading.show();
+    EasyLoading.show(status: 'please wait');
     if(_globalKey.currentState!.validate()){
-     String res = await _kalloSignUp.loginUsers(
+      String res = await _kalloSignUp.loginUsers(
           _email,
           _password,
-       context
+        context
       );
-     if(res != AppLocalizations.of(context)!.successfullyLoggedIn){
-       EasyLoading.dismiss();
-       snack(context, res);
-     }else{
-       EasyLoading.dismiss();
-       SharedPreferences prefs = await SharedPreferences.getInstance();
-       prefs.setBool('isFirstLaunch', false);
-       snack(context, res);
-       Navigator.pushReplacement(context, MaterialPageRoute(
-           builder: (context) => const Home()));
-     }
+      if(res != AppLocalizations.of(context)!.successfullyLoggedIn){
+        EasyLoading.dismiss();
+        snack(context, res);
+      }else{
+        EasyLoading.dismiss();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isFirstLaunch', false);
+        snack(context, res);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+          return Home();
+        }));
+      }
     }else{
       EasyLoading.dismiss();
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     return  Form(
@@ -180,7 +184,7 @@ class _KalloLoginPageState extends State<KalloLoginPage> {
                   ),
                   InkWell(
                     onTap: (){
-                     _login();
+                      _login();
                     },
                     child: Container(
                       height: 40,
