@@ -46,6 +46,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   double _startPoint = 0;
   final startController = TextEditingController();
   final endController = TextEditingController();
+  bool _slideInteract = false;
 
   void _switchToShop(Shops segment) {
     if (_selectedShop == segment) return;
@@ -301,7 +302,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
           transition: CircularFloatingSearchBarTransition(),
           debounceDelay: const Duration(milliseconds: 500),
           body:  Padding(
-            padding: const EdgeInsets.fromLTRB(0,60,0,10),
+            padding: const EdgeInsets.fromLTRB(0,100,0,10),
             child: FutureBuilder(
                 future: productName,
                 builder: (context, snapshot){
@@ -368,118 +369,605 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                       ],
                     );
                   }else if(snapshot.hasData){
+                    List<Pproducts>? offline = snapshot.data!.data!.products?.where((element) => element.merchantType == "offline").toList();
+                    List<Pproducts>? online = snapshot.data!.data!.products?.where((element) => element.merchantType == "online").toList();
+
                     return Column(
                       children: [
-                       Container(
-                         color:Colors.grey.shade50,
-                         child: Card(
+                        offline!.isNotEmpty && online!.isNotEmpty?AnimatedContainer(
+                         curve: Curves.ease,
+                         duration: Duration(milliseconds: 400),
+                         height: animatedProvider.myVariable ? 105 : 0,
+                         child: Container(
                            color:Colors.grey.shade50,
-                           shape: RoundedRectangleBorder(
-                               borderRadius: BorderRadius.circular(7)
-                           ),
-                           elevation: 2,
-                           shadowColor: Color(0xff7F78D8).withOpacity(0.3),
-                           child: ClipRRect(
-                             child: Padding(
-                               padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                               child: AppBar(
-                                 automaticallyImplyLeading: false,
-                                 backgroundColor: Colors.grey.shade50,
-                                 elevation: 0,
-                                 title: Center(
-                                   child: CustomSlidingSegmentedControl(
-                                     //isStretch: true,
-                                     initialValue: _selectedShop.index,
-                                     children:  {
-                                       Shops.onlineShops.index: SizedBox(
-                                         child: _selectedShop == Shops.onlineShops?
-                                         Row(
-                                           children: [
-                                             const Icon(Icons.location_on, color: Colors.white, size: 19,),
-                                             Text(
-                                               AppLocalizations.of(context)?.onlineShops??'',
-                                               style: const TextStyle(
-                                                   color: Colors.white,
-                                                   fontSize: 16,
-                                                   fontWeight: FontWeight.w800
+                           child: Card(
+                             color:Colors.grey.shade50,
+                             shape: RoundedRectangleBorder(
+                                 borderRadius: BorderRadius.circular(7)
+                             ),
+                             elevation: 2,
+                             shadowColor: Color(0xff7F78D8).withOpacity(0.3),
+                             child: ClipRRect(
+                               child: Padding(
+                                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                 child: AppBar(
+                                   automaticallyImplyLeading: false,
+                                   backgroundColor: Colors.grey.shade50,
+                                   elevation: 0,
+                                   title: Center(
+                                     child: CustomSlidingSegmentedControl(
+                                       //isStretch: true,
+                                       initialValue: _selectedShop.index,
+                                       children:  {
+                                         Shops.onlineShops.index: SizedBox(
+                                           child: _selectedShop == Shops.onlineShops?
+                                           Row(
+                                             children: [
+                                               const Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                               Text(
+                                                 AppLocalizations.of(context)?.onlineShops??'',
+                                                 style: const TextStyle(
+                                                     color: Colors.white,
+                                                     fontSize: 16,
+                                                     fontWeight: FontWeight.w800
+                                                 ),
                                                ),
-                                             ),
-                                           ],
-                                         ): Row(
-                                           children: [
-                                             const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
-                                             Text(
-                                               AppLocalizations.of(context)?.onlineShops??'',
-                                               style: const TextStyle(
-                                                   color: Colors.black,
-                                                   fontSize: 16,
-                                                   fontWeight: FontWeight.w800
+                                             ],
+                                           ): Row(
+                                             children: [
+                                               const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                               Text(
+                                                 AppLocalizations.of(context)?.onlineShops??'',
+                                                 style: const TextStyle(
+                                                     color: Colors.black,
+                                                     fontSize: 16,
+                                                     fontWeight: FontWeight.w800
+                                                 ),
                                                ),
-                                             ),
-                                           ],
+                                             ],
+                                           ),
                                          ),
-                                       ),
-                                       Shops.shopsNearMe.index: SizedBox(
-                                         child: _selectedShop == Shops.shopsNearMe?
-                                         Row(
-                                           children: [
-                                             Padding(
-                                               padding: const EdgeInsets.only(right: 4.0),
-                                               child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
-                                             ),
-                                             Text(
-                                               AppLocalizations.of(context)?.shopsNearMe??'',
-                                               style: const TextStyle(
-                                                   color: Colors.white,
-                                                   fontSize: 16,
-                                                   fontWeight: FontWeight.w800
+                                         Shops.shopsNearMe.index: SizedBox(
+                                           child: _selectedShop == Shops.shopsNearMe?
+                                           Row(
+                                             children: [
+                                               Padding(
+                                                 padding: const EdgeInsets.only(right: 4.0),
+                                                 child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
                                                ),
-                                             ),
-                                           ],
-                                         ): Row(
-                                           children: [
-                                             Padding(
-                                               padding: const EdgeInsets.only(right: 4.0),
-                                               child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
-                                             ),                                  Text(
-                                               AppLocalizations.of(context)?.shopsNearMe??'',
-                                               style: const TextStyle(
-                                                   color: Colors.black,
-                                                   fontSize: 16,
-                                                   fontWeight: FontWeight.w800
+                                               Text(
+                                                 AppLocalizations.of(context)?.shopsNearMe??'',
+                                                 style: const TextStyle(
+                                                     color: Colors.white,
+                                                     fontSize: 16,
+                                                     fontWeight: FontWeight.w800
+                                                 ),
                                                ),
-                                             ),
-                                           ],
+                                             ],
+                                           ): Row(
+                                             children: [
+                                               Padding(
+                                                 padding: const EdgeInsets.only(right: 4.0),
+                                                 child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                               ),                                  Text(
+                                                 AppLocalizations.of(context)?.shopsNearMe??'',
+                                                 style: const TextStyle(
+                                                     color: Colors.black,
+                                                     fontSize: 16,
+                                                     fontWeight: FontWeight.w800
+                                                 ),
+                                               ),
+                                             ],
+                                           ),
                                          ),
+                                       },
+                                       decoration: BoxDecoration(
+                                           color: Colors.grey.shade400,
+                                           borderRadius: BorderRadius.circular(20)
                                        ),
-                                     },
-                                     decoration: BoxDecoration(
-                                         color: Colors.grey.shade400,
-                                         borderRadius: BorderRadius.circular(20)
+                                       thumbDecoration: BoxDecoration(
+                                           color: const Color(0xff7F78D8),
+                                           borderRadius: BorderRadius.circular(20)
+                                       ),
+                                       duration: const Duration(milliseconds: 200),
+                                       curve: Curves.easeInToLinear,
+                                       onValueChanged: (value) {
+                                         setState(() {
+                                           _switchToShop(Shops.values[value]);
+                                         });
+                                       },
                                      ),
-                                     thumbDecoration: BoxDecoration(
-                                         color: const Color(0xff7F78D8),
-                                         borderRadius: BorderRadius.circular(20)
-                                     ),
-                                     duration: const Duration(milliseconds: 200),
-                                     curve: Curves.easeInToLinear,
-                                     onValueChanged: (value) {
-                                       setState(() {
-                                         _switchToShop(Shops.values[value]);
-                                       });
-                                     },
                                    ),
                                  ),
                                ),
                              ),
                            ),
                          ),
-                       ),
+                       ):Container(),
+                        AnimatedContainer(
+                          curve: Curves.ease,
+                          duration: Duration(milliseconds: 400),
+                          height: animatedProvider.myVariable ? 50 : 0,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap:(){
+                                    showModalBottomSheet(
+                                        context: context,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(25),
+                                            topRight: Radius.circular(25),
+                                          ),
+                                        ),
+                                        builder: (context){
+                                          return StatefulBuilder(
+                                              builder: (BuildContext context, StateSetter setState) {
 
+                                                return Column(
+                                                  children: [
+                                                    Container(
+                                                      height: 50,
+                                                      // color: Colors.grey,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(25),
+                                                            topRight: Radius.circular(25),
+                                                          ),
+                                                          color: Colors.grey.shade200
+                                                      ),
+                                                      width: MediaQuery.of(context).size.width,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                        child: Row(
+                                                          children: [
+                                                            IconButton(
+                                                                onPressed: (){
+                                                                  Navigator.pop(context);
+                                                                  // setState((){
+                                                                  //   _startValue = 0.0;
+                                                                  //   _endValue = _endPoint;
+                                                                  // });
+                                                                },
+                                                                icon: Icon(Icons.close)
+                                                            ),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Text('Sort',
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontSize: 22
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 12,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(right: 12.0),
+                                                            child: Text('Price:',
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w800,
+                                                                  fontSize: 22
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text('Low to high',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.w800,
+                                                                fontSize: 22
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(right: 12.0),
+                                                            child: Text('Price:',
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w800,
+                                                                  fontSize: 22
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text('High to low',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.w800,
+                                                                fontSize: 22
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(right: 12.0),
+                                                            child: Text('Distance:',
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w800,
+                                                                  fontSize: 22
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text('Closest first',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.w800,
+                                                                fontSize: 22
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                          );
+                                        }
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 80,
+                                    padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25),
+                                        color: Colors.grey.shade300
+                                    ),
+                                    child: Center(
+                                      child: Text('Sort',
+                                        style: TextStyle(
+                                            color: Color(0xff7f78d8),
+                                            fontWeight: FontWeight.w400
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 14,
+                                ),
+                                GestureDetector(
+                                  onTap:(){
+                                    if (!_hasCalculatedEndPoint) {
+                                      List<Pproducts>? listProducts = snapshot.data!.data!.products;
+                                      double totalPrices = 0;
+                                      if (listProducts != null) {
+                                        for (Pproducts product in listProducts) {
+                                          if (product.price != null) {
+                                            if (product.price is String) {
+                                              double? parsedPrice = double.tryParse(product.price as String);
+                                              if (parsedPrice != null) {
+                                                totalPrices += parsedPrice;
+                                              }
+                                            } else if (product.price is num) {
+                                              totalPrices += product.price as num;
+                                            }
+                                          }
+                                        }
+                                      }
+
+                                      setState(() {
+                                        _endPoint = totalPrices * 3;
+                                        _hasCalculatedEndPoint = true;// Set the flag to true once _endPoint is calculated
+                                        _slideInteract = false;
+                                      });
+                                    }
+
+                                    setState((){
+                                      _startValue = 0.0;
+                                      _endValue = _endPoint;
+                                      startController.clear();
+                                      endController.clear();
+                                    });
+                                    showModalBottomSheet(
+                                        context: context,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(25),
+                                            topRight: Radius.circular(25),
+                                          ),
+                                        ),
+                                        builder: (context){
+                                          return StatefulBuilder(
+                                              builder: (BuildContext context, StateSetter setState) {
+                                                String displayValue;
+                                                if (_startValue == _startValue.floor()) {
+                                                  //.floor is basically used to convert doubles to integers
+                                                  displayValue = _startValue.floor().toString();
+                                                } else {
+                                                  displayValue = _startValue.toString();
+                                                }
+                                                if (_startValue >= 1000) {
+                                                  final formatter = NumberFormat("#,###");
+                                                  displayValue = formatter.format(_startValue);
+                                                }
+                                                String displaySecondValue;
+                                                if (_endValue == _endValue.floor()) {
+                                                  //.floor is basically used to convert doubles to integers
+                                                  displaySecondValue = _endValue.floor().toString();
+                                                } else {
+                                                  displaySecondValue = _endValue.toString();
+                                                }
+                                                if (_endValue >= 1000) {
+                                                  final formatter = NumberFormat("#,###");
+                                                  displaySecondValue = formatter.format(_endValue);
+                                                }
+                                                return Column(
+                                                  children: [
+                                                    Container(
+                                                      height: 50,
+                                                      // color: Colors.grey,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(25),
+                                                            topRight: Radius.circular(25),
+                                                          ),
+                                                          color: Colors.grey.shade200
+                                                      ),
+                                                      width: MediaQuery.of(context).size.width,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                        child: Row(
+                                                          children: [
+                                                            IconButton(
+                                                                onPressed: (){
+                                                                  Navigator.pop(context);
+                                                                  // setState((){
+                                                                  //   _startValue = 0.0;
+                                                                  //   _endValue = _endPoint;
+                                                                  // });
+                                                                },
+                                                                icon: Icon(Icons.close)
+                                                            ),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Text('Filter',
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontSize: 22
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 12,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text('Price',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.w800,
+                                                                fontSize: 22
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 12,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          height: 60,
+                                                          width: 130,
+                                                          padding:EdgeInsets.symmetric(horizontal: 12),
+                                                          decoration:BoxDecoration(
+                                                              color: Colors.grey.shade400
+                                                          ),
+                                                          child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
+                                                          TextField(
+                                                            enabled: _slideInteract,
+                                                            decoration: InputDecoration(
+                                                                prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
+                                                                  style: TextStyle(
+                                                                      fontSize: 18
+                                                                  ),
+                                                                ),
+                                                                border: InputBorder.none,
+                                                                hintText: displayValue
+                                                            ),
+                                                            controller: startController,
+                                                            keyboardType: TextInputType.number,
+                                                          )
+                                                              : TextField(
+                                                            enabled: _slideInteract,
+                                                            decoration: InputDecoration(
+                                                                border: InputBorder.none, hintText: displayValue
+                                                            ),
+                                                            controller: startController,
+                                                            keyboardType: TextInputType.number,
+                                                          )
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 14,
+                                                        ),
+                                                        Text('to'),
+                                                        SizedBox(
+                                                          width: 14,
+                                                        ),
+                                                        Container(
+                                                          height: 60,
+                                                          width: 130,
+                                                          padding:EdgeInsets.symmetric(horizontal: 12),
+                                                          decoration:BoxDecoration(
+                                                              color: Colors.grey.shade400
+                                                          ),
+                                                          child: Center(
+                                                              child: snapshot.data!.data!.products!.isNotEmpty?
+                                                              TextField(
+                                                                enabled: _slideInteract,
+                                                                decoration: InputDecoration(
+                                                                    prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
+                                                                      style: TextStyle(
+                                                                          fontSize: 18
+                                                                      ),
+                                                                    ),
+                                                                    border: InputBorder.none, hintText: displaySecondValue
+                                                                ),
+                                                                controller: endController,
+                                                                keyboardType: TextInputType.number,
+                                                              )
+                                                                  : TextField(
+                                                                enabled: _slideInteract,
+                                                                decoration: InputDecoration(
+                                                                    border: InputBorder.none, hintText: displaySecondValue
+                                                                ),
+                                                                controller: endController,
+                                                                keyboardType: TextInputType.number,
+                                                              )),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RangeSlider(
+                                                      values: RangeValues(_startValue, _endValue),
+                                                      min: _startPoint,
+                                                      max: _endPoint,
+                                                      activeColor:Color(0xff7f78d8),
+                                                      // inactiveColor:Colors.grey.shade500,
+                                                      onChanged: ( values) {
+                                                        setState(() {
+                                                          _startValue = values.start;
+                                                          _endValue = values.end;
+                                                          _slideInteract = true;
+                                                          startController.text = NumberFormat.decimalPattern().format(values.start.floor());
+                                                          endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+
+                                                        });
+                                                      },
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text('Select Merchants',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.w800,
+                                                                fontSize: 22
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text('Select Categories',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.w800,
+                                                                fontSize: 22
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                        child: Container()
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(bottom: 15.0),
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        width: MediaQuery.of(context).size.width*0.5,
+                                                        child: FloatingActionButton(
+                                                            onPressed: (){
+                                                              _loadCountryCode().then((value){
+                                                                setState((){
+                                                                  productName = Network().getProductsName(_name, _code, _startValue.toInt(), _endValue.toInt(),context);
+                                                                });
+                                                              });
+                                                            },
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                            ),
+                                                            backgroundColor:Color(0xff7F78D8),
+                                                            child: Text('Show Results')
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                          );
+                                        }
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 80,
+                                    padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25),
+                                        color: Colors.grey.shade300
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text('Filter',
+                                          style: TextStyle(
+                                              color: Color(0xff7f78d8),
+                                              fontWeight: FontWeight.w400
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 6.0),
+                                          child: SvgPicture.asset('asset/filter-svgrepo-com.svg', height: 18,),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                         Expanded(
-                          child: SizedBox(
+                          child: offline.isNotEmpty && online!.isNotEmpty?SizedBox(
                             width: double.infinity,
-
                             child: Stack(
                               children: [
                                 SlideTransition(
@@ -496,471 +984,9 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                   ).animate(_animationController),
                                   child: Online(snapshot: snapshot,),
                                 ),
-                                AnimatedPositioned(
-                                  duration: Duration(milliseconds: 400),
-                                  top: animatedProvider.myVariable ? 0 : -100, // Adjust the value to control the sliding distance
-                                  left: 0,
-                                  right: 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                                    child: Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap:(){
-                                            showModalBottomSheet(
-                                              isDismissible: false,
-                                                context: context,
-                                                shape: RoundedRectangleBorder(
-                                                ),
-                                                builder: (context){
-                                                  return StatefulBuilder(
-                                                      builder: (BuildContext context, StateSetter setState) {
-
-                                                        return Column(
-                                                          children: [
-                                                            Container(
-                                                              height: 50,
-                                                              // color: Colors.grey,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius.circular(25),
-                                                                    topRight: Radius.circular(25),
-                                                                  ),
-                                                                  color: Colors.grey.shade200
-                                                              ),
-                                                              width: MediaQuery.of(context).size.width,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                                child: Row(
-                                                                  children: [
-                                                                    IconButton(
-                                                                        onPressed: (){
-                                                                          Navigator.pop(context);
-                                                                          // setState((){
-                                                                          //   _startValue = 0.0;
-                                                                          //   _endValue = _endPoint;
-                                                                          // });
-                                                                        },
-                                                                        icon: Icon(Icons.close)
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Text('Sort',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 12,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(right: 12.0),
-                                                                    child: Text('Price:',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w800,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Text('Low to high',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(right: 12.0),
-                                                                    child: Text('Price:',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w800,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Text('High to low',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(right: 12.0),
-                                                                    child: Text('Distance:',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w800,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Text('Closest first',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      }
-                                                  );
-                                                }
-                                            );
-                                          },
-                                          child: Container(
-                                            height: 40,
-                                            width: 80,
-                                            padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(25),
-                                                color: Colors.grey.shade300
-                                            ),
-                                            child: Center(
-                                              child: Text('Sort',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 14,
-                                        ),
-                                        GestureDetector(
-                                          onTap:(){
-                                            if (!_hasCalculatedEndPoint) {
-                                              List<Pproducts>? listProducts = snapshot.data!.data!.products;
-                                              double totalPrices = 0;
-                                              if (listProducts != null) {
-                                                for (Pproducts product in listProducts) {
-                                                  if (product.price != null) {
-                                                    if (product.price is String) {
-                                                      double? parsedPrice = double.tryParse(product.price as String);
-                                                      if (parsedPrice != null) {
-                                                        totalPrices += parsedPrice;
-                                                      }
-                                                    } else if (product.price is num) {
-                                                      totalPrices += product.price as num;
-                                                    }
-                                                  }
-                                                }
-                                              }
-
-                                              setState(() {
-                                                _endPoint = totalPrices * 3;
-                                                _hasCalculatedEndPoint = true; // Set the flag to true once _endPoint is calculated
-                                              });
-                                            }
-
-                                            setState((){
-                                              _startValue = 0.0;
-                                              _endValue = _endPoint;
-                                              startController.clear();
-                                              endController.clear();
-                                            });
-                                            showModalBottomSheet(
-                                                context: context,
-                                                shape: RoundedRectangleBorder(
-
-                                                ),
-                                                builder: (context){
-                                                  return StatefulBuilder(
-                                                      builder: (BuildContext context, StateSetter setState) {
-                                                        String displayValue;
-                                                        if (_startValue == _startValue.floor()) {
-                                                          //.floor is basically used to convert doubles to integers
-                                                          displayValue = _startValue.floor().toString();
-                                                        } else {
-                                                          displayValue = _startValue.toString();
-                                                        }
-                                                        if (_startValue >= 1000) {
-                                                          final formatter = NumberFormat("#,###");
-                                                          displayValue = formatter.format(_startValue);
-                                                        }
-                                                        String displaySecondValue;
-                                                        if (_endValue == _endValue.floor()) {
-                                                          //.floor is basically used to convert doubles to integers
-                                                          displaySecondValue = _endValue.floor().toString();
-                                                        } else {
-                                                          displaySecondValue = _endValue.toString();
-                                                        }
-                                                        if (_endValue >= 1000) {
-                                                          final formatter = NumberFormat("#,###");
-                                                          displaySecondValue = formatter.format(_endValue);
-                                                        }
-                                                        return Column(
-                                                          children: [
-                                                            Container(
-                                                              height: 50,
-                                                              // color: Colors.grey,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius.circular(25),
-                                                                    topRight: Radius.circular(25),
-                                                                  ),
-                                                                  color: Colors.grey.shade200
-                                                              ),
-                                                              width: MediaQuery.of(context).size.width,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                                child: Row(
-                                                                  children: [
-                                                                    IconButton(
-                                                                        onPressed: (){
-                                                                          Navigator.pop(context);
-                                                                          // setState((){
-                                                                          //   _startValue = 0.0;
-                                                                          //   _endValue = _endPoint;
-                                                                          // });
-                                                                        },
-                                                                        icon: Icon(Icons.close)
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Text('Filter',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 12,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Text('Price',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 12,
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                Container(
-                                                                  height: 60,
-                                                                  width: 130,
-                                                                  padding:EdgeInsets.symmetric(horizontal: 12),
-                                                                  decoration:BoxDecoration(
-                                                                      color: Colors.grey.shade400
-                                                                  ),
-                                                                  child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
-                                                                  TextField(
-                                                                    decoration: InputDecoration(
-                                                                        prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
-                                                                          style: TextStyle(
-                                                                              fontSize: 18
-                                                                          ),
-                                                                        ),
-                                                                        border: InputBorder.none,
-                                                                        hintText: displayValue
-                                                                    ),
-                                                                    controller: startController,
-                                                                    keyboardType: TextInputType.number,
-                                                                  )
-                                                                      : TextField(
-                                                                    decoration: InputDecoration(
-                                                                        border: InputBorder.none, hintText: displayValue
-                                                                    ),
-                                                                    controller: startController,
-                                                                    keyboardType: TextInputType.number,
-                                                                  )
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 14,
-                                                                ),
-                                                                Text('to'),
-                                                                SizedBox(
-                                                                  width: 14,
-                                                                ),
-                                                                Container(
-                                                                  height: 60,
-                                                                  width: 130,
-                                                                  padding:EdgeInsets.symmetric(horizontal: 12),
-                                                                  decoration:BoxDecoration(
-                                                                      color: Colors.grey.shade400
-                                                                  ),
-                                                                  child: Center(
-                                                                      child: snapshot.data!.data!.products!.isNotEmpty?
-                                                                      TextField(
-                                                                        decoration: InputDecoration(
-                                                                            prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
-                                                                              style: TextStyle(
-                                                                                  fontSize: 18
-                                                                              ),
-                                                                            ),
-                                                                            border: InputBorder.none, hintText: displaySecondValue
-                                                                        ),
-                                                                        controller: endController,
-                                                                        keyboardType: TextInputType.number,
-                                                                      )
-                                                                          : TextField(
-                                                                        decoration: InputDecoration(
-                                                                            border: InputBorder.none, hintText: displaySecondValue
-                                                                        ),
-                                                                        controller: endController,
-                                                                        keyboardType: TextInputType.number,
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            RangeSlider(
-                                                              values: RangeValues(_startValue, _endValue),
-                                                              min: _startPoint,
-                                                              max: _endPoint,
-                                                              activeColor:Color(0xff7f78d8),
-                                                              // inactiveColor:Colors.grey.shade500,
-                                                              onChanged: ( values) {
-                                                                setState(() {
-                                                                  _startValue = values.start;
-                                                                  _endValue = values.end;
-                                                                  startController.text = NumberFormat.decimalPattern().format(values.start.floor());
-                                                                  endController.text = NumberFormat.decimalPattern().format(values.end.floor());
-
-                                                                });
-                                                              },
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Text('Select Merchants',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Text('Select Categories',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                                child: Container()
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(bottom: 15.0),
-                                                              child: SizedBox(
-                                                                height: 40,
-                                                                width: MediaQuery.of(context).size.width*0.5,
-                                                                child: FloatingActionButton(
-                                                                    onPressed: (){
-                                                                      _loadCountryCode().then((value){
-                                                                        setState((){
-                                                                          productName = Network().getProductsName(_name, _code, _startValue.toInt(), _endValue.toInt(),context);
-                                                                        });
-                                                                      });
-                                                                    },
-                                                                    shape: RoundedRectangleBorder(
-                                                                      borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
-                                                                    ),
-                                                                    backgroundColor:Color(0xff7F78D8),
-                                                                    child: Text('Show Results')
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      }
-                                                  );
-                                                }
-                                            );
-                                          },
-                                          child: Container(
-                                            height: 40,
-                                            width: 80,
-                                            padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(25),
-                                                color: Colors.grey.shade300
-                                            ),
-                                            child: Center(
-                                              child: Text('Filter',
-                                                style: TextStyle(
-
-                                                    fontWeight: FontWeight.w500
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
-                          ),
+                          ):Online(snapshot: snapshot),
                         )
                       ],
                     );

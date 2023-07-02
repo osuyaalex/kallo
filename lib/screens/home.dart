@@ -143,7 +143,7 @@ class _MyHomeState extends State<MyHome> {
                 )
             ),
             const SizedBox(
-              height: 3,
+              height: 2,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

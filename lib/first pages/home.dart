@@ -99,6 +99,13 @@ class _HomeState extends State<Home> {
     ];
     return Scaffold(
       bottomNavigationBar: AnimatedContainer(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade500
+            )
+          )
+        ),
         curve: Curves.ease,
         duration: Duration(milliseconds: 400),
         height: animatedProvider.myVariable ? 70 : 0,
@@ -114,6 +121,7 @@ class _HomeState extends State<Home> {
           },
           items: [
             BottomNavigationBarItem(
+
               icon: const Icon(Icons.home),
               label: AppLocalizations.of(context)?.home,
             ),
