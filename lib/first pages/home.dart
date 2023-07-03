@@ -102,7 +102,8 @@ class _HomeState extends State<Home> {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Colors.grey.shade500
+              color: Colors.grey.shade300,
+              width: 1.7
             )
           )
         ),

@@ -374,112 +374,104 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
 
                     return Column(
                       children: [
-                        offline!.isNotEmpty && online!.isNotEmpty?AnimatedContainer(
+                        online!.isNotEmpty && offline!.isNotEmpty?AnimatedContainer(
                          curve: Curves.ease,
                          duration: Duration(milliseconds: 400),
                          height: animatedProvider.myVariable ? 105 : 0,
-                         child: Container(
+                         child: Card(
                            color:Colors.grey.shade50,
-                           child: Card(
-                             color:Colors.grey.shade50,
-                             shape: RoundedRectangleBorder(
-                                 borderRadius: BorderRadius.circular(7)
-                             ),
-                             elevation: 2,
-                             shadowColor: Color(0xff7F78D8).withOpacity(0.3),
-                             child: ClipRRect(
-                               child: Padding(
-                                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                                 child: AppBar(
-                                   automaticallyImplyLeading: false,
-                                   backgroundColor: Colors.grey.shade50,
-                                   elevation: 0,
-                                   title: Center(
-                                     child: CustomSlidingSegmentedControl(
-                                       //isStretch: true,
-                                       initialValue: _selectedShop.index,
-                                       children:  {
-                                         Shops.onlineShops.index: SizedBox(
-                                           child: _selectedShop == Shops.onlineShops?
-                                           Row(
-                                             children: [
-                                               const Icon(Icons.location_on, color: Colors.white, size: 19,),
-                                               Text(
-                                                 AppLocalizations.of(context)?.onlineShops??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.white,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
+                           shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(7)
+                           ),
+                           elevation: 2,
+                           shadowColor: Color(0xff7F78D8).withOpacity(0.3),
+                           child: ClipRRect(
+                             child: Padding(
+                               padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                               child:Center(
+                                   child: CustomSlidingSegmentedControl(
+                                     //isStretch: true,
+                                     initialValue: _selectedShop.index,
+                                     children:  {
+                                       Shops.onlineShops.index: SizedBox(
+                                         child: _selectedShop == Shops.onlineShops?
+                                         Row(
+                                           children: [
+                                             const Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                             Text(
+                                               AppLocalizations.of(context)?.onlineShops??'',
+                                               style: const TextStyle(
+                                                   color: Colors.white,
+                                                   fontSize: 16,
                                                ),
-                                             ],
-                                           ): Row(
-                                             children: [
-                                               const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
-                                               Text(
-                                                 AppLocalizations.of(context)?.onlineShops??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.black,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
+                                             ),
+                                           ],
+                                         ): Row(
+                                           children: [
+                                             const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                             Text(
+                                               AppLocalizations.of(context)?.onlineShops??'',
+                                               style: const TextStyle(
+                                                   color: Colors.black,
+                                                   fontSize: 16,
+
                                                ),
-                                             ],
-                                           ),
+                                             ),
+                                           ],
                                          ),
-                                         Shops.shopsNearMe.index: SizedBox(
-                                           child: _selectedShop == Shops.shopsNearMe?
-                                           Row(
-                                             children: [
-                                               Padding(
-                                                 padding: const EdgeInsets.only(right: 4.0),
-                                                 child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                       ),
+                                       Shops.shopsNearMe.index: SizedBox(
+                                         child: _selectedShop == Shops.shopsNearMe?
+                                         Row(
+                                           children: [
+                                             Padding(
+                                               padding: const EdgeInsets.only(right: 4.0),
+                                               child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                             ),
+                                             Text(
+                                               AppLocalizations.of(context)?.shopsNearMe??'',
+                                               style: const TextStyle(
+                                                   color: Colors.white,
+                                                   fontSize: 16,
+
                                                ),
-                                               Text(
-                                                 AppLocalizations.of(context)?.shopsNearMe??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.white,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
+                                             ),
+                                           ],
+                                         ): Row(
+                                           children: [
+                                             Padding(
+                                               padding: const EdgeInsets.only(right: 4.0),
+                                               child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                             ),                                  Text(
+                                               AppLocalizations.of(context)?.shopsNearMe??'',
+                                               style: const TextStyle(
+                                                   color: Colors.black,
+                                                   fontSize: 16,
+
                                                ),
-                                             ],
-                                           ): Row(
-                                             children: [
-                                               Padding(
-                                                 padding: const EdgeInsets.only(right: 4.0),
-                                                 child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
-                                               ),                                  Text(
-                                                 AppLocalizations.of(context)?.shopsNearMe??'',
-                                                 style: const TextStyle(
-                                                     color: Colors.black,
-                                                     fontSize: 16,
-                                                     fontWeight: FontWeight.w800
-                                                 ),
-                                               ),
-                                             ],
-                                           ),
+                                             ),
+                                           ],
                                          ),
-                                       },
-                                       decoration: BoxDecoration(
-                                           color: Colors.grey.shade400,
-                                           borderRadius: BorderRadius.circular(20)
                                        ),
-                                       thumbDecoration: BoxDecoration(
-                                           color: const Color(0xff7F78D8),
-                                           borderRadius: BorderRadius.circular(20)
-                                       ),
-                                       duration: const Duration(milliseconds: 200),
-                                       curve: Curves.easeInToLinear,
-                                       onValueChanged: (value) {
-                                         setState(() {
-                                           _switchToShop(Shops.values[value]);
-                                         });
-                                       },
+                                     },
+                                     decoration: BoxDecoration(
+                                         color: Colors.grey.shade400,
+                                         borderRadius: BorderRadius.circular(20)
                                      ),
+                                     thumbDecoration: BoxDecoration(
+                                         color: const Color(0xff7F78D8),
+                                         borderRadius: BorderRadius.circular(20)
+                                     ),
+                                     duration: const Duration(milliseconds: 200),
+                                     curve: Curves.easeInToLinear,
+                                     onValueChanged: (value) {
+                                       setState(() {
+                                         _switchToShop(Shops.values[value]);
+                                       });
+                                     },
                                    ),
                                  ),
-                               ),
+
                              ),
                            ),
                          ),
@@ -643,6 +635,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                     child: Center(
                                       child: Text('Sort',
                                         style: TextStyle(
+                                          fontSize: 16.5,
                                             color: Color(0xff7f78d8),
                                             fontWeight: FontWeight.w400
                                         ),
@@ -854,22 +847,27 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                         ),
                                                       ],
                                                     ),
-                                                    RangeSlider(
-                                                      values: RangeValues(_startValue, _endValue),
-                                                      min: _startPoint,
-                                                      max: _endPoint,
-                                                      activeColor:Color(0xff7f78d8),
-                                                      // inactiveColor:Colors.grey.shade500,
-                                                      onChanged: ( values) {
-                                                        setState(() {
-                                                          _startValue = values.start;
-                                                          _endValue = values.end;
-                                                          _slideInteract = true;
-                                                          startController.text = NumberFormat.decimalPattern().format(values.start.floor());
-                                                          endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+                                                    SliderTheme(
+                                                      data: SliderThemeData(
+                                                          trackHeight: 1.5
+                                                      ),
+                                                      child: RangeSlider(
+                                                        values: RangeValues(_startValue, _endValue),
+                                                        min: _startPoint,
+                                                        max: _endPoint,
+                                                        activeColor:Color(0xff7f78d8),
+                                                        // inactiveColor:Colors.grey.shade500,
+                                                        onChanged: ( values) {
+                                                          setState(() {
+                                                            _startValue = values.start;
+                                                            _endValue = values.end;
+                                                            _slideInteract = true;
+                                                            startController.text = NumberFormat.decimalPattern().format(values.start.floor());
+                                                            endController.text = NumberFormat.decimalPattern().format(values.end.floor());
 
-                                                        });
-                                                      },
+                                                          });
+                                                        },
+                                                      ),
                                                     ),
                                                     const SizedBox(
                                                       height: 20,
@@ -938,7 +936,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                   },
                                   child: Container(
                                     height: 40,
-                                    width: 80,
+                                    width: 90,
                                     padding: EdgeInsets.symmetric(horizontal: 14.0),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(25),
@@ -949,6 +947,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                       children: [
                                         Text('Filter',
                                           style: TextStyle(
+                                            fontSize: 16.5,
                                               color: Color(0xff7f78d8),
                                               fontWeight: FontWeight.w400
                                           ),
@@ -966,7 +965,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                           ),
                         ),
                         Expanded(
-                          child: offline.isNotEmpty && online!.isNotEmpty?SizedBox(
+                          child: online.isNotEmpty && offline!.isNotEmpty?SizedBox(
                             width: double.infinity,
                             child: Stack(
                               children: [

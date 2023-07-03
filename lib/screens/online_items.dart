@@ -127,7 +127,7 @@ class _OnlineState extends State<Online> {
                     elevation: 1,
                     shadowColor: Colors.grey.shade300,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(17)
+                        borderRadius: BorderRadius.circular(13)
                     ),
                     child: Column(
                       children: [
@@ -135,23 +135,32 @@ class _OnlineState extends State<Online> {
                           height: 160,
                           width: 180,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(17),
+                              borderRadius: BorderRadius.circular(12),
                               image: DecorationImage(
                                   image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
                                   online![index].imageThumbnailUrl!:
-                                      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
+                                  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
                                   ),
                                   fit: BoxFit.fill
                               )
                           ),
                         ),
+                        SizedBox(
+                          height: 7,
+                        ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(breakUnwantedPart(addRow?.productName??''),
-                            style: const TextStyle(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: SizedBox(
+                            width: 180,
+                            child: Text(breakUnwantedPart(addRow?.productName??''),
+                              style: const TextStyle(
                                 fontSize: 15,
+                              ),
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          height: 7,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -162,18 +171,20 @@ class _OnlineState extends State<Online> {
                                 style: const TextStyle(
                                     color: Color(0xff161b22),
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 12
+                                    fontSize: 15
                                 ),
                               ),
 
                             ],
                           ),
                         ),
-
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: SizedBox(
-                            height: 20,
+                        SizedBox(
+                          height: 7,
+                        ),
+                        SizedBox(
+                          height: 20,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -190,7 +201,7 @@ class _OnlineState extends State<Online> {
                                       fontWeight: FontWeight.w600,
                                       color: Color(0xff7F78D8)
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),

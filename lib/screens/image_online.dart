@@ -104,7 +104,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                           elevation: 1,
                           shadowColor: Colors.grey.shade300,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(17)
+                              borderRadius: BorderRadius.circular(13)
                           ),
                           child: Column(
                             children: [
@@ -112,7 +112,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                                 height: 160,
                                 width: 180,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(17),
+                                    borderRadius: BorderRadius.circular(12),
                                     image: DecorationImage(
                                         image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
                                         online![index].imageThumbnailUrl!:
@@ -122,11 +122,17 @@ class _ImageOnlineState extends State<ImageOnline> {
                                     )
                                 ),
                               ),
+                              SizedBox(
+                                height: 7,
+                              ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(breakUnwantedPart(addRow?.productName??''),
-                                  style: const TextStyle(
-                                    fontSize: 15,
+                                child: SizedBox(
+                                  width: 180,
+                                  child: Text(breakUnwantedPart(addRow?.productName??''),
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -142,7 +148,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                                       style: const TextStyle(
                                           color: Color(0xff161b22),
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 12
+                                          fontSize: 15
                                       ),
                                     ),
 

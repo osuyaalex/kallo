@@ -866,6 +866,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                       child: Center(
                                         child: Text('Sort',
                                           style: TextStyle(
+                                            fontSize: 16.5,
                                               color: Color(0xff7f78d8),
                                               fontWeight: FontWeight.w400
                                           ),
@@ -1078,22 +1079,27 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                                           ),
                                                         ],
                                                       ),
-                                                      RangeSlider(
-                                                        values: RangeValues(_startValue, _endValue),
-                                                        min: _startPoint,
-                                                        max: _endPoint,
-                                                        activeColor:Color(0xff7f78d8),
-                                                        // inactiveColor:Colors.grey.shade500,
-                                                        onChanged: ( values) {
-                                                          setState(() {
-                                                            _startValue = values.start;
-                                                            _endValue = values.end;
-                                                            _isSliderInteracted = true;
-                                                            startController.text = NumberFormat.decimalPattern().format(values.start.floor());
-                                                            endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+                                                      SliderTheme(
+                                                        data: SliderThemeData(
+                                                          trackHeight: 1.5
+                                                        ),
+                                                        child: RangeSlider(
+                                                          values: RangeValues(_startValue, _endValue),
+                                                          min: _startPoint,
+                                                          max: _endPoint,
+                                                          activeColor:Color(0xff7f78d8),
+                                                          // inactiveColor:Colors.grey.shade500,
+                                                          onChanged: ( values) {
+                                                            setState(() {
+                                                              _startValue = values.start;
+                                                              _endValue = values.end;
+                                                              _isSliderInteracted = true;
+                                                              startController.text = NumberFormat.decimalPattern().format(values.start.floor());
+                                                              endController.text = NumberFormat.decimalPattern().format(values.end.floor());
 
-                                                          });
-                                                        },
+                                                            });
+                                                          },
+                                                        ),
                                                       ),
                                                       const SizedBox(
                                                         height: 20,
@@ -1161,17 +1167,18 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                     },
                                     child: Container(
                                       height: 40,
-                                      width: 80,
+                                      width: 90,
                                       padding: EdgeInsets.symmetric(horizontal: 14.0),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(25),
-                                          color: Colors.grey.shade300
+                                          color: Colors.grey.shade200
                                       ),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text('Filter',
                                             style: TextStyle(
+                                              fontSize: 16.5,
                                                 color: Color(0xff7f78d8),
                                                 fontWeight: FontWeight.w400
                                             ),
@@ -1648,6 +1655,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                 child: Center(
                                   child: Text('Sort',
                                     style: TextStyle(
+                                      fontSize: 16.5,
                                         color: Color(0xff7f78d8),
                                         fontWeight: FontWeight.w400
                                     ),
@@ -1857,22 +1865,27 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                                     ),
                                                   ],
                                                 ),
-                                                RangeSlider(
-                                                  values: RangeValues(_startValue, _endValue),
-                                                  min: _startPoint,
-                                                  max: _endPoint,
-                                                  activeColor:Color(0xff7f78d8),
-                                                  // inactiveColor:Colors.grey.shade500,
-                                                  onChanged: ( values) {
-                                                    setState(() {
-                                                      _startValue = values.start;
-                                                      _endValue = values.end;
-                                                      _isSliderInteracted = true;
-                                                      startController.text = NumberFormat.decimalPattern().format(values.start.floor());
-                                                      endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+                                                SliderTheme(
+                                                  data: SliderThemeData(
+                                                    trackHeight: 1.5
+                                                  ),
+                                                  child: RangeSlider(
+                                                    values: RangeValues(_startValue, _endValue),
+                                                    min: _startPoint,
+                                                    max: _endPoint,
+                                                    activeColor:Color(0xff7f78d8),
+                                                    // inactiveColor:Colors.grey.shade500,
+                                                    onChanged: ( values) {
+                                                      setState(() {
+                                                        _startValue = values.start;
+                                                        _endValue = values.end;
+                                                        _isSliderInteracted = true;
+                                                        startController.text = NumberFormat.decimalPattern().format(values.start.floor());
+                                                        endController.text = NumberFormat.decimalPattern().format(values.end.floor());
 
-                                                    });
-                                                  },
+                                                      });
+                                                    },
+                                                  ),
                                                 ),
                                                 const SizedBox(
                                                   height: 20,
@@ -1941,7 +1954,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                               },
                               child: Container(
                                 height: 40,
-                                width: 80,
+                                width: 90,
                                 padding: EdgeInsets.symmetric(horizontal: 14.0),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
@@ -1952,6 +1965,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                                   children: [
                                     Text('Filter',
                                       style: TextStyle(
+                                        fontSize: 16.5,
                                           color: Color(0xff7f78d8),
                                           fontWeight: FontWeight.w400
                                       ),
@@ -1969,7 +1983,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                       ),
                     ),
                     Expanded(
-                      child:online.isEmpty && offline!.isEmpty? Container(
+                      child:online.isEmpty && offline!.isEmpty ? Container(
                         width: double.infinity,
                         color:Colors.grey.shade100,
                         child:Stack(
