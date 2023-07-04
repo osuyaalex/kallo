@@ -106,6 +106,7 @@ class _ProfileState extends State<Profile> {
                                 ],
                               ),
                             ),
+                            Divider(),
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: Row(
@@ -125,6 +126,7 @@ class _ProfileState extends State<Profile> {
                                 ],
                               ),
                             ),
+                            Divider(),
                             InkWell(
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
@@ -211,6 +213,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                       ),
+                      Divider(),
                       Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
@@ -230,6 +233,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                       ),
+                      Divider(),
                       InkWell(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context){

@@ -47,6 +47,11 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
   final startController = TextEditingController();
   final endController = TextEditingController();
   bool _slideInteract = false;
+  final String _ascend = 'asc';
+  final String _descend = 'desc';
+  int _selectedContainerIndex = -1;
+
+
 
   void _switchToShop(Shops segment) {
     if (_selectedShop == segment) return;
@@ -302,7 +307,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
           transition: CircularFloatingSearchBarTransition(),
           debounceDelay: const Duration(milliseconds: 500),
           body:  Padding(
-            padding: const EdgeInsets.fromLTRB(0,100,0,10),
+            padding: const EdgeInsets.fromLTRB(0,100,0,0),
             child: FutureBuilder(
                 future: productName,
                 builder: (context, snapshot){
@@ -497,7 +502,6 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         builder: (context){
                                           return StatefulBuilder(
                                               builder: (BuildContext context, StateSetter setState) {
-
                                                 return Column(
                                                   children: [
                                                     Container(
@@ -539,82 +543,165 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                       ),
                                                     ),
                                                     SizedBox(
-                                                      height: 12,
+                                                      height: 25,
                                                     ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 20.0),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        children: [
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(right: 12.0),
-                                                            child: Text('Price:',
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.w800,
-                                                                  fontSize: 22
+                                                    GestureDetector(
+                                                      onTap:(){
+                                                        setState((){
+                                                          _selectedContainerIndex =0;
+                                                        });
+                                                        _loadCountryCode().then((value){
+                                                          productName = Network().getProductsName(_name, _code, null, null, context);
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        height:45,
+                                                        width:MediaQuery.of(context).size.width*0.85,
+                                                        decoration:BoxDecoration(
+                                                            color: _selectedContainerIndex == 0? Colors.blue:Colors.grey.shade300,
+                                                            borderRadius: BorderRadius.circular(18)
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left: 20.0),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            children: [
+                                                              Text('Most Relevant',
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.w400,
+                                                                  fontSize: 20,
+                                                                  color: _selectedContainerIndex == 0?Colors.white:Colors.black,
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                          Text('Low to high',
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.w800,
-                                                                fontSize: 22
-                                                            ),
+                                                            ],
                                                           )
-                                                        ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 25,),
+                                                    GestureDetector(
+                                                      onTap:(){
+                                                        setState((){
+                                                          _selectedContainerIndex = 1;
+                                                        });
+                                                        _loadCountryCode().then((value){
+                                                          productName = Network().getSortedProductsName(_name, _code, _ascend, context);
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        height:45,
+                                                        width:MediaQuery.of(context).size.width*0.85,
+                                                        decoration:BoxDecoration(
+                                                            color: _selectedContainerIndex == 1 ?Colors.blue:Colors.grey.shade300,
+                                                            borderRadius: BorderRadius.circular(18)
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left: 20.0),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(right: 12.0),
+                                                                child: Text('Price:',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w400,
+                                                                      fontSize: 20,
+                                                                    color: _selectedContainerIndex == 1?Colors.white:Colors.black,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Text('Low to high',
+                                                                style: TextStyle(
+                                                                    fontWeight: FontWeight.w400,
+                                                                    fontSize: 20,
+                                                                  color: _selectedContainerIndex == 1?Colors.white:Colors.black,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                     SizedBox(
                                                       height: 20,
                                                     ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 20.0),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        children: [
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(right: 12.0),
-                                                            child: Text('Price:',
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.w800,
-                                                                  fontSize: 22
+                                                    GestureDetector(
+                                                      onTap:(){
+                                                        setState((){
+                                                          _selectedContainerIndex = 2;
+                                                        });
+                                                        _loadCountryCode().then((value){
+                                                          productName = Network().getSortedProductsName(_name, _code, _descend, context);
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        height:45,
+                                                        width:MediaQuery.of(context).size.width*0.85,
+                                                        decoration:BoxDecoration(
+                                                          color: _selectedContainerIndex == 2?Colors.blue:Colors.grey.shade300,
+                                                          borderRadius: BorderRadius.circular(18)
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left: 20.0),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(right: 12.0),
+                                                                child: Text('Price:',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w400,
+                                                                      fontSize: 20,
+                                                                    color: _selectedContainerIndex == 2?Colors.white:Colors.black,
+
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
+                                                              Text('High to low',
+                                                                style: TextStyle(
+                                                                    fontWeight: FontWeight.w400,
+                                                                    fontSize: 20,
+                                                                  color: _selectedContainerIndex == 2?Colors.white:Colors.black,
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
-                                                          Text('High to low',
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.w800,
-                                                                fontSize: 22
-                                                            ),
-                                                          )
-                                                        ],
+                                                        ),
                                                       ),
                                                     ),
 
                                                     const SizedBox(
                                                       height: 20,
                                                     ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 20.0),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        children: [
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(right: 12.0),
-                                                            child: Text('Distance:',
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.w800,
-                                                                  fontSize: 22
+                                                    Container(
+                                                      height:45,
+                                                      width:MediaQuery.of(context).size.width*0.85,
+                                                      decoration:BoxDecoration(
+                                                          color: Colors.grey.shade300,
+                                                          borderRadius: BorderRadius.circular(18)
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 20.0),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(right: 12.0),
+                                                              child: Text('Distance:',
+                                                                style: TextStyle(
+                                                                    fontWeight: FontWeight.w400,
+                                                                    fontSize: 20
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          Text('Closest first',
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.w800,
-                                                                fontSize: 22
-                                                            ),
-                                                          )
-                                                        ],
+                                                            Text('Closest first',
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w400,
+                                                                  fontSize: 20
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -636,7 +723,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                       child: Text('Sort',
                                         style: TextStyle(
                                           fontSize: 16.5,
-                                            color: Color(0xff7f78d8),
+                                            color: Colors.blue,
+                                            // Color(0xff7f78d8),
                                             fontWeight: FontWeight.w400
                                         ),
                                       ),
@@ -780,7 +868,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                           width: 130,
                                                           padding:EdgeInsets.symmetric(horizontal: 12),
                                                           decoration:BoxDecoration(
-                                                              color: Colors.grey.shade400
+                                                              color: Colors.grey.shade400,
+                                                              borderRadius: BorderRadius.circular(12)
                                                           ),
                                                           child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
                                                           TextField(
@@ -819,7 +908,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                           width: 130,
                                                           padding:EdgeInsets.symmetric(horizontal: 12),
                                                           decoration:BoxDecoration(
-                                                              color: Colors.grey.shade400
+                                                              color: Colors.grey.shade400,
+                                                              borderRadius: BorderRadius.circular(12)
                                                           ),
                                                           child: Center(
                                                               child: snapshot.data!.data!.products!.isNotEmpty?
@@ -948,13 +1038,14 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                         Text('Filter',
                                           style: TextStyle(
                                             fontSize: 16.5,
-                                              color: Color(0xff7f78d8),
+                                              color: Colors.blue,
+                                              //Color(0xff7f78d8),
                                               fontWeight: FontWeight.w400
                                           ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(left: 6.0),
-                                          child: SvgPicture.asset('asset/filter-svgrepo-com.svg', height: 18,),
+                                          child: SvgPicture.asset('asset/filter-svgrepo-com (1).svg', height: 18,),
                                         )
                                       ],
                                     ),

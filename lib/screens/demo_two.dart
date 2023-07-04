@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:job/first%20pages/home_search.dart';
 import 'package:job/network/image_json.dart';
 import 'package:job/network/json.dart';
 import 'package:job/network/network.dart';
@@ -17,6 +18,7 @@ import 'package:job/screens/image_online.dart';
 import 'package:job/screens/offline_items.dart';
 import 'package:job/screens/online_items.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -359,9 +361,14 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                 children: [
                   GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return const DemoScreen();
-                      }));
+                      Navigator.of(context).push(PageTransition(
+                        child: const HomeSearch(),
+                        type: PageTransitionType.fade,
+                        childCurrent: widget,
+                        duration: const Duration(milliseconds: 100),
+                        reverseDuration: const Duration(milliseconds: 100),
+                      )
+                      );
                     },
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height*0.055,

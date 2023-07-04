@@ -14,18 +14,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/google_sign_in.dart';
 import '../providers/animated.dart';
+import '../screens/demo.dart';
 import '../screens/demo_two.dart';
+import 'home.dart';
 
 
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeSearch extends StatefulWidget {
+  const HomeSearch({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeSearch> createState() => _HomeSearchState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeSearchState extends State<HomeSearch> {
   int _selectedItem = 1;
 
 
@@ -81,7 +83,7 @@ class _HomeState extends State<Home> {
           );
         },
       ),
-      Dems(),
+      DemoScreen(),
       Profile(
         onGoogleSignPressed: ()async{
           EasyLoading.show();
@@ -98,46 +100,46 @@ class _HomeState extends State<Home> {
       )
     ];
     return Scaffold(
-      bottomNavigationBar: AnimatedContainer(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey.shade300,
-              width: 1.7
-            )
-          )
-        ),
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 400),
-        height: animatedProvider.myVariable ? 70 : 0,
-        child: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          selectedItemColor: const Color(0xff7F78D8),
-          currentIndex: _selectedItem,
-          onTap: (index) {
-            setState(() {
-              _selectedItem = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
+        bottomNavigationBar: AnimatedContainer(
+          decoration: BoxDecoration(
+              border: Border(
+                  top: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 1.7
+                  )
+              )
+          ),
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 400),
+          height: animatedProvider.myVariable ? 70 : 0,
+          child: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            selectedItemColor: const Color(0xff7F78D8),
+            currentIndex: _selectedItem,
+            onTap: (index) {
+              setState(() {
+                _selectedItem = index;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
 
-              icon: const Icon(Icons.home),
-              label: AppLocalizations.of(context)?.home,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.search),
-              label: AppLocalizations.of(context)?.search,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.person),
-              label: AppLocalizations.of(context)?.profile,
-            ),
-          ],
+                icon: const Icon(Icons.home),
+                label: AppLocalizations.of(context)?.home,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.search),
+                label: AppLocalizations.of(context)?.search,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.person),
+                label: AppLocalizations.of(context)?.profile,
+              ),
+            ],
+          ),
         ),
-      ),
-      body: _screens[_selectedItem]
+        body: _screens[_selectedItem]
     );
   }
 }
