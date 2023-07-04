@@ -1,0 +1,245 @@
+[
+  {
+    "master_category": "Animal & Pet Supplies",
+    "product_categories": [
+      {"name": "Live Animals", "values": ""},
+      {"name": "Pet Supplies", "values": ""}
+    ],
+    "image_string": "asset/icons8-dog-walking-100.png"
+  },
+  {
+    "master_category": "Fashion & Accessories",
+    "product_categories": [
+      {"name": "Women's Clothing", "values": ""},
+      {"name": "Men's Clothing", "values": ""},
+      {"name": "Women's Shoes", "values": ""},
+      {"name": "Men's Shoes", "values": ""},
+      {"name": "Shoe Accessories", "values": ""},
+      {"name": "Watches", "values": ""},
+      {"name": "Sportswear", "values": ""},
+      {"name": "Clothing Accessories", "values": ""},
+      {"name": "Costumes & Accessories", "values": ""},
+      {"name": "Handbags", "values": ""},
+      {"name": "Jewelry", "values": ""},
+      {"name": "Luggage & Suitcases", "values": ""},
+      {"name": "Wallets & Cases", "values": ""},
+      {"name": "Backpacks", "values": ""}
+    ],
+    "image_string": "asset/icons8-shirt-100.png"
+  },
+  {
+    "master_category": "Arts & Entertainment",
+    "product_categories": [
+      {"name": "Artwork", "values": ""},
+      {"name": "Books", "values": ""},
+      {"name": "Crafts & Sewing", "values": ""},
+      {"name": "Musical Instruments", "values": ""},
+      {"name": "Party Supplies", "values": ""},
+      {"name": "Photography", "values": ""},
+      {"name": "Video & DVD", "values": ""}
+    ],
+    "image_string": "asset/icons8-theatre-mask-100.png"
+  },
+  {
+    "master_category": "Baby & Toddler",
+    "product_categories": [
+      {"name": "Baby Care", "values": ""},
+      {"name": "Baby Clothing", "values": ""},
+      {"name": "Baby Feeding", "values": ""},
+      {"name": "Baby Gear", "values": ""},
+      {"name": "Baby Safety", "values": ""},
+      {"name": "Baby Toys", "values": ""},
+      {"name": "Diapering", "values": ""},
+      {"name": "Nursery", "values": ""}
+    ],
+    "image_string": "asset/icons8-babys-room-100.png"
+  },
+  {
+    "master_category": "Business & Industrial",
+    "product_categories": [
+      {"name": "Industrial Supplies", "values": ""},
+      {"name": "Office Electronics", "values": ""},
+      {"name": "Office Furniture", "values": ""},
+      {"name": "Office Supplies", "values": ""},
+      {"name": "Restaurant & Catering", "values": ""},
+      {"name": "Retail & Services", "values": ""},
+      {"name": "Test Equipment", "values": ""}
+    ],
+    "image_string": "asset/icons8-personal-growth-100.png"
+  },
+  {
+    "master_category": "Electronics",
+    "product_categories": [
+      {"name": "Audio & Video", "values": ""},
+      {"name": "Cameras & Optics", "values": ""},
+      {"name": "Computer Hardware", "values": ""},
+      {"name": "Computer Software", "values": ""},
+      {"name": "Electronics Accessories", "values": ""},
+      {"name": "Networking & Communications", "values": ""},
+      {"name": "Printers & Scanners", "values": ""},
+      {"name": "Security & Surveillance", "values": ""},
+      {"name": "Telecommunications", "values": ""},
+      {"name": "TV & Home Theater", "values": ""}
+    ],
+    "image_string": "asset/icons8-radio-100.png"
+  },
+  {
+    "master_category": "Food & Beverages",
+    "product_categories": [
+      {"name": "Beverages", "values": ""},
+      {"name": "Food", "values": ""},
+      {"name": "Gourmet", "values": ""},
+      {"name": "Health Foods", "values": ""},
+      {"name": "Restaurant Supplies", "values": ""},
+      {"name": "Tobacco & Smoking", "values": ""}
+    ],
+    "image_string": "asset/icons8-food-and-wine-100.png"
+  },
+  {
+    "master_category": "Furniture",
+    "product_categories": [
+      {"name": "Baby & Kids Furniture", "values": ""},
+      {"name": "Bedroom Furniture", "values": ""},
+      {"name": "Dining Room Furniture", "values": ""},
+      {"name": "Home Office Furniture", "values": ""},
+      {"name": "Living Room Furniture", "values": ""},
+      {"name": "Mattresses & Accessories", "values": ""},
+      {"name": "Outdoor Furniture", "values": ""},
+      {"name": "Pet Furniture", "values": ""}
+    ],
+    "image_string": "asset/icons8-furniture-100.png"
+  },
+  {
+    "master_category": "Hardware",
+    "product_categories": [
+      {"name": "Building Materials", "values": ""},
+      {"name": "Electrical", "values": ""},
+      {"name": "Hardware Accessories", "values": ""},
+      {"name": "Plumbing", "values": ""},
+      {"name": "Tools", "values": ""}
+    ],
+    "image_string": "asset/icons8-open-end-wrench-100.png"
+  },
+  {
+    "master_category": "Health & Beauty",
+    "product_categories": [
+      {"name": "Bath & Body", "values": ""},
+      {"name": "Cosmetics", "values": ""},
+      {"name": "Fragrances", "values": ""},
+      {"name": "Hair Care", "values": ""},
+      {"name": "Health Care", "values": ""},
+      {"name": "Oral Care", "values": ""},
+      {"name": "Personal Care", "values": ""},
+      {"name": "Skin Care", "values": ""}
+    ],
+    "image_string": "asset/icons8-oil-massage-100.png"
+  },
+  {
+    "master_category": "Home & Garden",
+    "product_categories": [
+      {"name": "Bath", "values": ""},
+      {"name": "Bedding", "values": ""},
+      {"name": "Furniture", "values": ""},
+      {"name": "Garden", "values": ""},
+      {"name": "Home Decor", "values": ""},
+      {"name": "Kitchen & Dining", "values": ""},
+      {"name": "Patio & Outdoor", "values": ""},
+      {"name": "Tools & Home Improvement", "values": ""},
+      {"name": "Home Appliances", "values": ""}
+    ],
+    "image_string": "asset/icons8-house-with-a-garden-100.png"
+  },
+  {
+    "master_category": "Mobile Phones & Tablets",
+    "product_categories": [
+      {"name": "Mobile Phones", "values": ""},
+      {"name": "Tablets", "values": ""},
+      {"name": "Mobile Accessories", "values": ""},
+      {"name": "Tablet Accessories", "values": ""},
+      {"name": "Smart Watches", "values": ""}
+    ],
+    "image_string": "asset/icons8-electronics-100.png"
+  },
+  {
+    "master_category": "Mature",
+    "product_categories": [
+      {"name": "Adult Books", "values": ""},
+      {"name": "Adult DVDs", "values": ""},
+      {"name": "Adult Toys", "values": ""},
+      {"name": "Lingerie & Underwear", "values": ""},
+      {"name": "Novelties", "values": ""}
+    ],
+    "image_string": "asset/icons8-18-plus-100.png"
+  },
+  {
+    "master_category": "Media",
+    "product_categories": [
+      {"name": "Books", "values": ""},
+      {"name": "DVDs", "values": ""},
+      {"name": "Music", "values": ""},
+      {"name": "Newspapers & Magazines", "values": ""},
+      {"name": "Video Games", "values": ""}
+    ],
+    "image_string": "asset/icons8-video-camera-100.png"
+  },
+  {
+    "master_category": "Office Supplies",
+    "product_categories": [
+      {"name": "Office Basics", "values": ""},
+      {"name": "Binders & Accessories", "values": ""},
+      {"name": "Calendars & Planners", "values": ""},
+      {"name": "Desk Accessories", "values": ""},
+      {"name": "Filing & Organization", "values": ""},
+      {"name": "Office Equipment", "values": ""},
+      {"name": "Paper", "values": ""},
+      {"name": "Writing & Correction", "values": ""}
+    ],
+    "image_string": "asset/icons8-office-100.png"
+  },
+  {
+    "master_category": "Sporting Goods",
+    "product_categories": [
+      {"name": "Exercise & Fitness", "values": ""},
+      {"name": "Outdoor Recreation", "values": ""},
+      {"name": "Team Sports", "values": ""},
+      {"name": "Water Sports", "values": ""},
+      {"name": "Winter Sports", "values": ""}
+    ],
+    "image_string": "asset/icons8-basketball-player-100.png"
+  },
+  {
+    "master_category": "Toys & Games",
+    "product_categories": [
+      {"name": "Action Figures", "values": ""},
+      {"name": "Dolls & Accessories", "values": ""},
+      {"name": "Games & Puzzles", "values": ""},
+      {"name": "Outdoor Toys", "values": ""},
+      {"name": "Stuffed Animals", "values": ""},
+      {"name": "Video Games", "values": ""},
+      {"name": "Building Toys", "values": ""}
+    ],
+    "image_string": "asset/icons8-teddy-100.png"
+  },
+  {
+    "master_category": "Vehicles & Parts",
+    "product_categories": [
+      {"name": "Auto Parts & Accessories", "values": ""},
+      {"name": "Auto Tools & Equipment", "values": ""},
+      {"name": "Cars", "values": ""},
+      {"name": "Motorcycles & Scooters", "values": ""},
+      {"name": "Vehicle Electronics", "values": ""}
+    ],
+    "image_string": "asset/icons8-automobile-100.png"
+  },
+  {
+    "master_category": "Video Games",
+    "product_categories": [
+      {"name": "Nintendo Switch", "values": ""},
+      {"name": "PlayStation 4", "values": ""},
+      {"name": "Xbox One", "values": ""},
+      {"name": "PC Games", "values": ""},
+      {"name": "Virtual Reality", "values": ""}
+    ],
+    "image_string": "asset/icons8-ps-controller-100.png"
+  }
+]

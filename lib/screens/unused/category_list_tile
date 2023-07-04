@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+
+class CategoryListTile extends StatelessWidget {
+  final Widget page;
+  final String asset;
+  final String text;
+  const CategoryListTile({super.key, required this.page, required this.asset, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return  GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return page;
+        }));
+      },
+      child: ListTile(
+        leading: Image.asset(asset, height: 30,),
+        title: Text(text),
+      ),
+    );
+  }
+}

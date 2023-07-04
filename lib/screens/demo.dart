@@ -555,7 +555,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                         });
                                                       },
                                                       child: Container(
-                                                        height:45,
+                                                        height:50,
                                                         width:MediaQuery.of(context).size.width*0.85,
                                                         decoration:BoxDecoration(
                                                             color: _selectedContainerIndex == 0? Colors.blue:Colors.grey.shade300,
@@ -568,8 +568,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                             children: [
                                                               Text('Most Relevant',
                                                                 style: TextStyle(
-                                                                  fontWeight: FontWeight.w400,
-                                                                  fontSize: 20,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontSize: 17,
                                                                   color: _selectedContainerIndex == 0?Colors.white:Colors.black,
                                                                 ),
                                                               ),
@@ -578,7 +578,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                         ),
                                                       ),
                                                     ),
-                                                    SizedBox(height: 25,),
+                                                    SizedBox(height: 18,),
                                                     GestureDetector(
                                                       onTap:(){
                                                         setState((){
@@ -589,7 +589,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                         });
                                                       },
                                                       child: Container(
-                                                        height:45,
+                                                        height:50,
                                                         width:MediaQuery.of(context).size.width*0.85,
                                                         decoration:BoxDecoration(
                                                             color: _selectedContainerIndex == 1 ?Colors.blue:Colors.grey.shade300,
@@ -604,16 +604,16 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                 padding: const EdgeInsets.only(right: 12.0),
                                                                 child: Text('Price:',
                                                                   style: TextStyle(
-                                                                      fontWeight: FontWeight.w400,
-                                                                      fontSize: 20,
+                                                                      fontWeight: FontWeight.w600,
+                                                                      fontSize: 17,
                                                                     color: _selectedContainerIndex == 1?Colors.white:Colors.black,
                                                                   ),
                                                                 ),
                                                               ),
                                                               Text('Low to high',
                                                                 style: TextStyle(
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontSize: 20,
+                                                                    fontWeight: FontWeight.w600,
+                                                                    fontSize: 17,
                                                                   color: _selectedContainerIndex == 1?Colors.white:Colors.black,
                                                                 ),
                                                               )
@@ -623,7 +623,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                       ),
                                                     ),
                                                     SizedBox(
-                                                      height: 20,
+                                                      height: 18,
                                                     ),
                                                     GestureDetector(
                                                       onTap:(){
@@ -635,7 +635,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                         });
                                                       },
                                                       child: Container(
-                                                        height:45,
+                                                        height:50,
                                                         width:MediaQuery.of(context).size.width*0.85,
                                                         decoration:BoxDecoration(
                                                           color: _selectedContainerIndex == 2?Colors.blue:Colors.grey.shade300,
@@ -650,8 +650,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                                 padding: const EdgeInsets.only(right: 12.0),
                                                                 child: Text('Price:',
                                                                   style: TextStyle(
-                                                                      fontWeight: FontWeight.w400,
-                                                                      fontSize: 20,
+                                                                      fontWeight: FontWeight.w600,
+                                                                      fontSize: 17,
                                                                     color: _selectedContainerIndex == 2?Colors.white:Colors.black,
 
                                                                   ),
@@ -659,8 +659,8 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                               ),
                                                               Text('High to low',
                                                                 style: TextStyle(
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontSize: 20,
+                                                                    fontWeight: FontWeight.w600,
+                                                                    fontSize: 17,
                                                                   color: _selectedContainerIndex == 2?Colors.white:Colors.black,
                                                                 ),
                                                               )
@@ -671,7 +671,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                     ),
 
                                                     const SizedBox(
-                                                      height: 20,
+                                                      height: 18,
                                                     ),
                                                     Container(
                                                       height:45,
@@ -689,15 +689,15 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                               padding: const EdgeInsets.only(right: 12.0),
                                                               child: Text('Distance:',
                                                                 style: TextStyle(
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontSize: 20
+                                                                    fontWeight: FontWeight.w600,
+                                                                    fontSize: 17
                                                                 ),
                                                               ),
                                                             ),
                                                             Text('Closest first',
                                                               style: TextStyle(
-                                                                  fontWeight: FontWeight.w400,
-                                                                  fontSize: 20
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontSize: 17
                                                               ),
                                                             )
                                                           ],

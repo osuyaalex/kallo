@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:job/first%20pages/home.dart';
+import 'package:job/first%20pages/main_home.dart';
 import 'package:job/providers/animated.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         CountryLocalizations.delegate,
       ],
-      home: user == null ? (isFirstLaunch ? const GetStarted() : const Home()) : Home(),
+      home: user == null ? (isFirstLaunch ? const GetStarted() : const MainHome()) : MainHome(),
       builder: EasyLoading.init(),
     );
 

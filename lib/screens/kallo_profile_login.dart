@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:job/first%20pages/home.dart';
+import 'package:job/first%20pages/main_home.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,7 +40,7 @@ class _KalloProfileLoginPageState extends State<KalloProfileLoginPage> {
         prefs.setBool('isFirstLaunch', false);
         snack(context, res);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-          return Home();
+          return MainHome();
         }));
       }
     }else{

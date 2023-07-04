@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:job/first%20pages/main_home.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/kallo_sign_up.dart';
-import '../first pages/home.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 
@@ -53,7 +53,7 @@ class _KalloProfileSignUpPageState extends State<KalloProfileSignUpPage> {
           prefs.setBool('isFirstLaunch', false);
           snack(context, res);
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-            return Home();
+            return MainHome();
           }));
         }
       }else{
