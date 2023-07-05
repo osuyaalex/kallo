@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job/screens/sub_category_results.dart';
 
 class SubCategories extends StatelessWidget {
   final dynamic cats;
@@ -46,8 +47,15 @@ class SubCategories extends StatelessWidget {
                 child: ListView.builder(
                     itemCount: productCategory.length,
                     itemBuilder: (context, index){
-                      return ListTile(
-                        title: Text(productCategory[index]['name']),
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return SubCategoryResults(productCategory: productCategory[index]['name']);
+                          }));
+                        },
+                        child: ListTile(
+                          title: Text(productCategory[index]['name']),
+                        ),
                       );
                     }
                 ),

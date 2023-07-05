@@ -41,7 +41,7 @@ class _MainHomeState extends State<MainHome> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLaunch', true);
           Navigator.of(context).pushReplacement(PageTransition(
-            child: const MainHome(),
+            child: const Dems(),
             type: PageTransitionType.fade,
             childCurrent: widget,
             duration: const Duration(milliseconds: 100),
@@ -54,7 +54,7 @@ class _MainHomeState extends State<MainHome> {
           prefs.setBool('isLaunchCamera', true);
 
           Navigator.of(context).pushReplacement(PageTransition(
-            child: const MainHome(),
+            child: const Dems(),
             type: PageTransitionType.fade,
             childCurrent: widget,
             duration: const Duration(milliseconds: 100),
@@ -66,7 +66,7 @@ class _MainHomeState extends State<MainHome> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isSearchBar', true);
           Navigator.of(context).pushReplacement(PageTransition(
-            child: const MainHome(),
+            child: const Dems(),
             type: PageTransitionType.fade,
             childCurrent: widget,
             duration: const Duration(milliseconds: 100),
@@ -84,7 +84,7 @@ class _MainHomeState extends State<MainHome> {
           if(user != null){
             snack(context, AppLocalizations.of(context)!.successfullySignedIn);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-              return MainHome();
+              return Dems();
             }));
 
           }

@@ -197,21 +197,24 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
             ],
           ) ,
         ),
-        body: Center(
-          child:  NotificationListener<ScrollNotification>(
-            onNotification: (notification){
-              if(notification is ScrollUpdateNotification){
-                // Check the direction of scroll and update the visibility of the container
-                setState(() {
-                  animatedProvider.myVariable = notification.scrollDelta! < 0;
-                });
-              }
-              return false;
-            },
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  GestureDetector(
+        body: NotificationListener<ScrollNotification>(
+          onNotification: (notification){
+            if(notification is ScrollUpdateNotification){
+              // Check the direction of scroll and update the visibility of the container
+              setState(() {
+                animatedProvider.myVariable = notification.scrollDelta! < 0;
+              });
+            }
+            return false;
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 40,
+                ),
+                Center(
+                  child: GestureDetector(
                     onTap: (){
                       Navigator.of(context).push(PageTransition(
                         child: const BarcodeSearch(),
@@ -244,8 +247,10 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                       ),
                     ),
                   ),
+                ),
 
-                  Text(AppLocalizations.of(context)!.barcodeInfo,
+                Center(
+                  child: Text(AppLocalizations.of(context)!.barcodeInfo,
                     textAlign: TextAlign.center,
                     style:  TextStyle(
                         wordSpacing: 2,
@@ -253,10 +258,12 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                         color: Colors.grey.shade600
                     ),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  GestureDetector(
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Center(
+                  child: GestureDetector(
                     onTap: (){
                       Navigator.of(context).push(PageTransition(
                         child: const ImageSearch(),
@@ -289,7 +296,9 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                       ),
                     ),
                   ),
-                  Text(AppLocalizations.of(context)!.pictureInfo,
+                ),
+                Center(
+                  child: Text(AppLocalizations.of(context)!.pictureInfo,
                     textAlign: TextAlign.center,
                     style:TextStyle(
                         wordSpacing: 2,
@@ -297,27 +306,29 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                         color: Colors.grey.shade600
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 36.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Category',
-                            style: TextStyle(
-                                fontSize: 27,
-                                fontWeight: FontWeight.w700
-                            ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 36.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('Category',
+                          style: TextStyle(
+                              fontSize: 27,
+                              fontWeight: FontWeight.w700
                           ),
-                        ]
-                    ),
+                        ),
+                      ]
                   ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  FutureBuilder(
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Center(
+                  child: FutureBuilder(
                     future: loadCategoryJson(),
                       builder: (context, snapshot){
 
@@ -336,10 +347,10 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                       }
                       }
                   ),
+                ),
 
 
-                ],
-              ),
+              ],
             ),
           ),
         ),
