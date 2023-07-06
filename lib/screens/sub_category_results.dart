@@ -56,6 +56,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   List category= [];
   dynamic productCat;
   int selectedIndex = -1;
+  String? catName;
 
 
 
@@ -204,7 +205,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   }
   @override
   Widget build(BuildContext context) {
-    String catName =widget.productCategory;
+   // String catName =widget.productCategory;
     final animatedProvider = Provider.of<AnimatedProvider>(context);
     return Form(
       key: _key,
@@ -504,6 +505,9 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                   children: [
                                     GestureDetector(
                                       onTap:(){
+                                        setState(() {
+                                          _selectedContainerIndex = -1;
+                                        });
                                         showModalBottomSheet(
                                             context: context,
                                             shape: RoundedRectangleBorder(
@@ -565,14 +569,18 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                               _selectedContainerIndex =0;
                                                             });
                                                             _loadCountryCode().then((value){
-                                                              productsCategory = Network().getProductsCategory(_code, widget.productCategory,null,null, context);
+                                                              if(catName == null){
+                                                                productsCategory = Network().getProductsCategory(_code, widget.productCategory,null,null, context);
+                                                              }else{
+                                                                productsCategory = Network().getProductsCategory(_code, catName,null,null, context);
+                                                              }
                                                             });
                                                           },
                                                           child: Container(
                                                             height:50,
                                                             width:MediaQuery.of(context).size.width*0.85,
                                                             decoration:BoxDecoration(
-                                                                color: _selectedContainerIndex == 0? Colors.blue:Colors.grey.shade300,
+                                                                color: _selectedContainerIndex == 0? Color(0xff161b22):Colors.grey.shade300,
                                                                 borderRadius: BorderRadius.circular(18)
                                                             ),
                                                             child: Padding(
@@ -599,14 +607,18 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                               _selectedContainerIndex = 1;
                                                             });
                                                             _loadCountryCode().then((value){
-                                                              productsCategory= Network().getSortedProducts(widget.productCategory, _code, _ascend, context);
+                                                              if(catName == null){
+                                                                productsCategory= Network().getSortedProductsCategory(_code, widget.productCategory,null,null,'asc', context);
+                                                              }else{
+                                                                productsCategory= Network().getSortedProductsCategory(_code, catName,null,null,'asc', context);
+                                                              }
                                                             });
                                                           },
                                                           child: Container(
                                                             height:50,
                                                             width:MediaQuery.of(context).size.width*0.85,
                                                             decoration:BoxDecoration(
-                                                                color: _selectedContainerIndex == 1 ?Colors.blue:Colors.grey.shade300,
+                                                                color: _selectedContainerIndex == 1 ?Color(0xff161b22):Colors.grey.shade300,
                                                                 borderRadius: BorderRadius.circular(18)
                                                             ),
                                                             child: Padding(
@@ -645,14 +657,17 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                               _selectedContainerIndex = 2;
                                                             });
                                                             _loadCountryCode().then((value){
-                                                              productsCategory = Network().getSortedProductsName(widget.productCategory, _code, _descend, context);
-                                                            });
+                                                              if(catName == null){
+                                                                productsCategory= Network().getSortedProductsCategory(_code, widget.productCategory,null,null,'desc', context);
+                                                              }else{
+                                                                productsCategory= Network().getSortedProductsCategory(_code, catName,null,null,'desc', context);
+                                                              }});
                                                           },
                                                           child: Container(
                                                             height:50,
                                                             width:MediaQuery.of(context).size.width*0.85,
                                                             decoration:BoxDecoration(
-                                                                color: _selectedContainerIndex == 2?Colors.blue:Colors.grey.shade300,
+                                                                color: _selectedContainerIndex == 2?Color(0xff161b22):Colors.grey.shade300,
                                                                 borderRadius: BorderRadius.circular(18)
                                                             ),
                                                             child: Padding(
@@ -737,7 +752,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                           child: Text('Sort',
                                             style: TextStyle(
                                                 fontSize: 16.5,
-                                                color: Color(0xff7f78d8),
+                                                color: Colors.blue,
                                                 fontWeight: FontWeight.w400
                                             ),
                                           ),
@@ -780,6 +795,8 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                           endController.clear();
                                           _isSliderInteracted = false;
                                           selectedIndex = -1;
+                                          _seeMainCategory = false;
+                                          _seeProductCategory = false;
                                         });
                                         showModalBottomSheet(
                                             context: context,
@@ -982,23 +999,6 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                               child: Row(
                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                 children: [
-                                                                  Text('Select Merchants',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
                                                                   TextButton(
                                                                     onPressed: () {
                                                                       setState((){
@@ -1007,7 +1007,8 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     },
                                                                     child: Text('Select Categories',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.w800,
+                                                                          fontWeight: FontWeight.w600,
+                                                                          color: Colors.black,
                                                                           fontSize: 22
                                                                       ),
                                                                     ),
@@ -1048,7 +1049,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     SizedBox(
                                                                       width: 10,
                                                                     ),
-                                                                    Text('Main Category',
+                                                                    Text('Categories',
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight.w600,
                                                                           fontSize: 22
@@ -1169,9 +1170,15 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                                 width: MediaQuery.of(context).size.width*0.8,
                                                                                 decoration: BoxDecoration(
                                                                                     borderRadius: BorderRadius.circular(19),
-                                                                                    color: (selectedIndex == index) ? Colors.blue : Colors.grey.shade200
+                                                                                    color: (selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
                                                                                 ),
-                                                                                child: Center(child: Text(productCat['product_categories'][index]['name']))
+                                                                                child: Center(
+                                                                                    child: Text(productCat['product_categories'][index]['name'],
+                                                                                      style: TextStyle(
+                                                                                        color: (selectedIndex == index) ? Colors.white : Colors.black
+                                                                                      ),
+                                                                                    )
+                                                                                )
                                                                             ),
                                                                           ),
                                                                           SizedBox(height: 8,)
@@ -1233,13 +1240,13 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                             Text('Filter',
                                               style: TextStyle(
                                                   fontSize: 16.5,
-                                                  color: Color(0xff7f78d8),
+                                                  color: Colors.blue,
                                                   fontWeight: FontWeight.w400
                                               ),
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(left: 6.0),
-                                              child: SvgPicture.asset('asset/filter-svgrepo-com.svg', height: 18,),
+                                              child: SvgPicture.asset('asset/filter-svgrepo-com (1).svg', height: 18,),
                                             )
                                           ],
                                         ),

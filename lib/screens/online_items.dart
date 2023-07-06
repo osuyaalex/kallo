@@ -121,7 +121,7 @@ class _OnlineState extends State<Online> {
                   }
                 },
                 child: SizedBox(
-                  height: 290,
+                  height: 310,
                   width: 250,
                   child: Card(
                     elevation: 1,

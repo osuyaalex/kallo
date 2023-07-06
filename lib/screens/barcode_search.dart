@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,10 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:job/first%20pages/main_home.dart';
 import 'package:job/network/json.dart';
 import 'package:job/network/network.dart';
 import 'package:job/providers/animated.dart';
+import 'package:job/screens/demo_two.dart';
 import 'package:job/screens/offline_items.dart';
 import 'package:job/screens/online_items.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
@@ -30,7 +32,7 @@ class BarcodeSearch extends StatefulWidget {
 
 enum Segment { shopsNearMe, onlineShops }
 class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderStateMixin{
-  late Future<Koye> products = Network().getProducts(_scanBarcode, '',0,100000000,context);
+  late Future<Koye> products = Network().getProducts(_scanBarcode, '',0,100000000, null,context);
   late AnimationController _animationController;
   Segment _selectedSegment = Segment.onlineShops;
   String _scanBarcode = 'Unknown';
@@ -50,6 +52,14 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
   final String _ascend = 'asc';
   final String _descend = 'desc';
   int _selectedContainerIndex = -1;
+  bool _seeMainCategory = false;
+  bool _seeProductCategory = false;
+  late AsyncSnapshot _seeSnapshot;
+  List _category= [];
+  dynamic _productCat;
+  int _selectedIndex = -1;
+  String? _catName;
+  int _selectedMainIndex = -1;
   //RangeValues _selectedValues = RangeValues(0.0, 100000.0);
 
 
@@ -145,7 +155,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
       _loadCountryCode();
       scanBarcodeNormal().then((value)async{
         setState(() {
-          products = Network().getProducts(_scanBarcode, _code,0,100000000,context);
+          products = Network().getProducts(_scanBarcode, _code,0,100000000,null,context);
           _start = 7;
         });
         _startTimer();
@@ -198,6 +208,13 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
       print(e.toString());
     }
   }
+  loadCategoryJson() async {
+    String data = await DefaultAssetBundle.of(context).loadString(
+        "asset/model/categories.json"); //for calling local json
+    final jsonCategoryResult = jsonDecode(data);
+    //print(jsonCategoryResult);
+    return jsonCategoryResult;
+  }
 
   @override
   void initState(){
@@ -205,7 +222,8 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
     super.initState();
     _shiftBarCode();
     _loadCountryCode();
-    products = Network().getProducts(_scanBarcode, _code,0,100000000,context);
+    loadCategoryJson();
+    products = Network().getProducts(_scanBarcode, _code,0,100000000, null,context);
     products.then((value){
       print('the prducy issssssssssssssss ${value.data}');
       //snack(context, value.data.)
@@ -271,7 +289,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                       SharedPreferences prefs = await SharedPreferences.getInstance();
                       prefs.setBool('isSearchBar', true);
                       Navigator.of(context).pushReplacement(PageTransition(
-                        child: const MainHome(),
+                        child: const Dems(),
                         type: PageTransitionType.fade,
                         childCurrent: widget,
                         duration: const Duration(milliseconds: 100),
@@ -320,7 +338,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                         _loadCountryCode();
                         scanBarcodeNormal().then((value){
                           setState(() {
-                            products = Network().getProducts(_scanBarcode, _code,0,100000000,context);
+                            products = Network().getProducts(_scanBarcode, _code,0,100000000,null,context);
                             _start = 7;
                           });
                           _startTimer();
@@ -333,7 +351,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isLaunchCamera', true);
                         Navigator.of(context).pushReplacement(PageTransition(
-                          child: const MainHome(),
+                          child: const Dems(),
                           type: PageTransitionType.fade,
                           childCurrent: widget,
                           duration: const Duration(milliseconds: 100),
@@ -528,6 +546,9 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                 children: [
                                   GestureDetector(
                                     onTap:(){
+                                      setState(() {
+                                        _selectedContainerIndex = -1;
+                                      });
                                       showModalBottomSheet(
                                           context: context,
                                           shape: RoundedRectangleBorder(
@@ -589,14 +610,14 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                             _selectedContainerIndex =0;
                                                           });
                                                           _loadCountryCode().then((value){
-                                                            products = Network().getProducts(_scanBarcode, _code, null, null, context);
+                                                            products = Network().getProducts(_scanBarcode, _code, null, null, _catName,context);
                                                           });
                                                         },
                                                         child: Container(
                                                           height:50,
                                                           width:MediaQuery.of(context).size.width*0.85,
                                                           decoration:BoxDecoration(
-                                                              color: _selectedContainerIndex == 0? Colors.blue:Colors.grey.shade300,
+                                                              color: _selectedContainerIndex == 0? Color(0xff161b22):Colors.grey.shade300,
                                                               borderRadius: BorderRadius.circular(18)
                                                           ),
                                                           child: Padding(
@@ -623,14 +644,14 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                             _selectedContainerIndex = 1;
                                                           });
                                                           _loadCountryCode().then((value){
-                                                            products= Network().getSortedProducts(_scanBarcode, _code, _ascend, context);
+                                                            products= Network().getSortedProducts(_scanBarcode, _code, _ascend,null,null,_catName, context);
                                                           });
                                                         },
                                                         child: Container(
                                                           height:50,
                                                           width:MediaQuery.of(context).size.width*0.85,
                                                           decoration:BoxDecoration(
-                                                              color: _selectedContainerIndex == 1 ?Colors.blue:Colors.grey.shade300,
+                                                              color: _selectedContainerIndex == 1 ?Color(0xff161b22):Colors.grey.shade300,
                                                               borderRadius: BorderRadius.circular(18)
                                                           ),
                                                           child: Padding(
@@ -669,14 +690,14 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                             _selectedContainerIndex = 2;
                                                           });
                                                           _loadCountryCode().then((value){
-                                                            products = Network().getSortedProductsName(_scanBarcode, _code, _descend, context);
+                                                            products = Network().getSortedProducts(_scanBarcode, _code, _descend,null,null,_catName, context);
                                                           });
                                                         },
                                                         child: Container(
                                                           height:50,
                                                           width:MediaQuery.of(context).size.width*0.85,
                                                           decoration:BoxDecoration(
-                                                              color: _selectedContainerIndex == 2?Colors.blue:Colors.grey.shade300,
+                                                              color: _selectedContainerIndex == 2?Color(0xff161b22):Colors.grey.shade300,
                                                               borderRadius: BorderRadius.circular(18)
                                                           ),
                                                           child: Padding(
@@ -803,6 +824,10 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                         startController.clear();
                                         endController.clear();
                                         _isSliderInteracted = false;
+                                        _selectedMainIndex = -1;
+                                        _selectedIndex = -1;
+                                        _seeMainCategory = false;
+                                        _seeProductCategory = false;
                                       });
                                       showModalBottomSheet(
                                           context: context,
@@ -834,121 +859,80 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                     final formatter = NumberFormat("#,###");
                                                     displaySecondValue = formatter.format(_endValue);
                                                   }
-
-
-                                                  return Column(
+                                                  return Stack(
                                                     children: [
-                                                      Container(
-                                                        height: 50,
-                                                        // color: Colors.grey,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.only(
-                                                              topLeft: Radius.circular(25),
-                                                              topRight: Radius.circular(25),
-                                                            ),
-                                                            color: Colors.grey.shade200
-                                                        ),
-                                                        width: MediaQuery.of(context).size.width,
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                          child: Row(
-                                                            children: [
-                                                              IconButton(
-                                                                  onPressed: (){
-                                                                    Navigator.pop(context);
-                                                                    // setState((){
-                                                                    //   _startValue = 0.0;
-                                                                    //   _endValue = _endPoint;
-                                                                    // });
-                                                                  },
-                                                                  icon: Icon(Icons.close)
-                                                              ),
-                                                              SizedBox(
-                                                                width: 10,
-                                                              ),
-                                                              Text('Filter',
-                                                                style: TextStyle(
-                                                                    fontWeight: FontWeight.w600,
-                                                                    fontSize: 22
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 12,
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 20.0),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          children: [
-                                                            Text('Price',
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.w800,
-                                                                  fontSize: 22
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 12,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                      _seeMainCategory == false?Column(
                                                         children: [
                                                           Container(
-                                                            height: 70,
-                                                            width: 130,
-                                                            padding:EdgeInsets.symmetric(horizontal: 12),
-                                                            decoration:BoxDecoration(
-                                                                color: Colors.grey.shade400,
-                                                                borderRadius: BorderRadius.circular(12)
+                                                            height: 50,
+                                                            // color: Colors.grey,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(25),
+                                                                  topRight: Radius.circular(25),
+                                                                ),
+                                                                color: Colors.grey.shade200
                                                             ),
-                                                            child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
-                                                            TextField(
-                                                              enabled: _isSliderInteracted,
-                                                              decoration: InputDecoration(
-                                                                  prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
-                                                                    style: TextStyle(
-                                                                        fontSize: 18
-                                                                    ),
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        Navigator.pop(context);
+                                                                        // setState((){
+                                                                        //   _startValue = 0.0;
+                                                                        //   _endValue = _endPoint;
+                                                                        // });
+                                                                      },
+                                                                      icon: Icon(Icons.close)
                                                                   ),
-                                                                  border: InputBorder.none,
-                                                                  hintText: displayValue
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text('Filter',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
                                                               ),
-                                                              controller: startController,
-                                                              keyboardType: TextInputType.number,
-                                                            )
-                                                                : TextField(
-                                                              enabled: _isSliderInteracted,
-                                                              decoration: InputDecoration(
-                                                                  border: InputBorder.none, hintText: displayValue
-                                                              ),
-                                                              controller: startController,
-                                                              keyboardType: TextInputType.number,
-                                                            )
                                                             ),
                                                           ),
                                                           SizedBox(
-                                                            width: 14,
+                                                            height: 12,
                                                           ),
-                                                          Text('to'),
-                                                          SizedBox(
-                                                            width: 14,
-                                                          ),
-                                                          Container(
-                                                            height: 70,
-                                                            width: 130,
-                                                            padding:EdgeInsets.symmetric(horizontal: 12),
-                                                            decoration:BoxDecoration(
-                                                                color: Colors.grey.shade400,
-                                                                borderRadius: BorderRadius.circular(12)
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                Text('Price',
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight.w800,
+                                                                      fontSize: 22
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                            child: Center(
-                                                                child: snapshot.data!.data!.products!.isNotEmpty?
+                                                          ),
+                                                          SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              Container(
+                                                                height: 70,
+                                                                width: 130,
+                                                                padding:EdgeInsets.symmetric(horizontal: 12),
+                                                                decoration:BoxDecoration(
+                                                                    color: Colors.grey.shade400,
+                                                                    borderRadius: BorderRadius.circular(12)
+                                                                ),
+                                                                child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
                                                                 TextField(
                                                                   enabled: _isSliderInteracted,
                                                                   decoration: InputDecoration(
@@ -957,90 +941,332 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                                             fontSize: 18
                                                                         ),
                                                                       ),
-                                                                      border: InputBorder.none, hintText: displaySecondValue
+                                                                      border: InputBorder.none,
+                                                                      hintText: displayValue
                                                                   ),
-                                                                  controller: endController,
+                                                                  controller: startController,
                                                                   keyboardType: TextInputType.number,
                                                                 )
                                                                     : TextField(
                                                                   enabled: _isSliderInteracted,
                                                                   decoration: InputDecoration(
-                                                                      border: InputBorder.none, hintText: displaySecondValue
+                                                                      border: InputBorder.none, hintText: displayValue
                                                                   ),
-                                                                  controller: endController,
+                                                                  controller: startController,
                                                                   keyboardType: TextInputType.number,
-                                                                )),
+                                                                )
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 14,
+                                                              ),
+                                                              Text('to'),
+                                                              SizedBox(
+                                                                width: 14,
+                                                              ),
+                                                              Container(
+                                                                height: 70,
+                                                                width: 130,
+                                                                padding:EdgeInsets.symmetric(horizontal: 12),
+                                                                decoration:BoxDecoration(
+                                                                    color: Colors.grey.shade400,
+                                                                    borderRadius: BorderRadius.circular(12)
+                                                                ),
+                                                                child: Center(
+                                                                    child: snapshot.data!.data!.products!.isNotEmpty?
+                                                                    TextField(
+                                                                      enabled: _isSliderInteracted,
+                                                                      decoration: InputDecoration(
+                                                                          prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
+                                                                            style: TextStyle(
+                                                                                fontSize: 18
+                                                                            ),
+                                                                          ),
+                                                                          border: InputBorder.none, hintText: displaySecondValue
+                                                                      ),
+                                                                      controller: endController,
+                                                                      keyboardType: TextInputType.number,
+                                                                    )
+                                                                        : TextField(
+                                                                      enabled: _isSliderInteracted,
+                                                                      decoration: InputDecoration(
+                                                                          border: InputBorder.none, hintText: displaySecondValue
+                                                                      ),
+                                                                      controller: endController,
+                                                                      keyboardType: TextInputType.number,
+                                                                    )),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SliderTheme(
+                                                            data: SliderThemeData(
+                                                                trackHeight: 1.5
+                                                            ),
+                                                            child: RangeSlider(
+                                                              values: RangeValues(_startValue, _endValue),
+                                                              min: _startPoint,
+                                                              max: _endPoint,
+                                                              activeColor:Color(0xff7f78d8),
+                                                              // inactiveColor:Colors.grey.shade500,
+                                                              onChanged: ( values) {
+                                                                setState(() {
+                                                                  _startValue = values.start;
+                                                                  _endValue = values.end;
+                                                                  _isSliderInteracted = true;
+                                                                  startController.text = NumberFormat.decimalPattern().format(values.start.floor());
+                                                                  endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    setState((){
+                                                                      _seeMainCategory = true;
+                                                                    });
+                                                                  },
+                                                                  child: Text('Select Categories',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        color: Colors.black,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                              child: Container()
+                                                          ),
+
+                                                        ],
+                                                      ):_seeProductCategory== false?Column(
+                                                        children: [
+                                                          Container(
+                                                            height: 50,
+                                                            // color: Colors.grey,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(25),
+                                                                  topRight: Radius.circular(25),
+                                                                ),
+                                                                color: Colors.grey.shade200
+                                                            ),
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        setState((){
+                                                                          _seeMainCategory = false;
+                                                                        });
+                                                                      },
+                                                                      icon: Icon(Icons.arrow_back)
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text('Categories',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          FutureBuilder(
+                                                              future: loadCategoryJson(),
+                                                              builder: (context, snapshot){
+                                                                if(snapshot.hasData){
+                                                                  _seeSnapshot = snapshot;
+                                                                  _category = _seeSnapshot.data;
+                                                                  return Expanded(
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.only(bottom: 70.0),
+                                                                      child: ListView.builder(
+                                                                        itemCount: _category.length + 1,
+                                                                        itemBuilder: (context, index) {
+                                                                          if (index == 0) {
+                                                                            // Render the extra widget as the first item
+                                                                            return Column(
+                                                                              children: [
+                                                                                GestureDetector(
+                                                                                  onTap:(){
+                                                                                    setState((){
+                                                                                      _selectedMainIndex = 0;
+                                                                                      _catName = null;
+                                                                                    });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    height: 40,
+                                                                                    width: MediaQuery.of(context).size.width * 0.8,
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(19),
+                                                                                      color: _selectedMainIndex == 0 ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                    ),
+                                                                                    child: Center(child: Text('All Categories',
+                                                                                      style: TextStyle(
+                                                                                        color:_selectedMainIndex == 0 ? Colors.white : Colors.black,
+                                                                                      ),
+                                                                                    )
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                SizedBox(height: 12,)
+                                                                              ],
+                                                                            );
+                                                                          } else {
+                                                                            // Render the regular items from the category list, subtract 1 from index
+                                                                            return Column(
+                                                                              children: [
+                                                                                GestureDetector(
+                                                                                  onTap: () {
+                                                                                    setState(() {
+                                                                                      _seeProductCategory = true;
+                                                                                      _productCat = _category[index - 1];
+                                                                                      _selectedMainIndex = index;
+                                                                                    });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    height: 40,
+                                                                                    width: MediaQuery.of(context).size.width * 0.8,
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(19),
+                                                                                      color: _selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                    ),
+                                                                                    child: Center(child: Text(_category[index - 1]['master_category'],
+                                                                                      style: TextStyle(
+                                                                                        color: _selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                      ),
+                                                                                    )
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                SizedBox(height: 12,)
+                                                                              ],
+                                                                            );
+                                                                          }
+                                                                        },
+                                                                      )
+                                                                    ),
+                                                                  );
+                                                                }else{
+                                                                  return CircularProgressIndicator();
+                                                                }
+                                                              }
                                                           ),
                                                         ],
-                                                      ),
-                                                      SliderTheme(
-                                                        data: SliderThemeData(
-                                                            trackHeight: 1.5
-                                                        ),
-                                                        child: RangeSlider(
-                                                          values: RangeValues(_startValue, _endValue),
-                                                          min: _startPoint,
-                                                          max: _endPoint,
-                                                          activeColor:Color(0xff7f78d8),
-                                                          // inactiveColor:Colors.grey.shade500,
-                                                          onChanged: ( values) {
-                                                            setState(() {
-                                                              _startValue = values.start;
-                                                              _endValue = values.end;
-                                                              _isSliderInteracted = true;
-                                                              startController.text = NumberFormat.decimalPattern().format(values.start.floor());
-                                                              endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+                                                      ):Column(
+                                                        children: [
+                                                          Container(
+                                                            height: 50,
+                                                            // color: Colors.grey,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(25),
+                                                                  topRight: Radius.circular(25),
+                                                                ),
+                                                                color: Colors.grey.shade200
+                                                            ),
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        setState((){
+                                                                          _seeProductCategory = false;
+                                                                        });
+                                                                      },
+                                                                      icon: Icon(Icons.arrow_back)
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text('Product Category',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.only(bottom: 70.0),
+                                                              child: ListView.builder(
+                                                                  itemCount: _productCat['product_categories'].length,
+                                                                  itemBuilder: (context, index){
+                                                                    return  Column(
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                          onTap:(){
+                                                                            setState(() {
+                                                                              // Toggle the selected state
+                                                                              _selectedIndex = (_selectedIndex == index) ? -1 : index;
+                                                                              _catName = _productCat['product_categories'][index]['name'];
+                                                                            });
+                                                                          },
+                                                                          child: Container(
+                                                                              height: 40,
+                                                                              width: MediaQuery.of(context).size.width*0.8,
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(19),
+                                                                                  color: (_selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
+                                                                              ),
+                                                                              child: Center(
+                                                                                  child: Text(_productCat['product_categories'][index]['name'],
+                                                                                    style: TextStyle(
+                                                                                        color: (_selectedIndex == index) ? Colors.white : Colors.black
+                                                                                    ),
+                                                                                  )
+                                                                              )
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(height: 8,)
+                                                                      ],
+                                                                    );
 
-                                                            });
-                                                          },
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 20.0),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          children: [
-                                                            Text('Select Merchants',
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.w800,
-                                                                  fontSize: 22
+                                                                  }
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
+                                                          )
+                                                        ],
                                                       ),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 20.0),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          children: [
-                                                            Text('Select Categories',
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.w800,
-                                                                  fontSize: 22
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                          child: Container()
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(bottom: 15.0),
+                                                      Positioned(
+                                                        bottom: 10,
+                                                        left:70,
+                                                        right: 70,
                                                         child: SizedBox(
                                                           height: 40,
                                                           width: MediaQuery.of(context).size.width*0.5,
                                                           child: FloatingActionButton(
                                                               onPressed: (){
                                                                 _loadCountryCode().then((value){
-                                                                  products = Network().getProducts(_scanBarcode, _code, _startValue.toInt(), _endValue.toInt(),context);
+                                                                  products = Network().getProducts(_scanBarcode, _code, _startValue.toInt(), _endValue.toInt(),_catName,context);
 
                                                                 });
                                                               },

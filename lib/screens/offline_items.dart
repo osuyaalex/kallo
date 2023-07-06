@@ -104,7 +104,7 @@ class _OfflineState extends State<Offline> {
                     }
                     final distance = Functions().calculateDistance(_latitude, _longitude, offline?[index].merchantLongitude??'', offline?[index].merchantLatitude??'');
                     return SizedBox(
-                      height: 270,
+                      height: 310,
                       width: 250,
                       child: Card(
                         elevation: 1,

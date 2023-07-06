@@ -41,7 +41,7 @@ class _MainHomeState extends State<MainHome> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLaunch', true);
           Navigator.of(context).pushReplacement(PageTransition(
-            child: const Dems(),
+            child: const MainHome(),
             type: PageTransitionType.fade,
             childCurrent: widget,
             duration: const Duration(milliseconds: 100),
@@ -54,7 +54,7 @@ class _MainHomeState extends State<MainHome> {
           prefs.setBool('isLaunchCamera', true);
 
           Navigator.of(context).pushReplacement(PageTransition(
-            child: const Dems(),
+            child: const MainHome(),
             type: PageTransitionType.fade,
             childCurrent: widget,
             duration: const Duration(milliseconds: 100),
@@ -66,7 +66,7 @@ class _MainHomeState extends State<MainHome> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isSearchBar', true);
           Navigator.of(context).pushReplacement(PageTransition(
-            child: const Dems(),
+            child: const MainHome(),
             type: PageTransitionType.fade,
             childCurrent: widget,
             duration: const Duration(milliseconds: 100),
@@ -83,9 +83,11 @@ class _MainHomeState extends State<MainHome> {
           EasyLoading.dismiss();
           if(user != null){
             snack(context, AppLocalizations.of(context)!.successfullySignedIn);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-              return Dems();
-            }));
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MainHome()),
+                  (Route<dynamic> route) => false,
+            );
 
           }
         },
@@ -134,7 +136,6 @@ class _MainHomeState extends State<MainHome> {
           top: BorderSide(
             color: Colors.grey.shade300
           ),
-
         ),
         colorBehindNavBar: Colors.white,
       ),
@@ -147,7 +148,7 @@ class _MainHomeState extends State<MainHome> {
       screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
         animateTabTransition: true,
         curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
+        duration: Duration(milliseconds: 400),
       ),
       navBarStyle: NavBarStyle.simple, // Choose the nav bar style with this property.
     );
