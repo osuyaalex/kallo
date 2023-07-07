@@ -188,7 +188,7 @@ class Network{
     }
   }
 
-  Future<Koye> getSortedProductsName(String name, String countryCode, String magnitude,int? priceMin, int? priceMax, String? productCat, BuildContext context) async {
+  Future<Koye> getSortedProductsName(String name, String countryCode, String? magnitude,int? priceMin, int? priceMax, String? productCat, BuildContext context) async {
     var jsonResponse;
 
     try {
@@ -238,7 +238,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
 
   }
-  Future<Koye> getSortedProducts(String barcode, String countryCode, String magnitude,int? priceMin, int? priceMax, String? productCat,  BuildContext context) async {
+  Future<Koye> getSortedProducts(String barcode, String countryCode, String? magnitude,int? priceMin, int? priceMax, String? productCat,  BuildContext context) async {
     var jsonResponse;
 
     try {
@@ -335,7 +335,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
 
   }
-  Future<Koye> getSortedProductsCategory(String countryCode, String? productCat,int? priceMin, int? priceMax, String magnitude, BuildContext context) async {
+  Future<Koye> getSortedProductsCategory(String countryCode, String? productCat,int? priceMin, int? priceMax, String? magnitude, BuildContext context) async {
     var jsonResponse;
 
     try {

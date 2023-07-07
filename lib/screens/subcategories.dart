@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:job/screens/sub_category_results.dart';
+import 'package:provider/provider.dart';
 
-class SubCategories extends StatelessWidget {
+import '../providers/animated.dart';
+
+class SubCategories extends StatefulWidget {
   final dynamic cats;
   const SubCategories({super.key, required this.cats});
 
   @override
+  State<SubCategories> createState() => _SubCategoriesState();
+}
+
+class _SubCategoriesState extends State<SubCategories> {
+  @override
   Widget build(BuildContext context) {
-    final productCategory = cats['product_categories'];
+    final animatedProvider = Provider.of<AnimatedProvider>(context);
+    final productCategory = widget.cats['product_categories'];
     return Scaffold(
       backgroundColor:Colors.grey.shade100,
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back, color: Colors.black,)
+        ),
         elevation: 0,
         backgroundColor:Colors.grey.shade100,
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
             Center(
@@ -23,7 +39,7 @@ class SubCategories extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('Sub Category',
+                    Text(widget.cats['master_category'],
                       style: TextStyle(
                           fontSize: 27,
                           fontWeight: FontWeight.w700
@@ -36,9 +52,8 @@ class SubCategories extends StatelessWidget {
             SizedBox(
               height: 25,
             ),
-            Center(
+            Expanded(
               child: Container(
-                height: 57.0 * productCategory.length,
                 width: MediaQuery.of(context).size.width*0.8,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -47,15 +62,22 @@ class SubCategories extends StatelessWidget {
                 child: ListView.builder(
                     itemCount: productCategory.length,
                     itemBuilder: (context, index){
-                      return GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return SubCategoryResults(productCategory: productCategory[index]['name']);
-                          }));
-                        },
-                        child: ListTile(
-                          title: Text(productCategory[index]['name']),
-                        ),
+                      return Column(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return SubCategoryResults(productCategory: productCategory[index]['name']);
+                              }));
+                            },
+                            child: ListTile(
+                              title: Text(productCategory[index]['name']),
+                              trailing: Icon(Icons.arrow_forward_ios_sharp),
+
+                            ),
+                          ),
+                          Divider()
+                        ],
                       );
                     }
                 ),

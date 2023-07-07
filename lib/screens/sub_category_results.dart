@@ -47,8 +47,6 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   final startController = TextEditingController();
   final endController = TextEditingController();
   bool _isSliderInteracted = false;
-  final String _ascend = 'asc';
-  final String _descend = 'desc';
   int _selectedContainerIndex = -1;
   bool _seeMainCategory = false;
   bool _seeProductCategory = false;
@@ -57,6 +55,8 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   dynamic productCat;
   int selectedIndex = -1;
   String? catName;
+  String? _magnitude;
+
 
 
 
@@ -97,9 +97,11 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
         if (_start == 0) {
           _timer?.cancel();
         }else {
-          setState(() {
-            _start--;
-          });
+         if(mounted){
+           setState(() {
+             _start--;
+           });
+         }
         }
 
       },
@@ -378,296 +380,335 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                 }else if(snapshot.hasData){
                   List<Pproducts>? offline = snapshot.data!.data!.products?.where((element) => element.merchantType == "offline").toList();
                   List<Pproducts>? online = snapshot.data!.data!.products?.where((element) => element.merchantType == "online").toList();
+                  if(snapshot.data!.itemFound == false){
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*0.1,
+                        ),
+                        Text(AppLocalizations.of(context)!.noProductsAvailable,
+                          style: TextStyle(
+                              fontSize: 16
+                          ),
+                        ),
+                       SizedBox(
+                         height: 20,
+                       ),
+                        SvgPicture.asset('asset/No Results Found.svg')
+                        //Image.asset("asset/No Results Found.gif")
+                        //Image.network("https://media2.giphy.com/media/3oEjI4sFlp73fvEYgw/giphy.gif?cid=6c09b952y6gku9ja4cdota89fesgu8yyqnuw2ckmmr6ucv9f&rid=giphy.gif&ct=g")
 
-                  return Column(
-                    children: [
-                      online!.isNotEmpty && offline!.isNotEmpty? AnimatedContainer(
-                          curve: Curves.ease,
-                          duration: Duration(milliseconds: 400),
-                          height: animatedProvider.myVariable ? 70 : 0,
-                          child: Container(
-                            color:Colors.grey.shade50,
-                            child: Card(
+                      ],
+                    );
+                  }else{
+                    return Column(
+                      children: [
+                        online!.isNotEmpty && offline!.isNotEmpty? AnimatedContainer(
+                            curve: Curves.ease,
+                            duration: Duration(milliseconds: 400),
+                            height: animatedProvider.myVariable ? 70 : 0,
+                            child: Container(
                               color:Colors.grey.shade50,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(7)
-                              ),
-                              elevation: 2,
-                              shadowColor: Color(0xff7F78D8).withOpacity(0.3),
-                              child: ClipRRect(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                                  child: AppBar(
-                                    elevation: 0,
-                                    automaticallyImplyLeading: false,
-                                    backgroundColor: Colors.grey.shade50,
-                                    title:  Center(
-                                      child: CustomSlidingSegmentedControl(
-                                        //isStretch: true,
-                                        initialValue: _selectedSegment.index,
-                                        children:  {
-                                          Segment.onlineShops.index: SizedBox(
-                                            child: _selectedSegment == Segment.onlineShops?
-                                            Row(
-                                              children: [
-                                                Icon(Icons.location_on, color: Colors.white, size: 19,),
-                                                Text(
-                                                  AppLocalizations.of(context)?.onlineShops??'',
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400
+                              child: Card(
+                                color:Colors.grey.shade50,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7)
+                                ),
+                                elevation: 2,
+                                shadowColor: Color(0xff7F78D8).withOpacity(0.3),
+                                child: ClipRRect(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                    child: AppBar(
+                                      elevation: 0,
+                                      automaticallyImplyLeading: false,
+                                      backgroundColor: Colors.grey.shade50,
+                                      title:  Center(
+                                        child: CustomSlidingSegmentedControl(
+                                          //isStretch: true,
+                                          initialValue: _selectedSegment.index,
+                                          children:  {
+                                            Segment.onlineShops.index: SizedBox(
+                                              child: _selectedSegment == Segment.onlineShops?
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.location_on, color: Colors.white, size: 19,),
+                                                  Text(
+                                                    AppLocalizations.of(context)?.onlineShops??'',
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w400
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ): Row(
-                                              children: [
-                                                const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
-                                                Text(
-                                                  AppLocalizations.of(context)?.onlineShops??'',
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400
+                                                ],
+                                              ): Row(
+                                                children: [
+                                                  const Icon(Icons.location_on_outlined, color: Colors.black,size: 19,),
+                                                  Text(
+                                                    AppLocalizations.of(context)?.onlineShops??'',
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w400
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
+                                                ],
+                                              ),
 
-                                          ),
-                                          Segment.shopsNearMe.index: SizedBox(
-                                            child: _selectedSegment == Segment.shopsNearMe?
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 4.0),
-                                                  child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
-                                                ),
-                                                Text(
-                                                  AppLocalizations.of(context)?.shopsNearMe??'',
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400
-                                                  ),
-                                                ),
-                                              ],
-                                            ): Row(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 4.0),
-                                                  child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
-                                                ),Text(
-                                                  AppLocalizations.of(context)?.shopsNearMe??'',
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400
-                                                  ),
-                                                ),
-                                              ],
                                             ),
+                                            Segment.shopsNearMe.index: SizedBox(
+                                              child: _selectedSegment == Segment.shopsNearMe?
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(right: 4.0),
+                                                    child: SvgPicture.asset('asset/shipping-car-svgrepo-com (1).svg',height: 19,),
+                                                  ),
+                                                  Text(
+                                                    AppLocalizations.of(context)?.shopsNearMe??'',
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w400
+                                                    ),
+                                                  ),
+                                                ],
+                                              ): Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(right: 4.0),
+                                                    child: SvgPicture.asset('asset/shipping-car-svgrepo-com.svg', height: 19,),
+                                                  ),Text(
+                                                    AppLocalizations.of(context)?.shopsNearMe??'',
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w400
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          },
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey.shade400,
+                                              borderRadius: BorderRadius.circular(20)
                                           ),
-                                        },
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey.shade400,
-                                            borderRadius: BorderRadius.circular(20)
+                                          thumbDecoration: BoxDecoration(
+                                              color: const Color(0xff7F78D8),
+                                              borderRadius: BorderRadius.circular(20)
+                                          ),
+                                          duration: const Duration(milliseconds: 200),
+                                          curve: Curves.easeInToLinear,
+                                          onValueChanged: (value) {
+                                            setState(() {
+                                              _switchToSegment(Segment.values[value]);
+                                            });
+                                          },
                                         ),
-                                        thumbDecoration: BoxDecoration(
-                                            color: const Color(0xff7F78D8),
-                                            borderRadius: BorderRadius.circular(20)
-                                        ),
-                                        duration: const Duration(milliseconds: 200),
-                                        curve: Curves.easeInToLinear,
-                                        onValueChanged: (value) {
-                                          setState(() {
-                                            _switchToSegment(Segment.values[value]);
-                                          });
-                                        },
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                      ):Container(),
-                      AnimatedBuilder(
-                          animation: animatedProvider,
-                          builder: (context, child) {
-                            return AnimatedContainer(
-                              curve: Curves.ease,
-                              duration: Duration(milliseconds: 400),
-                              height: animatedProvider.myVariable ? 50 : 0,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                                child: Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap:(){
-                                        setState(() {
-                                          _selectedContainerIndex = -1;
-                                        });
-                                        showModalBottomSheet(
-                                            context: context,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(25),
-                                                topRight: Radius.circular(25),
+                            )
+                        ):Container(),
+                        snapshot.data!.itemFound == true?AnimatedBuilder(
+                            animation: animatedProvider,
+                            builder: (context, child) {
+                              return AnimatedContainer(
+                                curve: Curves.ease,
+                                duration: Duration(milliseconds: 400),
+                                height: animatedProvider.myVariable ? 50 : 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap:(){
+                                          showModalBottomSheet(
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(25),
+                                                  topRight: Radius.circular(25),
+                                                ),
                                               ),
-                                            ),
-                                            builder: (context){
-                                              return StatefulBuilder(
-                                                  builder: (BuildContext context, StateSetter setState) {
+                                              builder: (context){
+                                                return StatefulBuilder(
+                                                    builder: (BuildContext context, StateSetter setState) {
 
-                                                    return Column(
-                                                      children: [
-                                                        Container(
-                                                          height: 50,
-                                                          // color: Colors.grey,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(25),
-                                                                topRight: Radius.circular(25),
-                                                              ),
-                                                              color: Colors.grey.shade200
-                                                          ),
-                                                          width: MediaQuery.of(context).size.width,
-                                                          child: Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                            child: Row(
-                                                              children: [
-                                                                IconButton(
-                                                                    onPressed: (){
-                                                                      Navigator.pop(context);
-                                                                      // setState((){
-                                                                      //   _startValue = 0.0;
-                                                                      //   _endValue = _endPoint;
-                                                                      // });
-                                                                    },
-                                                                    icon: Icon(Icons.close)
+                                                      return Column(
+                                                        children: [
+                                                          Container(
+                                                            height: 50,
+                                                            // color: Colors.grey,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(25),
+                                                                  topRight: Radius.circular(25),
                                                                 ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text('Sort',
-                                                                  style: TextStyle(
-                                                                      fontWeight: FontWeight.w600,
-                                                                      fontSize: 22
-                                                                  ),
-                                                                )
-                                                              ],
+                                                                color: Colors.grey.shade200
                                                             ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 25,
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap:(){
-                                                            setState((){
-                                                              _selectedContainerIndex =0;
-                                                            });
-                                                            _loadCountryCode().then((value){
-                                                              if(catName == null){
-                                                                productsCategory = Network().getProductsCategory(_code, widget.productCategory,null,null, context);
-                                                              }else{
-                                                                productsCategory = Network().getProductsCategory(_code, catName,null,null, context);
-                                                              }
-                                                            });
-                                                          },
-                                                          child: Container(
-                                                            height:50,
-                                                            width:MediaQuery.of(context).size.width*0.85,
-                                                            decoration:BoxDecoration(
-                                                                color: _selectedContainerIndex == 0? Color(0xff161b22):Colors.grey.shade300,
-                                                                borderRadius: BorderRadius.circular(18)
-                                                            ),
+                                                            width: MediaQuery.of(context).size.width,
                                                             child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        Navigator.pop(context);
+                                                                        // setState((){
+                                                                        //   _startValue = 0.0;
+                                                                        //   _endValue = _endPoint;
+                                                                        // });
+                                                                      },
+                                                                      icon: Icon(Icons.close)
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text('Sort',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 25,
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap:(){
+                                                              setState((){
+                                                                _selectedContainerIndex =0;
+                                                                _magnitude = null;
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                              height:50,
+                                                              width:MediaQuery.of(context).size.width*0.85,
+                                                              decoration:BoxDecoration(
+                                                                  color: _selectedContainerIndex == 0? Color(0xff161b22):Colors.grey.shade300,
+                                                                  borderRadius: BorderRadius.circular(18)
+                                                              ),
+                                                              child: Padding(
+                                                                  padding: const EdgeInsets.only(left: 20.0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                    children: [
+                                                                      Text('Most Relevant',
+                                                                        style: TextStyle(
+                                                                          fontWeight: FontWeight.w600,
+                                                                          fontSize: 17,
+                                                                          color: _selectedContainerIndex == 0?Colors.white:Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 18,),
+                                                          GestureDetector(
+                                                            onTap:(){
+                                                              setState((){
+                                                                _selectedContainerIndex = 1;
+                                                                _magnitude = 'asc';
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                              height:50,
+                                                              width:MediaQuery.of(context).size.width*0.85,
+                                                              decoration:BoxDecoration(
+                                                                  color: _selectedContainerIndex == 1 ?Color(0xff161b22):Colors.grey.shade300,
+                                                                  borderRadius: BorderRadius.circular(18)
+                                                              ),
+                                                              child: Padding(
                                                                 padding: const EdgeInsets.only(left: 20.0),
                                                                 child: Row(
                                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                                   children: [
-                                                                    Text('Most Relevant',
-                                                                      style: TextStyle(
-                                                                        fontWeight: FontWeight.w600,
-                                                                        fontSize: 17,
-                                                                        color: _selectedContainerIndex == 0?Colors.white:Colors.black,
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.only(right: 12.0),
+                                                                      child: Text('Price:',
+                                                                        style: TextStyle(
+                                                                          fontWeight: FontWeight.w600,
+                                                                          fontSize: 17,
+                                                                          color: _selectedContainerIndex == 1?Colors.white:Colors.black,
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ],
-                                                                )
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 18,),
-                                                        GestureDetector(
-                                                          onTap:(){
-                                                            setState((){
-                                                              _selectedContainerIndex = 1;
-                                                            });
-                                                            _loadCountryCode().then((value){
-                                                              if(catName == null){
-                                                                productsCategory= Network().getSortedProductsCategory(_code, widget.productCategory,null,null,'asc', context);
-                                                              }else{
-                                                                productsCategory= Network().getSortedProductsCategory(_code, catName,null,null,'asc', context);
-                                                              }
-                                                            });
-                                                          },
-                                                          child: Container(
-                                                            height:50,
-                                                            width:MediaQuery.of(context).size.width*0.85,
-                                                            decoration:BoxDecoration(
-                                                                color: _selectedContainerIndex == 1 ?Color(0xff161b22):Colors.grey.shade300,
-                                                                borderRadius: BorderRadius.circular(18)
-                                                            ),
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(right: 12.0),
-                                                                    child: Text('Price:',
+                                                                    Text('Low to high',
                                                                       style: TextStyle(
                                                                         fontWeight: FontWeight.w600,
                                                                         fontSize: 17,
                                                                         color: _selectedContainerIndex == 1?Colors.white:Colors.black,
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                  Text('Low to high',
-                                                                    style: TextStyle(
-                                                                      fontWeight: FontWeight.w600,
-                                                                      fontSize: 17,
-                                                                      color: _selectedContainerIndex == 1?Colors.white:Colors.black,
-                                                                    ),
-                                                                  )
-                                                                ],
+                                                                    )
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 18,
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap:(){
-                                                            setState((){
-                                                              _selectedContainerIndex = 2;
-                                                            });
-                                                            _loadCountryCode().then((value){
-                                                              if(catName == null){
-                                                                productsCategory= Network().getSortedProductsCategory(_code, widget.productCategory,null,null,'desc', context);
-                                                              }else{
-                                                                productsCategory= Network().getSortedProductsCategory(_code, catName,null,null,'desc', context);
-                                                              }});
-                                                          },
-                                                          child: Container(
-                                                            height:50,
+                                                          SizedBox(
+                                                            height: 18,
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap:(){
+                                                              setState((){
+                                                                _selectedContainerIndex = 2;
+                                                                _magnitude = '_desc';
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                              height:50,
+                                                              width:MediaQuery.of(context).size.width*0.85,
+                                                              decoration:BoxDecoration(
+                                                                  color: _selectedContainerIndex == 2?Color(0xff161b22):Colors.grey.shade300,
+                                                                  borderRadius: BorderRadius.circular(18)
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(left: 20.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.only(right: 12.0),
+                                                                      child: Text('Price:',
+                                                                        style: TextStyle(
+                                                                          fontWeight: FontWeight.w600,
+                                                                          fontSize: 17,
+                                                                          color: _selectedContainerIndex == 2?Colors.white:Colors.black,
+
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Text('High to low',
+                                                                      style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: 17,
+                                                                        color: _selectedContainerIndex == 2?Colors.white:Colors.black,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+
+                                                          const SizedBox(
+                                                            height: 18,
+                                                          ),
+                                                          Container(
+                                                            height:45,
                                                             width:MediaQuery.of(context).size.width*0.85,
                                                             decoration:BoxDecoration(
-                                                                color: _selectedContainerIndex == 2?Color(0xff161b22):Colors.grey.shade300,
+                                                                color: Colors.grey.shade300,
                                                                 borderRadius: BorderRadius.circular(18)
                                                             ),
                                                             child: Padding(
@@ -677,613 +718,628 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                 children: [
                                                                   Padding(
                                                                     padding: const EdgeInsets.only(right: 12.0),
-                                                                    child: Text('Price:',
+                                                                    child: Text('Distance:',
                                                                       style: TextStyle(
-                                                                        fontWeight: FontWeight.w600,
-                                                                        fontSize: 17,
-                                                                        color: _selectedContainerIndex == 2?Colors.white:Colors.black,
-
+                                                                          fontWeight: FontWeight.w600,
+                                                                          fontSize: 17
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  Text('High to low',
-                                                                    style: TextStyle(
-                                                                      fontWeight: FontWeight.w600,
-                                                                      fontSize: 17,
-                                                                      color: _selectedContainerIndex == 2?Colors.white:Colors.black,
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(
-                                                          height: 18,
-                                                        ),
-                                                        Container(
-                                                          height:45,
-                                                          width:MediaQuery.of(context).size.width*0.85,
-                                                          decoration:BoxDecoration(
-                                                              color: Colors.grey.shade300,
-                                                              borderRadius: BorderRadius.circular(18)
-                                                          ),
-                                                          child: Padding(
-                                                            padding: const EdgeInsets.only(left: 20.0),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets.only(right: 12.0),
-                                                                  child: Text('Distance:',
+                                                                  Text('Closest first',
                                                                     style: TextStyle(
                                                                         fontWeight: FontWeight.w600,
                                                                         fontSize: 17
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                                Text('Closest first',
-                                                                  style: TextStyle(
-                                                                      fontWeight: FontWeight.w600,
-                                                                      fontSize: 17
-                                                                  ),
-                                                                )
-                                                              ],
+                                                                  )
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  }
-                                              );
-                                            }
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: 80,
-                                        padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(25),
-                                            color: Colors.grey.shade200
-                                        ),
-                                        child: Center(
-                                          child: Text('Sort',
-                                            style: TextStyle(
-                                                fontSize: 16.5,
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.w400
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 14,
-                                    ),
-                                    GestureDetector(
-                                      onTap:()async{
-                                        if (!_hasCalculatedEndPoint) {
-                                          List<Pproducts>? listProducts = snapshot.data!.data!.products;
-                                          double totalPrices = 0;
-                                          if (listProducts != null) {
-                                            for (Pproducts product in listProducts) {
-                                              if (product.price != null) {
-                                                if (product.price is String) {
-                                                  double? parsedPrice = double.tryParse(product.price as String);
-                                                  if (parsedPrice != null) {
-                                                    totalPrices += parsedPrice;
-                                                  }
-                                                } else if (product.price is num) {
-                                                  totalPrices += product.price as num;
-                                                }
-                                              }
-                                            }
-                                          }
-
-                                          setState(() {
-                                            _endPoint = totalPrices * 3;
-                                            _hasCalculatedEndPoint = true; // Set the flag to true once _endPoint is calculated
-                                          });
-                                        }
-
-                                        setState((){
-                                          _startValue = 0.0;
-                                          _endValue = _endPoint;
-                                          startController.clear();
-                                          endController.clear();
-                                          _isSliderInteracted = false;
-                                          selectedIndex = -1;
-                                          _seeMainCategory = false;
-                                          _seeProductCategory = false;
-                                        });
-                                        showModalBottomSheet(
-                                            context: context,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(25),
-                                                    topRight: Radius.circular(25)
-                                                )
-                                            ),
-                                            builder: (context){
-                                              return StatefulBuilder(
-                                                  builder: (BuildContext context, StateSetter setState) {
-
-                                                    String displayValue;
-                                                    //.floor is basically used to convert doubles to integers
-                                                    displayValue = _startValue.floor().toString();
-                                                    if (_startValue >= 1000) {
-                                                      final formatter = NumberFormat("#,###");
-                                                      displayValue = formatter.format(_startValue);
-                                                    }
-                                                    String displaySecondValue;
-                                                    if (_endValue == _endValue.floor()) {
-                                                      //.floor is basically used to convert doubles to integers
-                                                      displaySecondValue = _endValue.floor().toString();
-                                                    } else {
-                                                      displaySecondValue = _endValue.toString();
-                                                    }
-                                                    if (_endValue >= 1000) {
-                                                      final formatter = NumberFormat("#,###");
-                                                      displaySecondValue = formatter.format(_endValue);
-                                                    }
-
-
-                                                    return Stack(
-                                                      children: [
-                                                        _seeMainCategory == false?Column(
-                                                          children: [
-                                                            Container(
-                                                              height: 50,
-                                                              // color: Colors.grey,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius.circular(25),
-                                                                    topRight: Radius.circular(25),
-                                                                  ),
-                                                                  color: Colors.grey.shade200
-                                                              ),
-                                                              width: MediaQuery.of(context).size.width,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                                child: Row(
-                                                                  children: [
-                                                                    IconButton(
-                                                                        onPressed: (){
-                                                                          Navigator.pop(context);
-                                                                          // setState((){
-                                                                          //   _startValue = 0.0;
-                                                                          //   _endValue = _endPoint;
-                                                                          // });
-                                                                        },
-                                                                        icon: Icon(Icons.close)
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Text('Filter',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 12,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Text('Price',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w800,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 12,
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                Container(
-                                                                  height: 70,
-                                                                  width: 130,
-                                                                  padding:EdgeInsets.symmetric(horizontal: 12),
-                                                                  decoration:BoxDecoration(
-                                                                      color: Colors.grey.shade400,
-                                                                      borderRadius: BorderRadius.circular(12)
-                                                                  ),
-                                                                  child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
-                                                                  TextField(
-                                                                    enabled: _isSliderInteracted,
-                                                                    decoration: InputDecoration(
-                                                                        prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
-                                                                          style: TextStyle(
-                                                                              fontSize: 18
-                                                                          ),
-                                                                        ),
-                                                                        border: InputBorder.none,
-                                                                        hintText: displayValue
-                                                                    ),
-                                                                    controller: startController,
-                                                                    keyboardType: TextInputType.number,
-                                                                  )
-                                                                      : TextField(
-                                                                    enabled: _isSliderInteracted,
-                                                                    decoration: InputDecoration(
-                                                                        border: InputBorder.none, hintText: displayValue
-                                                                    ),
-                                                                    controller: startController,
-                                                                    keyboardType: TextInputType.number,
-                                                                  )
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 14,
-                                                                ),
-                                                                Text('to'),
-                                                                SizedBox(
-                                                                  width: 14,
-                                                                ),
-                                                                Container(
-                                                                  height: 70,
-                                                                  width: 130,
-                                                                  padding:EdgeInsets.symmetric(horizontal: 12),
-                                                                  decoration:BoxDecoration(
-                                                                      color: Colors.grey.shade400,
-                                                                      borderRadius: BorderRadius.circular(12)
-                                                                  ),
-                                                                  child: Center(
-                                                                      child: snapshot.data!.data!.products!.isNotEmpty?
-                                                                      TextField(
-                                                                        enabled: _isSliderInteracted,
-                                                                        decoration: InputDecoration(
-                                                                            prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
-                                                                              style: TextStyle(
-                                                                                  fontSize: 18
-                                                                              ),
-                                                                            ),
-                                                                            border: InputBorder.none, hintText: displaySecondValue
-                                                                        ),
-                                                                        controller: endController,
-                                                                        keyboardType: TextInputType.number,
-                                                                      )
-                                                                          : TextField(
-                                                                        enabled: _isSliderInteracted,
-                                                                        decoration: InputDecoration(
-                                                                            border: InputBorder.none, hintText: displaySecondValue
-                                                                        ),
-                                                                        controller: endController,
-                                                                        keyboardType: TextInputType.number,
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SliderTheme(
-                                                              data: SliderThemeData(
-                                                                  trackHeight: 1.5
-                                                              ),
-                                                              child: RangeSlider(
-                                                                values: RangeValues(_startValue, _endValue),
-                                                                min: _startPoint,
-                                                                max: _endPoint,
-                                                                activeColor:Color(0xff7f78d8),
-                                                                // inactiveColor:Colors.grey.shade500,
-                                                                onChanged: ( values) {
-                                                                  setState(() {
-                                                                    _startValue = values.start;
-                                                                    _endValue = values.end;
-                                                                    _isSliderInteracted = true;
-                                                                    startController.text = NumberFormat.decimalPattern().format(values.start.floor());
-                                                                    endController.text = NumberFormat.decimalPattern().format(values.end.floor());
-
-                                                                  });
-                                                                },
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  TextButton(
-                                                                    onPressed: () {
-                                                                      setState((){
-                                                                        _seeMainCategory = true;
-                                                                      });
-                                                                    },
-                                                                    child: Text('Select Categories',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          color: Colors.black,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                                child: Container()
-                                                            ),
-
-                                                          ],
-                                                        ):_seeProductCategory== false?Column(
-                                                          children: [
-                                                            Container(
-                                                              height: 50,
-                                                              // color: Colors.grey,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius.circular(25),
-                                                                    topRight: Radius.circular(25),
-                                                                  ),
-                                                                  color: Colors.grey.shade200
-                                                              ),
-                                                              width: MediaQuery.of(context).size.width,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                                child: Row(
-                                                                  children: [
-                                                                    IconButton(
-                                                                        onPressed: (){
-                                                                          setState((){
-                                                                            _seeMainCategory = false;
-                                                                          });
-                                                                        },
-                                                                        icon: Icon(Icons.close)
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Text('Categories',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            FutureBuilder(
-                                                                future: loadCategoryJson(),
-                                                                builder: (context, snapshot){
-                                                                  if(snapshot.hasData){
-                                                                    seeSnapshot = snapshot;
-                                                                    category = seeSnapshot.data;
-                                                                    return Expanded(
-                                                                      child: Padding(
-                                                                        padding: const EdgeInsets.only(bottom: 70.0),
-                                                                        child: ListView.builder(
-                                                                            itemCount: category.length,
-                                                                            itemBuilder: (context, index){
-                                                                              return Column(
-                                                                                children: [
-                                                                                  GestureDetector(
-                                                                                    onTap:(){
-                                                                                      setState((){
-                                                                                        _seeProductCategory = true;
-                                                                                        productCat = category[index];
-                                                                                      });
-                                                                                    },
-                                                                                    child: Container(
-                                                                                      height: 40,
-                                                                                      width: MediaQuery.of(context).size.width*0.8,
-                                                                                      decoration: BoxDecoration(
-                                                                                          borderRadius: BorderRadius.circular(19),
-                                                                                          color: Colors.grey.shade200
-                                                                                      ),
-                                                                                      child:  Center(child: Text(category[index]['master_category'])),
-                                                                                    ),
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 8,
-                                                                                  )
-                                                                                ],
-                                                                              );
-                                                                            }
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  }else{
-                                                                    return CircularProgressIndicator();
-                                                                  }
-                                                                }
-                                                            ),
-                                                          ],
-                                                        ):Column(
-                                                          children: [
-                                                            Container(
-                                                              height: 50,
-                                                              // color: Colors.grey,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius.circular(25),
-                                                                    topRight: Radius.circular(25),
-                                                                  ),
-                                                                  color: Colors.grey.shade200
-                                                              ),
-                                                              width: MediaQuery.of(context).size.width,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                                child: Row(
-                                                                  children: [
-                                                                    IconButton(
-                                                                        onPressed: (){
-                                                                          setState((){
-                                                                            _seeProductCategory = false;
-                                                                          });
-                                                                        },
-                                                                        icon: Icon(Icons.close)
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Text('Product Category',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 22
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Expanded(
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.only(bottom: 70.0),
-                                                                child: ListView.builder(
-                                                                    itemCount: productCat['product_categories'].length,
-                                                                    itemBuilder: (context, index){
-                                                                      return  Column(
-                                                                        children: [
-                                                                          GestureDetector(
-                                                                            onTap:(){
-                                                                              setState(() {
-                                                                                // Toggle the selected state
-                                                                                selectedIndex = (selectedIndex == index) ? -1 : index;
-                                                                                catName = productCat['product_categories'][index]['name'];
-                                                                              });
-                                                                            },
-                                                                            child: Container(
-                                                                                height: 40,
-                                                                                width: MediaQuery.of(context).size.width*0.8,
-                                                                                decoration: BoxDecoration(
-                                                                                    borderRadius: BorderRadius.circular(19),
-                                                                                    color: (selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
-                                                                                ),
-                                                                                child: Center(
-                                                                                    child: Text(productCat['product_categories'][index]['name'],
-                                                                                      style: TextStyle(
-                                                                                        color: (selectedIndex == index) ? Colors.white : Colors.black
-                                                                                      ),
-                                                                                    )
-                                                                                )
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: 8,)
-                                                                        ],
-                                                                      );
-
-                                                                    }
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        Positioned(
-                                                          bottom: 10,
-                                                          left:70,
-                                                          right: 70,
-                                                          child: Container(
+                                                          SizedBox(
+                                                            height: 30,
+                                                          ),
+                                                          Container(
                                                             height: 40,
-                                                            constraints: BoxConstraints(
-                                                              maxWidth: MediaQuery.of(context).size.width * 0.5,
-                                                            ),
+                                                           width:MediaQuery.of(context).size.width * 0.5,
                                                             child: FloatingActionButton(
                                                                 onPressed: (){
                                                                   _loadCountryCode().then((value){
-                                                                    productsCategory = Network().getProductsCategory(_code, catName,_startValue.toInt(),_endValue.toInt(), context);
-
-                                                                  });
+                                                                    if(catName == null){
+                                                                      productsCategory= Network().getSortedProductsCategory(_code, widget.productCategory,null,null,_magnitude, context);
+                                                                    }else{
+                                                                      productsCategory= Network().getSortedProductsCategory(_code, catName,null,null,_magnitude, context);
+                                                                    }});
                                                                 },
                                                                 shape: RoundedRectangleBorder(
                                                                   borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                                 ),
                                                                 backgroundColor:Color(0xff7F78D8),
                                                                 child: Text('Show Results',
-                                                                style: TextStyle(
-                                                                  fontSize: 18
-                                                                ),
+                                                                  style: TextStyle(
+                                                                      fontSize: 18
+                                                                  ),
                                                                 )
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  }
-                                              );
-                                            }
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: 90,
-                                        padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(25),
-                                            color: Colors.grey.shade200
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text('Filter',
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 80,
+                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(25),
+                                              color: Colors.grey.shade200
+                                          ),
+                                          child: Center(
+                                            child: Text('Sort',
                                               style: TextStyle(
                                                   fontSize: 16.5,
                                                   color: Colors.blue,
                                                   fontWeight: FontWeight.w400
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 6.0),
-                                              child: SvgPicture.asset('asset/filter-svgrepo-com (1).svg', height: 18,),
-                                            )
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
-                      ),
-                      Expanded(
-                        child:online.isNotEmpty && offline!.isNotEmpty? SizedBox(
-                            width: double.infinity,
-                            child:Stack(
-                              children: [
-                                SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1, 0),
-                                    end: Offset.zero,
-                                  ).animate(_animationController),
-                                  child: Offline(snapshot: snapshot,),
-                                ),
-                                SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset.zero,
-                                    end: Offset(-1, 0),
-                                  ).animate(_animationController),
-                                  child: Online(snapshot: snapshot,),
-                                ),
+                                      const SizedBox(
+                                        width: 14,
+                                      ),
+                                      GestureDetector(
+                                        onTap:()async{
+                                          if (!_hasCalculatedEndPoint) {
+                                            List<Pproducts>? listProducts = snapshot.data!.data!.products;
+                                            double totalPrices = 0;
+                                            if (listProducts != null) {
+                                              for (Pproducts product in listProducts) {
+                                                if (product.price != null) {
+                                                  if (product.price is String) {
+                                                    double? parsedPrice = double.tryParse(product.price as String);
+                                                    if (parsedPrice != null) {
+                                                      totalPrices += parsedPrice;
+                                                    }
+                                                  } else if (product.price is num) {
+                                                    totalPrices += product.price as num;
+                                                  }
+                                                }
+                                              }
+                                            }
 
-                              ],
-                            )
-                        ):Online(snapshot: snapshot),
-                      ),
-                    ],
-                  );
+                                            setState(() {
+                                              _endPoint = totalPrices * 3;
+                                              _hasCalculatedEndPoint = true; // Set the flag to true once _endPoint is calculated
+                                            });
+                                          }
+
+                                          setState((){
+                                            _startValue = 0.0;
+                                            _endValue = _endPoint;
+                                            startController.clear();
+                                            endController.clear();
+                                            _isSliderInteracted = false;
+                                            selectedIndex = -1;
+                                            _seeMainCategory = false;
+                                            _seeProductCategory = false;
+                                          });
+                                          showModalBottomSheet(
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(25),
+                                                      topRight: Radius.circular(25)
+                                                  )
+                                              ),
+                                              builder: (context){
+                                                return StatefulBuilder(
+                                                    builder: (BuildContext context, StateSetter setState) {
+
+                                                      String displayValue;
+                                                      //.floor is basically used to convert doubles to integers
+                                                      displayValue = _startValue.floor().toString();
+                                                      if (_startValue >= 1000) {
+                                                        final formatter = NumberFormat("#,###");
+                                                        displayValue = formatter.format(_startValue);
+                                                      }
+                                                      String displaySecondValue;
+                                                      if (_endValue == _endValue.floor()) {
+                                                        //.floor is basically used to convert doubles to integers
+                                                        displaySecondValue = _endValue.floor().toString();
+                                                      } else {
+                                                        displaySecondValue = _endValue.toString();
+                                                      }
+                                                      if (_endValue >= 1000) {
+                                                        final formatter = NumberFormat("#,###");
+                                                        displaySecondValue = formatter.format(_endValue);
+                                                      }
+
+
+                                                      return Stack(
+                                                        children: [
+                                                          _seeMainCategory == false?Column(
+                                                            children: [
+                                                              Container(
+                                                                height: 50,
+                                                                // color: Colors.grey,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(25),
+                                                                      topRight: Radius.circular(25),
+                                                                    ),
+                                                                    color: Colors.grey.shade200
+                                                                ),
+                                                                width: MediaQuery.of(context).size.width,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      IconButton(
+                                                                          onPressed: (){
+                                                                            Navigator.pop(context);
+                                                                            // setState((){
+                                                                            //   _startValue = 0.0;
+                                                                            //   _endValue = _endPoint;
+                                                                            // });
+                                                                          },
+                                                                          icon: Icon(Icons.close)
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 10,
+                                                                      ),
+                                                                      Text('Filter',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight.w600,
+                                                                            fontSize: 22
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 12,
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(left: 20.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                  children: [
+                                                                    Text('Price',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight.w600,
+                                                                          fontSize: 22
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 12,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  Container(
+                                                                    height: 70,
+                                                                    width: 130,
+                                                                    padding:EdgeInsets.symmetric(horizontal: 12),
+                                                                    decoration:BoxDecoration(
+                                                                        color: Colors.grey.shade400,
+                                                                        borderRadius: BorderRadius.circular(12)
+                                                                    ),
+                                                                    child: Center(child:  snapshot.data!.data!.products!.isNotEmpty?
+                                                                    TextField(
+                                                                      enabled: _isSliderInteracted,
+                                                                      decoration: InputDecoration(
+                                                                          prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
+                                                                            style: TextStyle(
+                                                                                fontSize: 18
+                                                                            ),
+                                                                          ),
+                                                                          border: InputBorder.none,
+                                                                          hintText: displayValue
+                                                                      ),
+                                                                      controller: startController,
+                                                                      keyboardType: TextInputType.number,
+                                                                    )
+                                                                        : TextField(
+                                                                      enabled: _isSliderInteracted,
+                                                                      decoration: InputDecoration(
+                                                                          border: InputBorder.none, hintText: displayValue
+                                                                      ),
+                                                                      controller: startController,
+                                                                      keyboardType: TextInputType.number,
+                                                                    )
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 14,
+                                                                  ),
+                                                                  Text('to'),
+                                                                  SizedBox(
+                                                                    width: 14,
+                                                                  ),
+                                                                  Container(
+                                                                    height: 70,
+                                                                    width: 130,
+                                                                    padding:EdgeInsets.symmetric(horizontal: 12),
+                                                                    decoration:BoxDecoration(
+                                                                        color: Colors.grey.shade400,
+                                                                        borderRadius: BorderRadius.circular(12)
+                                                                    ),
+                                                                    child: Center(
+                                                                        child: snapshot.data!.data!.products!.isNotEmpty?
+                                                                        TextField(
+                                                                          enabled: _isSliderInteracted,
+                                                                          decoration: InputDecoration(
+                                                                              prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
+                                                                                style: TextStyle(
+                                                                                    fontSize: 18
+                                                                                ),
+                                                                              ),
+                                                                              border: InputBorder.none, hintText: displaySecondValue
+                                                                          ),
+                                                                          controller: endController,
+                                                                          keyboardType: TextInputType.number,
+                                                                        )
+                                                                            : TextField(
+                                                                          enabled: _isSliderInteracted,
+                                                                          decoration: InputDecoration(
+                                                                              border: InputBorder.none, hintText: displaySecondValue
+                                                                          ),
+                                                                          controller: endController,
+                                                                          keyboardType: TextInputType.number,
+                                                                        )),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SliderTheme(
+                                                                data: SliderThemeData(
+                                                                    trackHeight: 1.5
+                                                                ),
+                                                                child: RangeSlider(
+                                                                  values: RangeValues(_startValue, _endValue),
+                                                                  min: _startPoint,
+                                                                  max: _endPoint,
+                                                                  activeColor:Color(0xff7f78d8),
+                                                                  // inactiveColor:Colors.grey.shade500,
+                                                                  onChanged: ( values) {
+                                                                    setState(() {
+                                                                      _startValue = values.start;
+                                                                      _endValue = values.end;
+                                                                      _isSliderInteracted = true;
+                                                                      startController.text = NumberFormat.decimalPattern().format(values.start.floor());
+                                                                      endController.text = NumberFormat.decimalPattern().format(values.end.floor());
+
+                                                                    });
+                                                                  },
+                                                                ),
+                                                              ),
+                                                               SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              GestureDetector(
+                                                                onTap:(){
+                                                                  setState((){
+                                                                      _seeMainCategory = true;
+                                                                    });
+                                                                },
+                                                                child: Container(
+                                                                  height:50,
+                                                                  width: MediaQuery.of(context).size.width*0.95,
+                                                                  decoration:BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(24),
+                                                                    color: Color(0xff161b22),
+                                                                  ),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:MainAxisAlignment.spaceAround,
+                                                                    children: [
+                                                                      Row(
+                                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                                        children: [
+                                                                          Text('Select Categories',
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.w600,
+                                                                                color: Colors.white,
+                                                                                fontSize: 22
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(width: 15,),
+                                                                          catName == null ?
+                                                                          Text('All categories',
+                                                                            style: TextStyle(
+                                                                                fontSize: 13,
+                                                                                color: Colors.white
+                                                                            ),
+                                                                          ):Text(catName!,
+                                                                            style: TextStyle(
+                                                                                fontSize: 13,
+                                                                                color: Colors.white
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                      Icon(Icons.arrow_forward_ios_sharp, color: Colors.white,)
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                  child: Container()
+                                                              ),
+
+                                                            ],
+                                                          ):_seeProductCategory== false?Column(
+                                                            children: [
+                                                              Container(
+                                                                height: 50,
+                                                                // color: Colors.grey,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(25),
+                                                                      topRight: Radius.circular(25),
+                                                                    ),
+                                                                    color: Colors.grey.shade200
+                                                                ),
+                                                                width: MediaQuery.of(context).size.width,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      IconButton(
+                                                                          onPressed: (){
+                                                                            setState((){
+                                                                              _seeMainCategory = false;
+                                                                            });
+                                                                          },
+                                                                          icon: Icon(Icons.arrow_back)
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 10,
+                                                                      ),
+                                                                      Text('Categories',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight.w600,
+                                                                            fontSize: 22
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              FutureBuilder(
+                                                                  future: loadCategoryJson(),
+                                                                  builder: (context, snapshot){
+                                                                    if(snapshot.hasData){
+                                                                      seeSnapshot = snapshot;
+                                                                      category = seeSnapshot.data;
+                                                                      return Expanded(
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.only(bottom: 70.0),
+                                                                          child: ListView.builder(
+                                                                              itemCount: category.length,
+                                                                              itemBuilder: (context, index){
+                                                                                return Column(
+                                                                                  children: [
+                                                                                    GestureDetector(
+                                                                                      onTap:(){
+                                                                                        setState((){
+                                                                                          _seeProductCategory = true;
+                                                                                          productCat = category[index];
+                                                                                        });
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        height: 40,
+                                                                                        width: MediaQuery.of(context).size.width*0.8,
+                                                                                        decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(19),
+                                                                                            color: Colors.grey.shade200
+                                                                                        ),
+                                                                                        child:  Center(child: Text(category[index]['master_category'])),
+                                                                                      ),
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      height: 8,
+                                                                                    )
+                                                                                  ],
+                                                                                );
+                                                                              }
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    }else{
+                                                                      return CircularProgressIndicator();
+                                                                    }
+                                                                  }
+                                                              ),
+                                                            ],
+                                                          ):Column(
+                                                            children: [
+                                                              Container(
+                                                                height: 50,
+                                                                // color: Colors.grey,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(25),
+                                                                      topRight: Radius.circular(25),
+                                                                    ),
+                                                                    color: Colors.grey.shade200
+                                                                ),
+                                                                width: MediaQuery.of(context).size.width,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      IconButton(
+                                                                          onPressed: (){
+                                                                            setState((){
+                                                                              _seeProductCategory = false;
+                                                                            });
+                                                                          },
+                                                                          icon: Icon(Icons.arrow_back)
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 10,
+                                                                      ),
+                                                                      Text('Product Category',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight.w600,
+                                                                            fontSize: 22
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Expanded(
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.only(bottom: 70.0),
+                                                                  child: ListView.builder(
+                                                                      itemCount: productCat['product_categories'].length,
+                                                                      itemBuilder: (context, index){
+                                                                        return  Column(
+                                                                          children: [
+                                                                            GestureDetector(
+                                                                              onTap:(){
+                                                                                setState(() {
+                                                                                  // Toggle the selected state
+                                                                                  selectedIndex = (selectedIndex == index) ? -1 : index;
+                                                                                  catName = productCat['product_categories'][index]['name'];
+                                                                                });
+                                                                              },
+                                                                              child: Container(
+                                                                                  height: 40,
+                                                                                  width: MediaQuery.of(context).size.width*0.8,
+                                                                                  decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(19),
+                                                                                      color: (selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
+                                                                                  ),
+                                                                                  child: Center(
+                                                                                      child: Text(productCat['product_categories'][index]['name'],
+                                                                                        style: TextStyle(
+                                                                                            color: (selectedIndex == index) ? Colors.white : Colors.black
+                                                                                        ),
+                                                                                      )
+                                                                                  )
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: 8,)
+                                                                          ],
+                                                                        );
+
+                                                                      }
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          Positioned(
+                                                            bottom: 10,
+                                                            left:70,
+                                                            right: 70,
+                                                            child: Container(
+                                                              height: 40,
+                                                              constraints: BoxConstraints(
+                                                                maxWidth: MediaQuery.of(context).size.width * 0.5,
+                                                              ),
+                                                              child: FloatingActionButton(
+                                                                  onPressed: (){
+                                                                    setState(() {
+                                                                      _selectedContainerIndex = -1;
+                                                                    });
+                                                                    _loadCountryCode().then((value){
+                                                                      productsCategory = Network().getProductsCategory(_code, catName,_startValue.toInt(),_endValue.toInt(), context);
+
+                                                                    });
+                                                                  },
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                                  ),
+                                                                  backgroundColor:Color(0xff7F78D8),
+                                                                  child: Text('Show Results',
+                                                                    style: TextStyle(
+                                                                        fontSize: 18
+                                                                    ),
+                                                                  )
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 90,
+                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(25),
+                                              color: Colors.grey.shade200
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text('Filter',
+                                                style: TextStyle(
+                                                    fontSize: 16.5,
+                                                    color: Colors.blue,
+                                                    fontWeight: FontWeight.w400
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 6.0),
+                                                child: SvgPicture.asset('asset/filter-svgrepo-com (1).svg', height: 18,),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                        ):Container(),
+                        Expanded(
+                          child:online.isNotEmpty && offline!.isNotEmpty? SizedBox(
+                              width: double.infinity,
+                              child:Stack(
+                                children: [
+                                  SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1, 0),
+                                      end: Offset.zero,
+                                    ).animate(_animationController),
+                                    child: Offline(snapshot: snapshot,),
+                                  ),
+                                  SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset.zero,
+                                      end: Offset(-1, 0),
+                                    ).animate(_animationController),
+                                    child: Online(snapshot: snapshot,),
+                                  ),
+
+                                ],
+                              )
+                          ):Online(snapshot: snapshot),
+                        ),
+                      ],
+                    );
+                  }
                 }else{
                   return const Center(
                     child: CircularProgressIndicator(color: Colors.black,),

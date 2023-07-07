@@ -49,8 +49,6 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
   final startController = TextEditingController();
   final endController = TextEditingController();
   bool _isSliderInteracted = false;
-  final String _ascend = 'asc';
-  final String _descend = 'desc';
   int _selectedContainerIndex = -1;
   bool _seeMainCategory = false;
   bool _seeProductCategory = false;
@@ -60,6 +58,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
   int _selectedIndex = -1;
   String? _catName;
   int _selectedMainIndex = -1;
+  String? _magnitude;
   //RangeValues _selectedValues = RangeValues(0.0, 100000.0);
 
 
@@ -334,6 +333,9 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                       onPressed: (){
                         setState(() {
                           _hasCalculatedEndPoint = false;
+                          _selectedContainerIndex = -1;
+                          _selectedMainIndex = -1;
+                          _selectedIndex = -1;
                         });
                         _loadCountryCode();
                         scanBarcodeNormal().then((value){
@@ -546,9 +548,6 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                 children: [
                                   GestureDetector(
                                     onTap:(){
-                                      setState(() {
-                                        _selectedContainerIndex = -1;
-                                      });
                                       showModalBottomSheet(
                                           context: context,
                                           shape: RoundedRectangleBorder(
@@ -608,9 +607,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                         onTap:(){
                                                           setState((){
                                                             _selectedContainerIndex =0;
-                                                          });
-                                                          _loadCountryCode().then((value){
-                                                            products = Network().getProducts(_scanBarcode, _code, null, null, _catName,context);
+                                                            _magnitude = null;
                                                           });
                                                         },
                                                         child: Container(
@@ -642,9 +639,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                         onTap:(){
                                                           setState((){
                                                             _selectedContainerIndex = 1;
-                                                          });
-                                                          _loadCountryCode().then((value){
-                                                            products= Network().getSortedProducts(_scanBarcode, _code, _ascend,null,null,_catName, context);
+                                                            _magnitude = 'asc';
                                                           });
                                                         },
                                                         child: Container(
@@ -688,10 +683,9 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                         onTap:(){
                                                           setState((){
                                                             _selectedContainerIndex = 2;
+                                                            _magnitude = 'desc';
                                                           });
-                                                          _loadCountryCode().then((value){
-                                                            products = Network().getSortedProducts(_scanBarcode, _code, _descend,null,null,_catName, context);
-                                                          });
+
                                                         },
                                                         child: Container(
                                                           height:50,
@@ -763,6 +757,29 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                           ),
                                                         ),
                                                       ),
+                                                      SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Container(
+                                                        height: 40,
+                                                        width:MediaQuery.of(context).size.width * 0.5,
+                                                        child: FloatingActionButton(
+                                                            onPressed: (){
+                                                              _loadCountryCode().then((value){
+                                                                products = Network().getSortedProducts(_scanBarcode, _code, _magnitude,null,null,_catName, context);
+                                                              });
+                                                            },
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                            ),
+                                                            backgroundColor:Color(0xff7F78D8),
+                                                            child: Text('Show Results',
+                                                              style: TextStyle(
+                                                                  fontSize: 18
+                                                              ),
+                                                            )
+                                                        ),
+                                                      ),
                                                     ],
                                                   );
                                                 }
@@ -824,8 +841,6 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                         startController.clear();
                                         endController.clear();
                                         _isSliderInteracted = false;
-                                        _selectedMainIndex = -1;
-                                        _selectedIndex = -1;
                                         _seeMainCategory = false;
                                         _seeProductCategory = false;
                                       });
@@ -911,7 +926,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                               children: [
                                                                 Text('Price',
                                                                   style: TextStyle(
-                                                                      fontWeight: FontWeight.w800,
+                                                                      fontWeight: FontWeight.w600,
                                                                       fontSize: 22
                                                                   ),
                                                                 ),
@@ -1023,26 +1038,50 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                           const SizedBox(
                                                             height: 20,
                                                           ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(left: 20.0),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              children: [
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    setState((){
-                                                                      _seeMainCategory = true;
-                                                                    });
-                                                                  },
-                                                                  child: Text('Select Categories',
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w600,
-                                                                        color: Colors.black,
-                                                                        fontSize: 22
-                                                                    ),
+                                                          GestureDetector(
+                                                            onTap:(){
+                                                              setState((){
+                                                                _seeMainCategory = true;
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                              height:50,
+                                                              width: MediaQuery.of(context).size.width*0.95,
+                                                              decoration:BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(24),
+                                                                color: Color(0xff161b22),
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceAround,
+                                                                children: [
+                                                                  Row(
+                                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                                    children: [
+                                                                      Text('Select Categories',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight.w600,
+                                                                            color: Colors.white,
+                                                                            fontSize: 22
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(width: 15,),
+                                                                      _catName == null ?
+                                                                      Text('All categories',
+                                                                        style: TextStyle(
+                                                                            fontSize: 13,
+                                                                            color: Colors.white
+                                                                        ),
+                                                                      ):Text(_catName!,
+                                                                        style: TextStyle(
+                                                                            fontSize: 13,
+                                                                            color: Colors.white
+                                                                        ),
+                                                                      )
+                                                                    ],
                                                                   ),
-                                                                ),
-                                                              ],
+                                                                  Icon(Icons.arrow_forward_ios_sharp, color: Colors.white,)
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -1265,6 +1304,9 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                           width: MediaQuery.of(context).size.width*0.5,
                                                           child: FloatingActionButton(
                                                               onPressed: (){
+                                                                setState(() {
+                                                                  _selectedContainerIndex = -1;
+                                                                });
                                                                 _loadCountryCode().then((value){
                                                                   products = Network().getProducts(_scanBarcode, _code, _startValue.toInt(), _endValue.toInt(),_catName,context);
 
@@ -1308,6 +1350,280 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                             child: SvgPicture.asset('asset/filter-svgrepo-com.svg', height: 18,),
                                           )
                                         ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 14,),
+                                  GestureDetector(
+                                    onTap:(){
+
+                                      setState((){
+                                        _seeProductCategory = false;
+                                      });
+                                      showModalBottomSheet(
+                                          context: context,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(20),
+                                                  topLeft: Radius.circular(20)
+                                              )
+                                          ),
+                                          builder: (context){
+                                            return StatefulBuilder(
+                                                builder: (BuildContext context, StateSetter setState) {
+                                                  return  Stack(
+                                                    children: [
+                                                      _seeProductCategory== false?Column(
+                                                        children: [
+                                                          Container(
+                                                            height: 50,
+                                                            // color: Colors.grey,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(25),
+                                                                  topRight: Radius.circular(25),
+                                                                ),
+                                                                color: Colors.grey.shade200
+                                                            ),
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        setState((){
+                                                                          _seeMainCategory = false;
+                                                                        });
+                                                                      },
+                                                                      icon: Icon(Icons.arrow_back)
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text('Categories',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          FutureBuilder(
+                                                              future: loadCategoryJson(),
+                                                              builder: (context, snapshot){
+                                                                if(snapshot.hasData){
+                                                                  _seeSnapshot = snapshot;
+                                                                  _category = _seeSnapshot.data;
+                                                                  return Expanded(
+                                                                    child: Padding(
+                                                                        padding: const EdgeInsets.only(bottom: 70.0),
+                                                                        child: ListView.builder(
+                                                                          itemCount: _category.length + 1,
+                                                                          itemBuilder: (context, index) {
+                                                                            if (index == 0) {
+                                                                              // Render the extra widget as the first item
+                                                                              return Column(
+                                                                                children: [
+                                                                                  GestureDetector(
+                                                                                    onTap:(){
+                                                                                      setState((){
+                                                                                        _selectedMainIndex = 0;
+                                                                                        _catName = null;
+                                                                                      });
+                                                                                    },
+                                                                                    child: Container(
+                                                                                      height: 40,
+                                                                                      width: MediaQuery.of(context).size.width * 0.8,
+                                                                                      decoration: BoxDecoration(
+                                                                                        borderRadius: BorderRadius.circular(19),
+                                                                                        color: _selectedMainIndex == 0 ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                      ),
+                                                                                      child: Center(child: Text('All Categories',
+                                                                                        style: TextStyle(
+                                                                                          color:_selectedMainIndex == 0 ? Colors.white : Colors.black,
+                                                                                        ),
+                                                                                      )
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  SizedBox(height: 12,)
+                                                                                ],
+                                                                              );
+                                                                            } else {
+                                                                              // Render the regular items from the category list, subtract 1 from index
+                                                                              return Column(
+                                                                                children: [
+                                                                                  GestureDetector(
+                                                                                    onTap: () {
+                                                                                      setState(() {
+                                                                                        _seeProductCategory = true;
+                                                                                        _productCat = _category[index - 1];
+                                                                                        _selectedMainIndex = index;
+                                                                                      });
+                                                                                    },
+                                                                                    child: Container(
+                                                                                      height: 40,
+                                                                                      width: MediaQuery.of(context).size.width * 0.8,
+                                                                                      decoration: BoxDecoration(
+                                                                                        borderRadius: BorderRadius.circular(19),
+                                                                                        color: _selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                      ),
+                                                                                      child: Center(child: Text(_category[index - 1]['master_category'],
+                                                                                        style: TextStyle(
+                                                                                          color: _selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                        ),
+                                                                                      )
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  SizedBox(height: 12,)
+                                                                                ],
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                        )
+                                                                    ),
+                                                                  );
+                                                                }else{
+                                                                  return CircularProgressIndicator();
+                                                                }
+                                                              }
+                                                          ),
+                                                        ],
+                                                      ):Column(
+                                                        children: [
+                                                          Container(
+                                                            height: 50,
+                                                            // color: Colors.grey,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(25),
+                                                                  topRight: Radius.circular(25),
+                                                                ),
+                                                                color: Colors.grey.shade200
+                                                            ),
+                                                            width: MediaQuery.of(context).size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                      onPressed: (){
+                                                                        setState((){
+                                                                          _seeProductCategory = false;
+                                                                        });
+                                                                      },
+                                                                      icon: Icon(Icons.arrow_back)
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text('Product Category',
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: 22
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.only(bottom: 70.0),
+                                                              child: ListView.builder(
+                                                                  itemCount: _productCat['product_categories'].length,
+                                                                  itemBuilder: (context, index){
+                                                                    return  Column(
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                          onTap:(){
+                                                                            setState(() {
+                                                                              // Toggle the selected state
+                                                                              _selectedIndex = (_selectedIndex == index) ? -1 : index;
+                                                                              _catName = _productCat['product_categories'][index]['name'];
+                                                                            });
+                                                                          },
+                                                                          child: Container(
+                                                                              height: 40,
+                                                                              width: MediaQuery.of(context).size.width*0.8,
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(19),
+                                                                                  color: (_selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
+                                                                              ),
+                                                                              child: Center(
+                                                                                  child: Text(_productCat['product_categories'][index]['name'],
+                                                                                    style: TextStyle(
+                                                                                        color: (_selectedIndex == index) ? Colors.white : Colors.black
+                                                                                    ),
+                                                                                  )
+                                                                              )
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(height: 8,)
+                                                                      ],
+                                                                    );
+
+                                                                  }
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 10,
+                                                        left:70,
+                                                        right: 70,
+                                                        child: SizedBox(
+                                                          height: 40,
+                                                          width: MediaQuery.of(context).size.width*0.5,
+                                                          child: FloatingActionButton(
+                                                              onPressed: (){
+                                                                _loadCountryCode().then((value){
+                                                                  products = Network().getProducts(_scanBarcode, _code, null, null,_catName,context);
+
+                                                                });
+                                                              },
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                              ),
+                                                              backgroundColor:Color(0xff7F78D8),
+                                                              child: Text('Show Results')
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                }
+                                            );
+                                          }
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      width: 90,
+                                      padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(25),
+                                          color: Colors.grey.shade200
+                                      ),
+                                      child: Center(
+                                        child: Text('Category',
+                                          style: TextStyle(
+                                              fontSize: 16.5,
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.w400
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   )
