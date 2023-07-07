@@ -2,8 +2,8 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
-import 'package:job/first%20pages/home.dart';
 import 'package:job/first%20pages/kallo_login_page.dart';
+import 'package:job/first%20pages/main_home.dart';
 import 'package:job/first%20pages/signin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -186,7 +186,7 @@ class _NationalityState extends State<Nationality> {
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isFirstLaunch', false);
                         Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) => const Home()));
+                            builder: (context) => const MainHome()));
                       },
                       child: Card(
                         color: const Color(0xff7F78D8),

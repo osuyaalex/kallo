@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:job/screens/barcode_search.dart';
 import 'package:job/screens/home.dart';
 import 'package:job/screens/idealo.dart';
 import 'dart:ui';
@@ -14,18 +15,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/google_sign_in.dart';
 import '../providers/animated.dart';
-import '../screens/demo_two.dart';
+import '../screens/demo.dart';
+import 'home.dart';
 
 
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeBarCode extends StatefulWidget {
+  const HomeBarCode({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeBarCode> createState() => _HomeBarCodeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeBarCodeState extends State<HomeBarCode> {
   int _selectedItem = 1;
 
 
@@ -81,7 +83,7 @@ class _HomeState extends State<Home> {
           );
         },
       ),
-      Dems(),
+      BarcodeSearch(),
       Profile(
         onGoogleSignPressed: ()async{
           EasyLoading.show();
@@ -98,48 +100,46 @@ class _HomeState extends State<Home> {
       )
     ];
     return Scaffold(
-      bottomNavigationBar: AnimatedContainer(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey.shade500
-            )
-          )
-        ),
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 400),
-        height: animatedProvider.myVariable ? 70 : 0,
-        child: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          selectedItemColor: const Color(0xff7F78D8),
-          currentIndex: _selectedItem,
-          onTap: (index) {
-            setState(() {
-              _selectedItem = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
+        bottomNavigationBar: AnimatedContainer(
+          decoration: BoxDecoration(
+              border: Border(
+                  top: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 1.7
+                  )
+              )
+          ),
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 400),
+          height: animatedProvider.myVariable ? 70 : 0,
+          child: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            selectedItemColor: const Color(0xff7F78D8),
+            currentIndex: _selectedItem,
+            onTap: (index) {
+              setState(() {
+                _selectedItem = index;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
 
-              icon: const Icon(Icons.home),
-              label: AppLocalizations.of(context)?.home,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.search),
-              label: AppLocalizations.of(context)?.search,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.person),
-              label: AppLocalizations.of(context)?.profile,
-            ),
-          ],
+                icon: const Icon(Icons.home),
+                label: AppLocalizations.of(context)?.home,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.search),
+                label: AppLocalizations.of(context)?.search,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.person),
+                label: AppLocalizations.of(context)?.profile,
+              ),
+            ],
+          ),
         ),
-      ),
-      body: IndexedStack(
-        index: _selectedItem,
-        children: _screens,
-      ),
+        body: _screens[_selectedItem]
     );
   }
 }

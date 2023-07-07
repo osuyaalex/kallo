@@ -103,13 +103,13 @@ class _ImageOfflineState extends State<ImageOffline> {
                     }
                     final distance = Functions().calculateDistance(_latitude, _longitude, offline?[index].merchantLongitude??'', offline?[index].merchantLatitude??'');
                     return SizedBox(
-                      height: 270,
+                      height: 310,
                       width: 250,
                       child: Card(
                         elevation: 1,
                         shadowColor: Colors.grey.shade300,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(17)
+                            borderRadius: BorderRadius.circular(13)
                         ),
                         child: Column(
                           children: [
@@ -117,7 +117,7 @@ class _ImageOfflineState extends State<ImageOffline> {
                               height: 160,
                               width: 180,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(17),
+                                  borderRadius: BorderRadius.circular(13),
                                   image: DecorationImage(
                                       image: NetworkImage(offline?[index].imageThumbnailUrl?.isNotEmpty == true?
                                       offline![index].imageThumbnailUrl!:
@@ -128,11 +128,14 @@ class _ImageOfflineState extends State<ImageOffline> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(breakUnwantedPart(offline?[index].productName??''),
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: SizedBox(
+                                width: 180,
+                                child: Text(breakUnwantedPart(offline?[index].productName??''),
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600
+                                  ),
                                 ),
                               ),
                             ),
@@ -143,9 +146,9 @@ class _ImageOfflineState extends State<ImageOffline> {
                                 children: [
                                   Text(offline?[index].merchantName??'',
                                     style: const TextStyle(
-                                        color: Colors.red,
+                                        color: Color(0xff161b22),
                                         fontWeight: FontWeight.w700,
-                                        fontSize: 12
+                                        fontSize: 15
                                     ),
                                   ),
 
@@ -179,14 +182,14 @@ class _ImageOfflineState extends State<ImageOffline> {
                                       style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
-                                          color: Colors.green
+                                          color: Color(0xff7F78D8)
                                       ),
                                     ),
                                     Text(displayValue,
                                       style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
-                                          color: Colors.green
+                                          color: Color(0xff7F78D8)
                                       ),
                                     ),
                                   ],

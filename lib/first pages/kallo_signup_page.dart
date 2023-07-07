@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:job/first%20pages/main_home.dart';
 import 'package:job/utilities/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 
 import '../Authentication/kallo_sign_up.dart';
-import 'home.dart';
 
 class KalloSignUpPage extends StatefulWidget {
   const KalloSignUpPage({super.key});
@@ -53,7 +53,7 @@ class _KalloSignUpPageState extends State<KalloSignUpPage> {
           prefs.setBool('isFirstLaunch', false);
           snack(context, res);
           Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => const Home()));
+              builder: (context) => const MainHome()));
         }
       }else{
         EasyLoading.dismiss();

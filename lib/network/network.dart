@@ -10,7 +10,7 @@ import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 
 class Network{
-  Future<Koye> getProducts(String barcode,String countryCode, int priceMin, int priceMax, BuildContext context) async {
+  Future<Koye> getProducts(String barcode,String countryCode, int? priceMin, int? priceMax, String? productCat, BuildContext context) async {
     var jsonResponse;
 
     try {
@@ -28,7 +28,7 @@ class Network{
           "filter_criteria": {
             "price_min": priceMin,
             "price_max": priceMax,
-            "product_category": null
+            "product_category": productCat
           }
           }),
 
@@ -56,7 +56,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
   }
 
-  Future<Koye> getProductsName(String name, String countryCode,int priceMin, int priceMax, BuildContext context) async {
+  Future<Koye> getProductsName(String name, String countryCode,int? priceMin, int? priceMax, String? productCat, BuildContext context) async {
     var jsonResponse;
 
     try {
@@ -74,7 +74,7 @@ class Network{
           "filter_criteria": {
             "price_min": priceMin,
             "price_max": priceMax,
-            "product_category": null
+            "product_category": productCat
           }
         }),
 
@@ -103,7 +103,7 @@ class Network{
     return Koye.fromJson(jsonResponse);
 
   }
-  Future<KalloImageSearch> getProductsImage(String image, String countryCode, int priceMin, int priceMax, BuildContext context) async {
+  Future<KalloImageSearch> getProductsImage(String image, String countryCode, int? priceMin, int? priceMax,String? productCat, BuildContext context) async {
     var jsonResponse;
 
     try {
@@ -121,7 +121,7 @@ class Network{
           "filter_criteria": {
             "price_min": priceMin,
             "price_max": priceMax,
-            "product_category": null
+            "product_category": productCat
           }
         }),
 
@@ -187,5 +187,202 @@ class Network{
       throw error;
     }
   }
-  
+
+  Future<Koye> getSortedProductsName(String name, String countryCode, String? magnitude,int? priceMin, int? priceMax, String? productCat, BuildContext context) async {
+    var jsonResponse;
+
+    try {
+      const String apiKey = 'f7shtjns57sjBbjdf';
+      const String url = 'https://o3hmv2z8oj.execute-api.us-east-1.amazonaws.com/Prod/get-data';
+      final response = await http.post(Uri.parse('$url'),
+        headers: {
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body:  jsonEncode({
+          "action": "gpd_and_sd",
+          "query_txt": name,
+          "country": countryCode,
+          "filter_criteria": {
+            "price_min": priceMin,
+            "price_max": priceMax,
+            "product_category": productCat
+          },
+          "sort_criteria":{
+            "price_sort_mode":magnitude
+          }
+        }),
+
+      );
+
+      print('hhhhhhhhhhhh');
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        jsonResponse  = jsonDecode(response.body);
+
+      } else {
+        throw Exception('Failed to load transactions');
+      }
+    } catch(error){
+      String errorMessage = error.toString();
+      print('the error isissssssisisisis ${errorMessage}');
+      if (errorMessage.contains('Failed host lookup')) {
+        snack(context, AppLocalizations.of(context)!.connectionIsDown);
+      } else if (errorMessage.contains('DOCTYPE HTML')) {
+        snack(context, AppLocalizations.of(context)!.somethingWentWrong);
+      } else {
+        snack(context, errorMessage);
+      }
+    }
+
+    return Koye.fromJson(jsonResponse);
+
+  }
+  Future<Koye> getSortedProducts(String barcode, String countryCode, String? magnitude,int? priceMin, int? priceMax, String? productCat,  BuildContext context) async {
+    var jsonResponse;
+
+    try {
+      const String apiKey = 'f7shtjns57sjBbjdf';
+      const String url = 'https://o3hmv2z8oj.execute-api.us-east-1.amazonaws.com/Prod/get-data';
+      final response = await http.post(Uri.parse('$url'),
+        headers: {
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body:  jsonEncode({
+          "action": "gpd_and_sd",
+          "barcode": barcode,
+          "country": countryCode,
+          "filter_criteria": {
+            "price_min": priceMin,
+            "price_max": priceMax,
+            "product_category": productCat
+          },
+          "sort_criteria":{
+            "price_sort_mode":magnitude
+          }
+        }),
+
+      );
+
+      print('hhhhhhhhhhhh');
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        jsonResponse  = jsonDecode(response.body);
+
+      } else {
+        throw Exception('Failed to load transactions');
+      }
+    } catch(error){
+      String errorMessage = error.toString();
+      print('the error isissssssisisisis ${errorMessage}');
+      if (errorMessage.contains('Failed host lookup')) {
+        snack(context, AppLocalizations.of(context)!.connectionIsDown);
+      } else if (errorMessage.contains('DOCTYPE HTML')) {
+        snack(context, AppLocalizations.of(context)!.somethingWentWrong);
+      } else {
+        snack(context, errorMessage);
+      }
+    }
+
+    return Koye.fromJson(jsonResponse);
+
+  }
+  Future<Koye> getProductsCategory(String countryCode, String? productCat,int? priceMin, int? priceMax, BuildContext context) async {
+    var jsonResponse;
+
+    try {
+      const String apiKey = 'f7shtjns57sjBbjdf';
+      const String url = 'https://o3hmv2z8oj.execute-api.us-east-1.amazonaws.com/Prod/get-data';
+      final response = await http.post(Uri.parse('$url'),
+        headers: {
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body:  jsonEncode({
+          "action": "gpd_and_sd",
+          "query_txt": null,
+          "country": countryCode,
+          "filter_criteria": {
+            "price_min": priceMin,
+            "price_max": priceMax,
+            "product_category": productCat
+          },
+        }),
+
+      );
+
+      print('hhhhhhhhhhhh');
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        jsonResponse  = jsonDecode(response.body);
+
+      } else {
+        throw Exception('Failed to load transactions');
+      }
+    } catch(error){
+      String errorMessage = error.toString();
+      print('the error isissssssisisisis ${errorMessage}');
+      if (errorMessage.contains('Failed host lookup')) {
+        snack(context, AppLocalizations.of(context)!.connectionIsDown);
+      } else if (errorMessage.contains('DOCTYPE HTML')) {
+        snack(context, AppLocalizations.of(context)!.somethingWentWrong);
+      } else {
+        snack(context, errorMessage);
+      }
+    }
+
+    return Koye.fromJson(jsonResponse);
+
+  }
+  Future<Koye> getSortedProductsCategory(String countryCode, String? productCat,int? priceMin, int? priceMax, String? magnitude, BuildContext context) async {
+    var jsonResponse;
+
+    try {
+      const String apiKey = 'f7shtjns57sjBbjdf';
+      const String url = 'https://o3hmv2z8oj.execute-api.us-east-1.amazonaws.com/Prod/get-data';
+      final response = await http.post(Uri.parse('$url'),
+        headers: {
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body:  jsonEncode({
+          "action": "gpd_and_sd",
+          "query_txt": null,
+          "country": countryCode,
+          "filter_criteria": {
+            "price_min": priceMin,
+            "price_max": priceMax,
+            "product_category": productCat
+          },
+          "sort_criteria":{
+            "price_sort_mode":magnitude
+          }
+        }),
+
+      );
+
+      print('hhhhhhhhhhhh');
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        jsonResponse  = jsonDecode(response.body);
+
+      } else {
+        throw Exception('Failed to load transactions');
+      }
+    } catch(error){
+      String errorMessage = error.toString();
+      print('the error isissssssisisisis ${errorMessage}');
+      if (errorMessage.contains('Failed host lookup')) {
+        snack(context, AppLocalizations.of(context)!.connectionIsDown);
+      } else if (errorMessage.contains('DOCTYPE HTML')) {
+        snack(context, AppLocalizations.of(context)!.somethingWentWrong);
+      } else {
+        snack(context, errorMessage);
+      }
+    }
+
+    return Koye.fromJson(jsonResponse);
+
+  }
 }

@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:job/Authentication/google_sign_in.dart';
-import 'package:job/first%20pages/home.dart';
 import 'package:job/first%20pages/kallo_login_page.dart';
 import 'package:job/first%20pages/kallo_signup_page.dart';
 import 'package:job/utilities/snackbar.dart';
-import 'package:job/utils/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
+import 'main_home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -89,7 +89,7 @@ class _SignUpState extends State<SignUp> {
                 if(user != null){
                   snack(context, AppLocalizations.of(context)!.successfullySignedIn);
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                    return Home();
+                    return MainHome();
                   }));
 
                 }
@@ -219,7 +219,7 @@ class _SignUpState extends State<SignUp> {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   prefs.setBool('isFirstLaunch', false);
                   Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const Home()));
+                      builder: (context) => const MainHome()));
                 },
                 child: Text(AppLocalizations.of(context)!.noThanks,
                   style: TextStyle(

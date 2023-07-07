@@ -2,7 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:job/first%20pages/home.dart';
+import 'package:job/first%20pages/main_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
@@ -156,7 +156,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     .then(
                                         (value){
                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                                           return Home();
+                                           return MainHome();
                                          })) ;
                                         }
                                 );

@@ -39,7 +39,7 @@
 "@searchForProducts":{
 "description": "Search products"
 },
-"noProductsAvailable": "No products available",
+"noProductsAvailable": "Oops...we didn't find any products",
 "@noProductsAvailable":{
 "description": "message"
 },
