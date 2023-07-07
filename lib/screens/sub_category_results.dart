@@ -56,6 +56,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   int selectedIndex = -1;
   String? catName;
   String? _magnitude;
+  int selectedMainIndex = -1;
 
 
 
@@ -514,7 +515,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                               ),
                             )
                         ):Container(),
-                        snapshot.data!.itemFound == true?AnimatedBuilder(
+                       AnimatedBuilder(
                             animation: animatedProvider,
                             builder: (context, child) {
                               return AnimatedContainer(
@@ -822,7 +823,6 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                             startController.clear();
                                             endController.clear();
                                             _isSliderInteracted = false;
-                                            selectedIndex = -1;
                                             _seeMainCategory = false;
                                             _seeProductCategory = false;
                                           });
@@ -935,7 +935,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     TextField(
                                                                       enabled: _isSliderInteracted,
                                                                       decoration: InputDecoration(
-                                                                          prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
+                                                                          prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
                                                                             style: TextStyle(
                                                                                 fontSize: 18
                                                                             ),
@@ -976,7 +976,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                         TextField(
                                                                           enabled: _isSliderInteracted,
                                                                           decoration: InputDecoration(
-                                                                              prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
+                                                                              prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
                                                                                 style: TextStyle(
                                                                                     fontSize: 18
                                                                                 ),
@@ -1050,7 +1050,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                           ),
                                                                           SizedBox(width: 15,),
                                                                           catName == null ?
-                                                                          Text('All categories',
+                                                                          Text(widget.productCategory,
                                                                             style: TextStyle(
                                                                                 fontSize: 13,
                                                                                 color: Colors.white
@@ -1073,7 +1073,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                               ),
 
                                                             ],
-                                                          ):_seeProductCategory== false?Column(
+                                                          ): _seeProductCategory== false?Column(
                                                             children: [
                                                               Container(
                                                                 height: 50,
@@ -1092,11 +1092,9 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     children: [
                                                                       IconButton(
                                                                           onPressed: (){
-                                                                            setState((){
-                                                                              _seeMainCategory = false;
-                                                                            });
+                                                                            Navigator.pop(context);
                                                                           },
-                                                                          icon: Icon(Icons.arrow_back)
+                                                                          icon: Icon(Icons.clear)
                                                                       ),
                                                                       SizedBox(
                                                                         width: 10,
@@ -1122,36 +1120,41 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       category = seeSnapshot.data;
                                                                       return Expanded(
                                                                         child: Padding(
-                                                                          padding: const EdgeInsets.only(bottom: 70.0),
-                                                                          child: ListView.builder(
+                                                                            padding: const EdgeInsets.only(bottom: 70.0),
+                                                                            child: ListView.builder(
                                                                               itemCount: category.length,
-                                                                              itemBuilder: (context, index){
+                                                                              itemBuilder: (context, index) {
                                                                                 return Column(
                                                                                   children: [
                                                                                     GestureDetector(
-                                                                                      onTap:(){
-                                                                                        setState((){
+                                                                                      onTap: () {
+                                                                                        setState(() {
                                                                                           _seeProductCategory = true;
                                                                                           productCat = category[index];
+                                                                                          selectedMainIndex = index;
                                                                                         });
                                                                                       },
                                                                                       child: Container(
                                                                                         height: 40,
-                                                                                        width: MediaQuery.of(context).size.width*0.8,
+                                                                                        width: MediaQuery.of(context).size.width * 0.8,
                                                                                         decoration: BoxDecoration(
-                                                                                            borderRadius: BorderRadius.circular(19),
-                                                                                            color: Colors.grey.shade200
+                                                                                          borderRadius: BorderRadius.circular(19),
+                                                                                          color: selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
                                                                                         ),
-                                                                                        child:  Center(child: Text(category[index]['master_category'])),
+                                                                                        child: Center(child: Text(category[index]['master_category'],
+                                                                                          style: TextStyle(
+                                                                                            color: selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                          ),
+                                                                                        )
+                                                                                        ),
                                                                                       ),
                                                                                     ),
-                                                                                    SizedBox(
-                                                                                      height: 8,
-                                                                                    )
+                                                                                    SizedBox(height: 12,)
                                                                                   ],
                                                                                 );
-                                                                              }
-                                                                          ),
+
+                                                                              },
+                                                                            )
                                                                         ),
                                                                       );
                                                                     }else{
@@ -1306,13 +1309,254 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                             ],
                                           ),
                                         ),
+                                      ),
+                                      SizedBox(width: 14,),
+                                      GestureDetector(
+                                        onTap:(){
+
+                                          setState((){
+                                            _seeProductCategory = false;
+                                          });
+                                          showModalBottomSheet(
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.only(
+                                                      topRight: Radius.circular(20),
+                                                      topLeft: Radius.circular(20)
+                                                  )
+                                              ),
+                                              builder: (context){
+                                                return StatefulBuilder(
+                                                    builder: (BuildContext context, StateSetter setState) {
+                                                      return  Stack(
+                                                        children: [
+                                                          _seeProductCategory== false?Column(
+                                                            children: [
+                                                              Container(
+                                                                height: 50,
+                                                                // color: Colors.grey,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(25),
+                                                                      topRight: Radius.circular(25),
+                                                                    ),
+                                                                    color: Colors.grey.shade200
+                                                                ),
+                                                                width: MediaQuery.of(context).size.width,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      IconButton(
+                                                                          onPressed: (){
+                                                                           Navigator.pop(context);
+                                                                          },
+                                                                          icon: Icon(Icons.clear)
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 10,
+                                                                      ),
+                                                                      Text('Categories',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight.w600,
+                                                                            fontSize: 22
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              FutureBuilder(
+                                                                  future: loadCategoryJson(),
+                                                                  builder: (context, snapshot){
+                                                                    if(snapshot.hasData){
+                                                                      seeSnapshot = snapshot;
+                                                                      category = seeSnapshot.data;
+                                                                      return Expanded(
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.only(bottom: 70.0),
+                                                                            child: ListView.builder(
+                                                                              itemCount: category.length,
+                                                                              itemBuilder: (context, index) {
+                                                                                  return Column(
+                                                                                    children: [
+                                                                                      GestureDetector(
+                                                                                        onTap: () {
+                                                                                          setState(() {
+                                                                                            _seeProductCategory = true;
+                                                                                            productCat = category[index];
+                                                                                            selectedMainIndex = index;
+                                                                                          });
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          height: 40,
+                                                                                          width: MediaQuery.of(context).size.width * 0.8,
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(19),
+                                                                                            color: selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                          ),
+                                                                                          child: Center(child: Text(category[index]['master_category'],
+                                                                                            style: TextStyle(
+                                                                                              color: selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                            ),
+                                                                                          )
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(height: 12,)
+                                                                                    ],
+                                                                                  );
+
+                                                                              },
+                                                                            )
+                                                                        ),
+                                                                      );
+                                                                    }else{
+                                                                      return CircularProgressIndicator();
+                                                                    }
+                                                                  }
+                                                              ),
+                                                            ],
+                                                          ):Column(
+                                                            children: [
+                                                              Container(
+                                                                height: 50,
+                                                                // color: Colors.grey,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(25),
+                                                                      topRight: Radius.circular(25),
+                                                                    ),
+                                                                    color: Colors.grey.shade200
+                                                                ),
+                                                                width: MediaQuery.of(context).size.width,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      IconButton(
+                                                                          onPressed: (){
+                                                                            setState((){
+                                                                              _seeProductCategory = false;
+                                                                            });
+                                                                          },
+                                                                          icon: Icon(Icons.arrow_back)
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 10,
+                                                                      ),
+                                                                      Text('Product Category',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight.w600,
+                                                                            fontSize: 22
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Expanded(
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.only(bottom: 70.0),
+                                                                  child: ListView.builder(
+                                                                      itemCount: productCat['product_categories'].length,
+                                                                      itemBuilder: (context, index){
+                                                                        return  Column(
+                                                                          children: [
+                                                                            GestureDetector(
+                                                                              onTap:(){
+                                                                                setState(() {
+                                                                                  // Toggle the selected state
+                                                                                  selectedIndex = (selectedIndex == index) ? -1 : index;
+                                                                                  catName = productCat['product_categories'][index]['name'];
+                                                                                });
+                                                                              },
+                                                                              child: Container(
+                                                                                  height: 40,
+                                                                                  width: MediaQuery.of(context).size.width*0.8,
+                                                                                  decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(19),
+                                                                                      color: (selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
+                                                                                  ),
+                                                                                  child: Center(
+                                                                                      child: Text(productCat['product_categories'][index]['name'],
+                                                                                        style: TextStyle(
+                                                                                            color: (selectedIndex == index) ? Colors.white : Colors.black
+                                                                                        ),
+                                                                                      )
+                                                                                  )
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: 8,)
+                                                                          ],
+                                                                        );
+
+                                                                      }
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          Positioned(
+                                                            bottom: 10,
+                                                            left:70,
+                                                            right: 70,
+                                                            child: SizedBox(
+                                                              height: 40,
+                                                              width: MediaQuery.of(context).size.width*0.5,
+                                                              child: FloatingActionButton(
+                                                                  onPressed: (){
+                                                                    _loadCountryCode().then((value){
+                                                                      productsCategory = Network().getProductsCategory(_code, catName,null,null, context);
+
+                                                                    });
+                                                                  },
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                                                                  ),
+                                                                  backgroundColor:Color(0xff7F78D8),
+                                                                  child: Text('Show Results')
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 90,
+                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(25),
+                                              color: Colors.grey.shade200
+                                          ),
+                                          child: Center(
+                                            child: Text('Category',
+                                              style: TextStyle(
+                                                  fontSize: 16.5,
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.w400
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       )
                                     ],
                                   ),
                                 ),
                               );
                             }
-                        ):Container(),
+                        ),
                         Expanded(
                           child:online.isNotEmpty && offline!.isNotEmpty? SizedBox(
                               width: double.infinity,

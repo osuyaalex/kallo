@@ -799,7 +799,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                         child: Text('Sort',
                                           style: TextStyle(
                                               fontSize: 16.5,
-                                              color: Color(0xff7f78d8),
+                                              color: Colors.blue,
                                               fontWeight: FontWeight.w400
                                           ),
                                         ),
@@ -1341,13 +1341,13 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                           Text('Filter',
                                             style: TextStyle(
                                                 fontSize: 16.5,
-                                                color: Color(0xff7f78d8),
+                                                color: Colors.blue,
                                                 fontWeight: FontWeight.w400
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 6.0),
-                                            child: SvgPicture.asset('asset/filter-svgrepo-com.svg', height: 18,),
+                                            child: SvgPicture.asset('asset/filter-svgrepo-com (1).svg', height: 18,),
                                           )
                                         ],
                                       ),
