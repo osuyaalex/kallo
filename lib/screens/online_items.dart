@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:job/network/json.dart';
 import 'package:job/providers/animated.dart';
+import 'package:job/screens/similar_images.dart';
 import 'package:provider/provider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -294,10 +295,15 @@ class _OnlineState extends State<Online> {
                                       ),
                                       actions: [
                                         TextButton(
-                                            onPressed: (){},
+                                            onPressed: (){
+                                              Navigator.of(context).pop();
+                                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                return SimilarImagePage(similarSearch: addRow?.imageThumbnailUrl);
+                                              }));
+                                            },
                                             child: Text(AppLocalizations.of(context)!.yes,
                                               style: TextStyle(
-                                                color:  Color(0xff7F78D8),
+                                                color:  Colors.black,
                                               ),
                                             )
                                         ),
@@ -306,7 +312,7 @@ class _OnlineState extends State<Online> {
                                               Navigator.pop(context);
                                             }, child: Text(AppLocalizations.of(context)!.no,
                                           style: TextStyle(
-                                            color:  Colors.red,
+                                            color:  Colors.black,
                                           ),
                                         )
                                         )
@@ -543,10 +549,15 @@ class _OnlineState extends State<Online> {
                                       ),
                                       actions: [
                                         TextButton(
-                                            onPressed: (){},
+                                            onPressed: (){
+                                              Navigator.of(context).pop();
+                                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                return SimilarImagePage(similarSearch: addRow?.imageThumbnailUrl);
+                                              }));
+                                            },
                                             child: Text(AppLocalizations.of(context)!.yes,
                                               style: TextStyle(
-                                                color:  Color(0xff7F78D8),
+                                                color: Colors.black
                                               ),
                                             )
                                         ),
@@ -555,7 +566,7 @@ class _OnlineState extends State<Online> {
                                               Navigator.pop(context);
                                             }, child: Text(AppLocalizations.of(context)!.no,
                                           style: TextStyle(
-                                            color:  Colors.red,
+                                              color: Colors.black
                                           ),
                                         )
                                         )

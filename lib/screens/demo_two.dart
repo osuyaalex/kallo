@@ -334,7 +334,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
 
                       if(snapshot.hasData){
                         return Container(
-                          height: 57*19,
+                          height: 57*24,
                             width: MediaQuery.of(context).size.width*0.8,
                             decoration: BoxDecoration(
                                 color: Colors.white,

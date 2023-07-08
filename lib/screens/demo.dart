@@ -339,7 +339,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                             )
                         ):Padding(
                           padding: const EdgeInsets.only(top: 30.0),
-                          child: Text(snapshot.error.toString(),
+                          child: Text(AppLocalizations.of(context)!.somethingWentWrong,
                               style: const TextStyle(
                                   color: Color(0xff7F78D8),
                                   fontWeight: FontWeight.w800,
