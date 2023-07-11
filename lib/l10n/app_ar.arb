@@ -67,5 +67,19 @@
   "signingOut": "جارٍ تسجيل الخروج",
   "areYouSure": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
   "yes": "نعم",
-  "no": "لا"
+  "no": "لا",
+  "category": "الفئة",
+  "mostRelevant": "الأكثر ذو صلة",
+  "price": "السعر",
+  "lowToHigh": "من الأقل إلى الأعلى",
+  "highToLow": "من الأعلى إلى الأقل",
+  "distance": "المسافة",
+  "closestFirst": "الأقرب أولاً",
+  "showResult": "عرض النتائج",
+  "sort": "ترتيب",
+  "filter": "تصفية",
+  "selectCategories": "تحديد الفئات",
+  "categories": "الفئات",
+  "searchSimilarImages": "البحث عن صور مشابهة لهذا العنصر؟",
+  "productCategory": "فئة المنتج"
 }

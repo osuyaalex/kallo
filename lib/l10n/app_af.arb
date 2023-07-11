@@ -67,5 +67,19 @@
   "signingOut": "Teken Uit",
   "areYouSure": "Is u seker dat u wil uitteken?",
   "yes": "Ja",
-  "no": "Nee"
+  "no": "Nee",
+  "category": "Kategorie",
+  "mostRelevant": "Mees Relevant",
+  "price": "Prys",
+  "lowToHigh": "Laag na Hoog",
+  "highToLow": "Hoog na Laag",
+  "distance": "Afstand",
+  "closestFirst": "Naaste Eerste",
+  "showResult": "Wys Resultate",
+  "sort": "Sorteer",
+  "filter": "Filtreer",
+  "selectCategories": "Kies Kategorieë",
+  "categories": "Kategorieë",
+  "searchSimilarImages": "Soek na Beelde Soortgelyk aan Hierdie Item?",
+  "productCategory": "Produkkategorie"
 }

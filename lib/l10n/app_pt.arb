@@ -67,5 +67,19 @@
  "signingOut": "Saindo",
  "areYouSure": "Tem certeza de que deseja sair?",
  "yes": "Sim",
- "no": "Não"
+ "no": "Não",
+ "category": "Categoria",
+ "mostRelevant": "Mais Relevante",
+ "price": "Preço",
+ "lowToHigh": "Do Menor ao Maior",
+ "highToLow": "Do Maior ao Menor",
+ "distance": "Distância",
+ "closestFirst": "Mais Próximo Primeiro",
+ "showResult": "Mostrar Resultados",
+ "sort": "Ordenar",
+ "filter": "Filtrar",
+ "selectCategories": "Selecionar Categorias",
+ "categories": "Categorias",
+ "searchSimilarImages": "Pesquisar Imagens Semelhantes a Este Item?",
+ "productCategory": "Categoria do Produto"
 }

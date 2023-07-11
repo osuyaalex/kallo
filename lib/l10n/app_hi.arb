@@ -67,5 +67,19 @@
   "signingOut": "साइन आउट हो रहा है",
   "areYouSure": "क्या आप वाकई साइन आउट करना चाहते हैं?",
   "yes": "हाँ",
-  "no": "नहीं"
+  "no": "नहीं",
+  "category": "श्रेणी",
+  "mostRelevant": "सबसे प्रासंगिक",
+  "price": "मूल्य",
+  "lowToHigh": "कम से अधिक",
+  "highToLow": "उच्च से निम्न",
+  "distance": "दूरी",
+  "closestFirst": "सबसे नजदीक आगे",
+  "showResult": "परिणाम दिखाएं",
+  "sort": "क्रमबद्ध करें",
+  "filter": "फ़िल्टर",
+  "selectCategories": "श्रेणियाँ चुनें",
+  "categories": "श्रेणियाँ",
+  "searchSimilarImages": "क्या इस आइटम के समान चित्र खोजें?",
+  "productCategory": "उत्पाद श्रेणी"
 }

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:job/network/image_json.dart';
 import 'package:job/providers/animated.dart';
+import 'package:job/screens/similar_images.dart';
 import 'package:provider/provider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -279,7 +280,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                         ),
                         Positioned(
                             top: 10,
-                            left: 10,
+                            right: 10,
                             child: GestureDetector(
                                 onTap: (){
                                   showDialog(
@@ -293,10 +294,15 @@ class _ImageOnlineState extends State<ImageOnline> {
                                         ),
                                         actions: [
                                           TextButton(
-                                              onPressed: (){},
+                                              onPressed: (){
+                                                Navigator.of(context).pop();
+                                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                  return SimilarImagePage(similarSearch: addRow?.imageThumbnailUrl);
+                                                }));
+                                              },
                                               child: Text(AppLocalizations.of(context)!.yes,
                                                 style: TextStyle(
-                                                  color:  Color(0xff7F78D8),
+                                                  color:  Colors.black,
                                                 ),
                                               )
                                           ),
@@ -305,7 +311,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                                                 Navigator.pop(context);
                                               }, child: Text(AppLocalizations.of(context)!.no,
                                             style: TextStyle(
-                                              color:  Colors.red,
+                                              color:  Colors.black,
                                             ),
                                           )
                                           )
@@ -314,7 +320,10 @@ class _ImageOnlineState extends State<ImageOnline> {
                                     },
                                   );
                                 },
-                                child: SvgPicture.asset('asset/search with image icon.svg')
+                                child: Opacity(
+                                    opacity: 0.5,
+                                    child: SvgPicture.asset('asset/search with image icon.svg')
+                                )
                             )
                         )
                       ],
@@ -528,7 +537,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                       ),
                       Positioned(
                           top: 10,
-                          left: 10,
+                          right: 10,
                           child: GestureDetector(
                               onTap: (){
                                 showDialog(
@@ -542,10 +551,15 @@ class _ImageOnlineState extends State<ImageOnline> {
                                       ),
                                       actions: [
                                         TextButton(
-                                            onPressed: (){},
+                                            onPressed: (){
+                                              Navigator.of(context).pop();
+                                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                return SimilarImagePage(similarSearch: addRow?.imageThumbnailUrl);
+                                              }));
+                                            },
                                             child: Text(AppLocalizations.of(context)!.yes,
                                               style: TextStyle(
-                                                color:  Color(0xff7F78D8),
+                                                color:  Colors.black,
                                               ),
                                             )
                                         ),
@@ -554,7 +568,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                                               Navigator.pop(context);
                                             }, child: Text(AppLocalizations.of(context)!.no,
                                           style: TextStyle(
-                                            color:  Colors.red,
+                                            color:  Colors.black,
                                           ),
                                         )
                                         )
@@ -563,7 +577,10 @@ class _ImageOnlineState extends State<ImageOnline> {
                                   },
                                 );
                               },
-                              child: SvgPicture.asset('asset/search with image icon.svg')
+                              child: Opacity(
+                                  opacity: 0.5,
+                                  child: SvgPicture.asset('asset/search with image icon.svg')
+                              )
                           )
                       )
                     ],

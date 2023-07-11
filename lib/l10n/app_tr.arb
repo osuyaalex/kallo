@@ -67,5 +67,19 @@
  "signingOut": "Oturumu Kapatıyor",
  "areYouSure": "Çıkış yapmak istediğinize emin misiniz?",
  "yes": "Evet",
- "no": "Hayır"
+ "no": "Hayır",
+ "category": "Kategori",
+ "mostRelevant": "En İlgili",
+ "price": "Fiyat",
+ "lowToHigh": "Düşükten Yükseğe",
+ "highToLow": "Yüksekten Düşüğe",
+ "distance": "Mesafe",
+ "closestFirst": "En Yakın İlk",
+ "showResult": "Sonuçları Göster",
+ "sort": "Sırala",
+ "filter": "Filtrele",
+ "selectCategories": "Kategorileri Seç",
+ "categories": "Kategoriler",
+ "searchSimilarImages": "Bu Öğeye Benzer Resimleri Ara?",
+ "productCategory": "Ürün Kategorisi"
 }

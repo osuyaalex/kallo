@@ -67,5 +67,21 @@
   "signingOut": "Déconnexion",
   "areYouSure": "Êtes-vous sûr de vouloir vous déconnecter ?",
   "yes": "Oui",
-  "no": "Non"
+  "no": "Non",
+  "category": "Catégorie",
+  "mostRelevant": "Le plus pertinent",
+  "price": "Prix",
+  "lowToHigh": "Du plus bas au plus haut",
+  "highToLow": "Du plus haut au plus bas",
+  "distance": "Distance",
+  "closestFirst": "Les plus proches d'abord",
+  "showResult": "Afficher les résultats",
+  "sort": "Trier",
+  "filter": "Filtrer",
+  "selectCategories": "Sélectionner des Catégories",
+  "categories": "Catégories",
+  "searchSimilarImages": "Rechercher des Images Similaires à Cet Article ?",
+  "productCategory": "Catégorie de produit"
+
+
 }

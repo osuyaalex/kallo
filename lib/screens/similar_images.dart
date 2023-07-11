@@ -6,32 +6,35 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:job/network/json.dart';
 import 'package:job/network/network.dart';
 import 'package:job/providers/animated.dart';
 import 'package:job/screens/demo_two.dart';
-import 'package:job/screens/offline_items.dart';
-import 'package:job/screens/online_items.dart';
+import 'package:job/screens/image_offline.dart';
+import 'package:job/screens/image_online.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as Img;
+import '../network/image_json.dart';
 
 
 
 
-class SubCategoryResults extends StatefulWidget {
-final dynamic productCategory;
-  const SubCategoryResults({Key? key, required this.productCategory}) : super(key: key);
+
+class SimilarImagePage extends StatefulWidget {
+  final dynamic similarSearch;
+  const SimilarImagePage({Key? key, required this.similarSearch}) : super(key: key);
 
   @override
-  State<SubCategoryResults> createState() => _SubCategoryResultsState();
+  State<SimilarImagePage> createState() => _SimilarImagePageState();
 }
 
 enum Segment { shopsNearMe, onlineShops }
-class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTickerProviderStateMixin{
-  late Future<Koye> productsCategory = Network().getProductsCategory(_code, widget.productCategory,null,null, context);
+class _SimilarImagePageState extends State<SimilarImagePage>with SingleTickerProviderStateMixin{
+  late Future<KalloImageSearch> _imageSimilarSearch = Network().getProductsImage(widget.similarSearch, '', null,null,null, context);
   late AnimationController _animationController;
   Segment _selectedSegment = Segment.onlineShops;
   GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -47,16 +50,15 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   final startController = TextEditingController();
   final endController = TextEditingController();
   bool _isSliderInteracted = false;
-  int _selectedContainerIndex = -1;
   bool _seeMainCategory = false;
   bool _seeProductCategory = false;
-  late AsyncSnapshot seeSnapshot;
-  List category= [];
-  dynamic productCat;
-  int selectedIndex = -1;
-  String? catName;
-  String? _magnitude;
-  int selectedMainIndex = -1;
+  late AsyncSnapshot _seeSnapshot;
+  List _category= [];
+  dynamic _productCat;
+  int _selectedIndex = -1;
+  String? _catName;
+  int _selectedMainIndex = -1;
+  String _similarImageResult = '';
 
 
 
@@ -98,28 +100,76 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
         if (_start == 0) {
           _timer?.cancel();
         }else {
-         if(mounted){
-           setState(() {
-             _start--;
-           });
-         }
+          if(mounted){
+            setState(() {
+              _start--;
+            });
+          }
         }
 
       },
     );
   }
-  _shiftProductCat()async{
+  Future<String> _imageUrlToBase64() async {
+    final response = await http.get(Uri.parse(widget.similarSearch));
+    if (response.statusCode == 200) {
+      final bytes = response.bodyBytes;
+
+      // Decode the image
+      final originalImage = Img.decodeImage(bytes);
+
+      // Calculate the size of the square crop
+      final cropSize = originalImage!.width > originalImage.height
+          ? originalImage.height
+          : originalImage.width;
+
+      // Calculate the coordinates for the center crop
+      final left = (originalImage.width - cropSize) ~/ 2;
+      final top = (originalImage.height - cropSize) ~/ 2;
+
+      // Crop the image to a square
+      final squareImage = Img.copyCrop(
+        originalImage,
+        x: left,
+        y: top,
+        width: cropSize,
+        height: cropSize,
+      );
+
+      // Resize the image to 224x224
+      final resizedImage = Img.copyResize(
+        squareImage,
+        width: 224,
+        height: 224,
+      );
+
+      // Encode the resized image to a base64-encoded string
+      final resizedImageString = base64Encode(Img.encodeJpg(resizedImage));
+
+      setState(() {
+        _similarImageResult = resizedImageString;
+      });
+
+      print(_similarImageResult);
+      return resizedImageString;
+    } else {
+      throw Exception('Failed to load image:');
+    }
+  }
+  _shiftSimilarImg()async{
     setState(() {
       _hasCalculatedEndPoint = false;
     });
     _loadCountryCode().then((value){
-      setState(() {
-        productsCategory = Network().getProductsCategory(_code, widget.productCategory,null,null, context);
-        _start = 7;
-      });
+     _imageUrlToBase64().then((value){
+       setState(() {
+         _imageSimilarSearch = Network().getProductsImage(_similarImageResult, _code, null,null,null, context);
+         _start = 7;
+       });
+     });
     });
 
-      _startTimer();
+    _startTimer();
 
   }
 
@@ -178,18 +228,15 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   }
 
 
+
   @override
   void initState(){
     // TODO: implement initState
     super.initState();
-    _shiftProductCat();
+    _shiftSimilarImg();
     _loadCountryCode();
     loadCategoryJson();
-    productsCategory = Network().getProductsCategory(_code, widget.productCategory,null,null, context);
-    productsCategory.then((value){
-      print('the prducy issssssssssssssss ${value.data}');
-      //snack(context, value.data.)
-    });
+    _imageSimilarSearch = Network().getProductsImage(_similarImageResult, _code, null,null,null, context);
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -208,7 +255,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
   }
   @override
   Widget build(BuildContext context) {
-   // String catName =widget.productCategory;
+    // String catName =widget.productCategory;
     final animatedProvider = Provider.of<AnimatedProvider>(context);
     return Form(
       key: _key,
@@ -329,23 +376,20 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
             ) ,
           ),
           body: FutureBuilder(
-              future: productsCategory,
+              future: _imageSimilarSearch,
               builder: (context, snapshot){
                 if(snapshot.hasError){
                   return Center(
-                      child:_start != 0?Stack(
+                      child:_start != 0?Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height*0.686,
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                          Positioned(
-                            top:MediaQuery.of(context).size.height*0.4,
-                            left:MediaQuery.of(context).size.width*0.45,
-                            child: const Center(
-                              child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                          CircularProgressIndicator(color: Color(0xff7F78D8),),
+                          SizedBox(height: 10,),
+                          Text('Hold on... this may take some time',
+                            style: TextStyle(
+                                color: Color(0xff7F78D8)
                             ),
-                          ),
+                          )
                         ],
                       ):Column(
                         children: [
@@ -363,24 +407,23 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                   );
                 }
                 if(snapshot.connectionState == ConnectionState.waiting){
-                  return Stack(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height*0.685,
-                        width: MediaQuery.of(context).size.width,
-                      ),
-                      Positioned(
-                        top:MediaQuery.of(context).size.height*0.4,
-                        left:MediaQuery.of(context).size.width*0.45,
-                        child: const Center(
-                          child: CircularProgressIndicator(color: Color(0xff7F78D8),),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(color: Color(0xff7F78D8),),
+                        SizedBox(height: 10,),
+                        Text('Hold on... this may take some time',
+                        style: TextStyle(
+                          color: Color(0xff7F78D8)
                         ),
-                      ),
-                    ],
+                        )
+                      ],
+                    ),
                   );
                 }else if(snapshot.hasData){
-                  List<Pproducts>? offline = snapshot.data!.data!.products?.where((element) => element.merchantType == "offline").toList();
-                  List<Pproducts>? online = snapshot.data!.data!.products?.where((element) => element.merchantType == "online").toList();
+                  List<Products>? offline = snapshot.data!.data!.products?.where((element) => element.merchantType == "offline").toList();
+                  List<Products>? online = snapshot.data!.data!.products?.where((element) => element.merchantType == "online").toList();
                   if(snapshot.data!.itemFound == false){
                     return Column(
                       children: [
@@ -392,9 +435,9 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                               fontSize: 16
                           ),
                         ),
-                       SizedBox(
-                         height: 20,
-                       ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         SvgPicture.asset('asset/No Results Found.svg')
                         //Image.asset("asset/No Results Found.gif")
                         //Image.network("https://media2.giphy.com/media/3oEjI4sFlp73fvEYgw/giphy.gif?cid=6c09b952y6gku9ja4cdota89fesgu8yyqnuw2ckmmr6ucv9f&rid=giphy.gif&ct=g")
@@ -515,7 +558,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                               ),
                             )
                         ):Container(),
-                       AnimatedBuilder(
+                        AnimatedBuilder(
                             animation: animatedProvider,
                             builder: (context, child) {
                               return AnimatedContainer(
@@ -528,276 +571,11 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                     children: [
                                       GestureDetector(
                                         onTap:(){
-                                          showModalBottomSheet(
-                                              context: context,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(25),
-                                                  topRight: Radius.circular(25),
-                                                ),
-                                              ),
-                                              builder: (context){
-                                                return StatefulBuilder(
-                                                    builder: (BuildContext context, StateSetter setState) {
-
-                                                      return Column(
-                                                        children: [
-                                                          Container(
-                                                            height: 50,
-                                                            // color: Colors.grey,
-                                                            decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius.circular(25),
-                                                                  topRight: Radius.circular(25),
-                                                                ),
-                                                                color: Colors.grey.shade200
-                                                            ),
-                                                            width: MediaQuery.of(context).size.width,
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                                              child: Row(
-                                                                children: [
-                                                                  IconButton(
-                                                                      onPressed: (){
-                                                                        Navigator.pop(context);
-                                                                        // setState((){
-                                                                        //   _startValue = 0.0;
-                                                                        //   _endValue = _endPoint;
-                                                                        // });
-                                                                      },
-                                                                      icon: Icon(Icons.close)
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 10,
-                                                                  ),
-                                                                  Text(AppLocalizations.of(context)!.sort,
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w600,
-                                                                        fontSize: 22
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 25,
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap:(){
-                                                              setState((){
-                                                                _selectedContainerIndex =0;
-                                                                _magnitude = null;
-                                                              });
-                                                            },
-                                                            child: Container(
-                                                              height:50,
-                                                              width:MediaQuery.of(context).size.width*0.85,
-                                                              decoration:BoxDecoration(
-                                                                  color: _selectedContainerIndex == 0? Color(0xff161b22):Colors.grey.shade300,
-                                                                  borderRadius: BorderRadius.circular(18)
-                                                              ),
-                                                              child: Padding(
-                                                                  padding: const EdgeInsets.only(left: 20.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(AppLocalizations.of(context)!.mostRelevant,
-                                                                        style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 17,
-                                                                          color: _selectedContainerIndex == 0?Colors.white:Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 18,),
-                                                          GestureDetector(
-                                                            onTap:(){
-                                                              setState((){
-                                                                _selectedContainerIndex = 1;
-                                                                _magnitude = 'asc';
-                                                              });
-                                                            },
-                                                            child: Container(
-                                                              height:50,
-                                                              width:MediaQuery.of(context).size.width*0.85,
-                                                              decoration:BoxDecoration(
-                                                                  color: _selectedContainerIndex == 1 ?Color(0xff161b22):Colors.grey.shade300,
-                                                                  borderRadius: BorderRadius.circular(18)
-                                                              ),
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.only(left: 20.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets.only(right: 12.0),
-                                                                      child: Text(AppLocalizations.of(context)!.price,
-                                                                        style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 17,
-                                                                          color: _selectedContainerIndex == 1?Colors.white:Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Text(AppLocalizations.of(context)!.lowToHigh,
-                                                                      style: TextStyle(
-                                                                        fontWeight: FontWeight.w600,
-                                                                        fontSize: 17,
-                                                                        color: _selectedContainerIndex == 1?Colors.white:Colors.black,
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 18,
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap:(){
-                                                              setState((){
-                                                                _selectedContainerIndex = 2;
-                                                                _magnitude = '_desc';
-                                                              });
-                                                            },
-                                                            child: Container(
-                                                              height:50,
-                                                              width:MediaQuery.of(context).size.width*0.85,
-                                                              decoration:BoxDecoration(
-                                                                  color: _selectedContainerIndex == 2?Color(0xff161b22):Colors.grey.shade300,
-                                                                  borderRadius: BorderRadius.circular(18)
-                                                              ),
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.only(left: 20.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets.only(right: 12.0),
-                                                                      child: Text(AppLocalizations.of(context)!.price,
-                                                                        style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 17,
-                                                                          color: _selectedContainerIndex == 2?Colors.white:Colors.black,
-
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Text(AppLocalizations.of(context)!.highToLow,
-                                                                      style: TextStyle(
-                                                                        fontWeight: FontWeight.w600,
-                                                                        fontSize: 17,
-                                                                        color: _selectedContainerIndex == 2?Colors.white:Colors.black,
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-
-                                                          const SizedBox(
-                                                            height: 18,
-                                                          ),
-                                                          Container(
-                                                            height:45,
-                                                            width:MediaQuery.of(context).size.width*0.85,
-                                                            decoration:BoxDecoration(
-                                                                color: Colors.grey.shade300,
-                                                                borderRadius: BorderRadius.circular(18)
-                                                            ),
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(right: 12.0),
-                                                                    child: Text(AppLocalizations.of(context)!.distance,
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.w600,
-                                                                          fontSize: 17
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Text(AppLocalizations.of(context)!.closestFirst,
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight.w600,
-                                                                        fontSize: 17
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 30,
-                                                          ),
-                                                          Container(
-                                                            height: 40,
-                                                           width:MediaQuery.of(context).size.width * 0.5,
-                                                            child: FloatingActionButton(
-                                                                onPressed: (){
-                                                                  _loadCountryCode().then((value){
-                                                                    if(catName == null){
-                                                                      productsCategory= Network().getSortedProductsCategory(_code, widget.productCategory,null,null,_magnitude, context);
-                                                                    }else{
-                                                                      productsCategory= Network().getSortedProductsCategory(_code, catName,null,null,_magnitude, context);
-                                                                    }});
-                                                                },
-                                                                shape: RoundedRectangleBorder(
-                                                                  borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
-                                                                ),
-                                                                backgroundColor:Color(0xff7F78D8),
-                                                                child: Text(AppLocalizations.of(context)!.showResult,
-                                                                  style: TextStyle(
-                                                                      fontSize: 18
-                                                                  ),
-                                                                )
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    }
-                                                );
-                                              }
-                                          );
-                                        },
-                                        child: Container(
-                                          height: 40,
-                                          width: 80,
-                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(25),
-                                              color: Colors.grey.shade200
-                                          ),
-                                          child: Center(
-                                            child: Text(AppLocalizations.of(context)!.sort,
-                                              style: TextStyle(
-                                                  fontSize: 16.5,
-                                                  color: Colors.blue,
-                                                  fontWeight: FontWeight.w400
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 14,
-                                      ),
-                                      GestureDetector(
-                                        onTap:()async{
                                           if (!_hasCalculatedEndPoint) {
-                                            List<Pproducts>? listProducts = snapshot.data!.data!.products;
+                                            List<Products>? listProducts = snapshot.data!.data!.products;
                                             double totalPrices = 0;
                                             if (listProducts != null) {
-                                              for (Pproducts product in listProducts) {
+                                              for (Products product in listProducts) {
                                                 if (product.price != null) {
                                                   if (product.price is String) {
                                                     double? parsedPrice = double.tryParse(product.price as String);
@@ -830,14 +608,13 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                               context: context,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.only(
-                                                      topLeft: Radius.circular(25),
-                                                      topRight: Radius.circular(25)
+                                                      topRight: Radius.circular(20),
+                                                      topLeft: Radius.circular(20)
                                                   )
                                               ),
                                               builder: (context){
                                                 return StatefulBuilder(
                                                     builder: (BuildContext context, StateSetter setState) {
-
                                                       String displayValue;
                                                       //.floor is basically used to convert doubles to integers
                                                       displayValue = _startValue.floor().toString();
@@ -856,9 +633,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                         final formatter = NumberFormat("#,###");
                                                         displaySecondValue = formatter.format(_endValue);
                                                       }
-
-
-                                                      return Stack(
+                                                      return  Stack(
                                                         children: [
                                                           _seeMainCategory == false?Column(
                                                             children: [
@@ -890,7 +665,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text(AppLocalizations.of(context)!.filter,
+                                                                      Text('Filter',
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -908,7 +683,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                 child: Row(
                                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                                   children: [
-                                                                    Text(AppLocalizations.of(context)!.price,
+                                                                    Text('Price',
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight.w600,
                                                                           fontSize: 22
@@ -935,7 +710,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     TextField(
                                                                       enabled: _isSliderInteracted,
                                                                       decoration: InputDecoration(
-                                                                          prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
+                                                                          prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
                                                                             style: TextStyle(
                                                                                 fontSize: 18
                                                                             ),
@@ -976,7 +751,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                         TextField(
                                                                           enabled: _isSliderInteracted,
                                                                           decoration: InputDecoration(
-                                                                              prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
+                                                                              prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
                                                                                 style: TextStyle(
                                                                                     fontSize: 18
                                                                                 ),
@@ -1019,14 +794,14 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   },
                                                                 ),
                                                               ),
-                                                               SizedBox(
+                                                              const SizedBox(
                                                                 height: 20,
                                                               ),
                                                               GestureDetector(
                                                                 onTap:(){
                                                                   setState((){
-                                                                      _seeMainCategory = true;
-                                                                    });
+                                                                    _seeMainCategory = true;
+                                                                  });
                                                                 },
                                                                 child: Container(
                                                                   height:50,
@@ -1041,7 +816,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       Row(
                                                                         crossAxisAlignment: CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Text(AppLocalizations.of(context)!.selectCategories,
+                                                                          Text('Select Categories',
                                                                             style: TextStyle(
                                                                                 fontWeight: FontWeight.w600,
                                                                                 color: Colors.white,
@@ -1049,13 +824,13 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                             ),
                                                                           ),
                                                                           SizedBox(width: 15,),
-                                                                          catName == null ?
-                                                                          Text(widget.productCategory,
+                                                                          _catName == null ?
+                                                                          Text('All categories',
                                                                             style: TextStyle(
                                                                                 fontSize: 13,
                                                                                 color: Colors.white
                                                                             ),
-                                                                          ):Text(catName!,
+                                                                          ):Text(_catName!,
                                                                             style: TextStyle(
                                                                                 fontSize: 13,
                                                                                 color: Colors.white
@@ -1073,7 +848,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                               ),
 
                                                             ],
-                                                          ): _seeProductCategory== false?Column(
+                                                          ):_seeProductCategory== false?Column(
                                                             children: [
                                                               Container(
                                                                 height: 50,
@@ -1092,14 +867,16 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     children: [
                                                                       IconButton(
                                                                           onPressed: (){
-                                                                            Navigator.pop(context);
+                                                                            setState((){
+                                                                              _seeMainCategory = false;
+                                                                            });
                                                                           },
-                                                                          icon: Icon(Icons.clear)
+                                                                          icon: Icon(Icons.arrow_back)
                                                                       ),
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text(AppLocalizations.of(context)!.categories,
+                                                                      Text('Categories',
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1116,43 +893,74 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   future: loadCategoryJson(),
                                                                   builder: (context, snapshot){
                                                                     if(snapshot.hasData){
-                                                                      seeSnapshot = snapshot;
-                                                                      category = seeSnapshot.data;
+                                                                      _seeSnapshot = snapshot;
+                                                                      _category = _seeSnapshot.data;
                                                                       return Expanded(
                                                                         child: Padding(
                                                                             padding: const EdgeInsets.only(bottom: 70.0),
                                                                             child: ListView.builder(
-                                                                              itemCount: category.length,
+                                                                              itemCount: _category.length + 1,
                                                                               itemBuilder: (context, index) {
-                                                                                return Column(
-                                                                                  children: [
-                                                                                    GestureDetector(
-                                                                                      onTap: () {
-                                                                                        setState(() {
-                                                                                          _seeProductCategory = true;
-                                                                                          productCat = category[index];
-                                                                                          selectedMainIndex = index;
-                                                                                        });
-                                                                                      },
-                                                                                      child: Container(
-                                                                                        height: 40,
-                                                                                        width: MediaQuery.of(context).size.width * 0.8,
-                                                                                        decoration: BoxDecoration(
-                                                                                          borderRadius: BorderRadius.circular(19),
-                                                                                          color: selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
-                                                                                        ),
-                                                                                        child: Center(child: Text(category[index]['master_category'],
-                                                                                          style: TextStyle(
-                                                                                            color: selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                if (index == 0) {
+                                                                                  // Render the extra widget as the first item
+                                                                                  return Column(
+                                                                                    children: [
+                                                                                      GestureDetector(
+                                                                                        onTap:(){
+                                                                                          setState((){
+                                                                                            _selectedMainIndex = 0;
+                                                                                            _catName = null;
+                                                                                          });
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          height: 40,
+                                                                                          width: MediaQuery.of(context).size.width * 0.8,
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(19),
+                                                                                            color: _selectedMainIndex == 0 ? Color(0xff161b22) : Colors.grey.shade200,
                                                                                           ),
-                                                                                        )
+                                                                                          child: Center(child: Text('All Categories',
+                                                                                            style: TextStyle(
+                                                                                              color:_selectedMainIndex == 0 ? Colors.white : Colors.black,
+                                                                                            ),
+                                                                                          )
+                                                                                          ),
                                                                                         ),
                                                                                       ),
-                                                                                    ),
-                                                                                    SizedBox(height: 12,)
-                                                                                  ],
-                                                                                );
-
+                                                                                      SizedBox(height: 12,)
+                                                                                    ],
+                                                                                  );
+                                                                                } else {
+                                                                                  // Render the regular items from the category list, subtract 1 from index
+                                                                                  return Column(
+                                                                                    children: [
+                                                                                      GestureDetector(
+                                                                                        onTap: () {
+                                                                                          setState(() {
+                                                                                            _seeProductCategory = true;
+                                                                                            _productCat = _category[index - 1];
+                                                                                            _selectedMainIndex = index;
+                                                                                          });
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          height: 40,
+                                                                                          width: MediaQuery.of(context).size.width * 0.8,
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(19),
+                                                                                            color: _selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                          ),
+                                                                                          child: Center(child: Text(_category[index - 1]['master_category'],
+                                                                                            style: TextStyle(
+                                                                                              color: _selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                            ),
+                                                                                          )
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(height: 12,)
+                                                                                    ],
+                                                                                  );
+                                                                                }
                                                                               },
                                                                             )
                                                                         ),
@@ -1191,7 +999,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text(AppLocalizations.of(context)!.productCategory,
+                                                                      Text('Product Category',
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1208,7 +1016,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                 child: Padding(
                                                                   padding: const EdgeInsets.only(bottom: 70.0),
                                                                   child: ListView.builder(
-                                                                      itemCount: productCat['product_categories'].length,
+                                                                      itemCount: _productCat['product_categories'].length,
                                                                       itemBuilder: (context, index){
                                                                         return  Column(
                                                                           children: [
@@ -1216,8 +1024,8 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                               onTap:(){
                                                                                 setState(() {
                                                                                   // Toggle the selected state
-                                                                                  selectedIndex = (selectedIndex == index) ? -1 : index;
-                                                                                  catName = productCat['product_categories'][index]['name'];
+                                                                                  _selectedIndex = (_selectedIndex == index) ? -1 : index;
+                                                                                  _catName = _productCat['product_categories'][index]['name'];
                                                                                 });
                                                                               },
                                                                               child: Container(
@@ -1225,12 +1033,12 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                                   width: MediaQuery.of(context).size.width*0.8,
                                                                                   decoration: BoxDecoration(
                                                                                       borderRadius: BorderRadius.circular(19),
-                                                                                      color: (selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
+                                                                                      color: (_selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
                                                                                   ),
                                                                                   child: Center(
-                                                                                      child: Text(productCat['product_categories'][index]['name'],
+                                                                                      child: Text(_productCat['product_categories'][index]['name'],
                                                                                         style: TextStyle(
-                                                                                            color: (selectedIndex == index) ? Colors.white : Colors.black
+                                                                                            color: (_selectedIndex == index) ? Colors.white : Colors.black
                                                                                         ),
                                                                                       )
                                                                                   )
@@ -1250,30 +1058,28 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                             bottom: 10,
                                                             left:70,
                                                             right: 70,
-                                                            child: Container(
+                                                            child: SizedBox(
                                                               height: 40,
-                                                              constraints: BoxConstraints(
-                                                                maxWidth: MediaQuery.of(context).size.width * 0.5,
-                                                              ),
+                                                              width: MediaQuery.of(context).size.width*0.5,
                                                               child: FloatingActionButton(
                                                                   onPressed: (){
-                                                                    setState(() {
-                                                                      _selectedContainerIndex = -1;
-                                                                    });
                                                                     _loadCountryCode().then((value){
-                                                                      productsCategory = Network().getProductsCategory(_code, catName,_startValue.toInt(),_endValue.toInt(), context);
-
+                                                                      _imageUrlToBase64().then((value){
+                                                                        if(mounted){
+                                                                          setState(() {
+                                                                            _imageSimilarSearch = Network().getProductsImage(_similarImageResult, _code, _startValue.toInt(),_endValue.toInt(),_catName, context);
+                                                                            _start = 7;
+                                                                          });
+                                                                        }
+                                                                      });
                                                                     });
+
                                                                   },
                                                                   shape: RoundedRectangleBorder(
                                                                     borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                                   ),
                                                                   backgroundColor:Color(0xff7F78D8),
-                                                                  child: Text(AppLocalizations.of(context)!.showResult,
-                                                                    style: TextStyle(
-                                                                        fontSize: 18
-                                                                    ),
-                                                                  )
+                                                                  child: Text('Show Results')
                                                               ),
                                                             ),
                                                           ),
@@ -1295,7 +1101,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Text(AppLocalizations.of(context)!.filter,
+                                              Text('Filter',
                                                 style: TextStyle(
                                                     fontSize: 16.5,
                                                     color: Colors.blue,
@@ -1349,14 +1155,16 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     children: [
                                                                       IconButton(
                                                                           onPressed: (){
-                                                                           Navigator.pop(context);
+                                                                            setState((){
+                                                                              _seeMainCategory = false;
+                                                                            });
                                                                           },
-                                                                          icon: Icon(Icons.clear)
+                                                                          icon: Icon(Icons.arrow_back)
                                                                       ),
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text(AppLocalizations.of(context)!.categories,
+                                                                      Text('Categories',
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1373,22 +1181,23 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   future: loadCategoryJson(),
                                                                   builder: (context, snapshot){
                                                                     if(snapshot.hasData){
-                                                                      seeSnapshot = snapshot;
-                                                                      category = seeSnapshot.data;
+                                                                      _seeSnapshot = snapshot;
+                                                                      _category = _seeSnapshot.data;
                                                                       return Expanded(
                                                                         child: Padding(
                                                                             padding: const EdgeInsets.only(bottom: 70.0),
                                                                             child: ListView.builder(
-                                                                              itemCount: category.length,
+                                                                              itemCount: _category.length + 1,
                                                                               itemBuilder: (context, index) {
+                                                                                if (index == 0) {
+                                                                                  // Render the extra widget as the first item
                                                                                   return Column(
                                                                                     children: [
                                                                                       GestureDetector(
-                                                                                        onTap: () {
-                                                                                          setState(() {
-                                                                                            _seeProductCategory = true;
-                                                                                            productCat = category[index];
-                                                                                            selectedMainIndex = index;
+                                                                                        onTap:(){
+                                                                                          setState((){
+                                                                                            _selectedMainIndex = 0;
+                                                                                            _catName = null;
                                                                                           });
                                                                                         },
                                                                                         child: Container(
@@ -1396,11 +1205,11 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                                           width: MediaQuery.of(context).size.width * 0.8,
                                                                                           decoration: BoxDecoration(
                                                                                             borderRadius: BorderRadius.circular(19),
-                                                                                            color: selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                            color: _selectedMainIndex == 0 ? Color(0xff161b22) : Colors.grey.shade200,
                                                                                           ),
-                                                                                          child: Center(child: Text(category[index]['master_category'],
+                                                                                          child: Center(child: Text('All Categories',
                                                                                             style: TextStyle(
-                                                                                              color: selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                              color:_selectedMainIndex == 0 ? Colors.white : Colors.black,
                                                                                             ),
                                                                                           )
                                                                                           ),
@@ -1409,7 +1218,37 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                                       SizedBox(height: 12,)
                                                                                     ],
                                                                                   );
-
+                                                                                } else {
+                                                                                  // Render the regular items from the category list, subtract 1 from index
+                                                                                  return Column(
+                                                                                    children: [
+                                                                                      GestureDetector(
+                                                                                        onTap: () {
+                                                                                          setState(() {
+                                                                                            _seeProductCategory = true;
+                                                                                            _productCat = _category[index - 1];
+                                                                                            _selectedMainIndex = index;
+                                                                                          });
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          height: 40,
+                                                                                          width: MediaQuery.of(context).size.width * 0.8,
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(19),
+                                                                                            color: _selectedMainIndex == index ? Color(0xff161b22) : Colors.grey.shade200,
+                                                                                          ),
+                                                                                          child: Center(child: Text(_category[index - 1]['master_category'],
+                                                                                            style: TextStyle(
+                                                                                              color: _selectedMainIndex == index ? Colors.white : Colors.black,
+                                                                                            ),
+                                                                                          )
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(height: 12,)
+                                                                                    ],
+                                                                                  );
+                                                                                }
                                                                               },
                                                                             )
                                                                         ),
@@ -1448,7 +1287,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text(AppLocalizations.of(context)!.productCategory,
+                                                                      Text('Product Category',
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1465,7 +1304,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                 child: Padding(
                                                                   padding: const EdgeInsets.only(bottom: 70.0),
                                                                   child: ListView.builder(
-                                                                      itemCount: productCat['product_categories'].length,
+                                                                      itemCount: _productCat['product_categories'].length,
                                                                       itemBuilder: (context, index){
                                                                         return  Column(
                                                                           children: [
@@ -1473,8 +1312,8 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                               onTap:(){
                                                                                 setState(() {
                                                                                   // Toggle the selected state
-                                                                                  selectedIndex = (selectedIndex == index) ? -1 : index;
-                                                                                  catName = productCat['product_categories'][index]['name'];
+                                                                                  _selectedIndex = (_selectedIndex == index) ? -1 : index;
+                                                                                  _catName = _productCat['product_categories'][index]['name'];
                                                                                 });
                                                                               },
                                                                               child: Container(
@@ -1482,12 +1321,12 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                                   width: MediaQuery.of(context).size.width*0.8,
                                                                                   decoration: BoxDecoration(
                                                                                       borderRadius: BorderRadius.circular(19),
-                                                                                      color: (selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
+                                                                                      color: (_selectedIndex == index) ? Color(0xff161b22) : Colors.grey.shade200
                                                                                   ),
                                                                                   child: Center(
-                                                                                      child: Text(productCat['product_categories'][index]['name'],
+                                                                                      child: Text(_productCat['product_categories'][index]['name'],
                                                                                         style: TextStyle(
-                                                                                            color: (selectedIndex == index) ? Colors.white : Colors.black
+                                                                                            color: (_selectedIndex == index) ? Colors.white : Colors.black
                                                                                         ),
                                                                                       )
                                                                                   )
@@ -1513,15 +1352,20 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                               child: FloatingActionButton(
                                                                   onPressed: (){
                                                                     _loadCountryCode().then((value){
-                                                                      productsCategory = Network().getProductsCategory(_code, catName,null,null, context);
-
+                                                                      _imageUrlToBase64().then((value){
+                                                                        setState(() {
+                                                                          _imageSimilarSearch = Network().getProductsImage(_similarImageResult, _code, null,null,_catName, context);
+                                                                          _start = 7;
+                                                                        });
+                                                                      });
                                                                     });
+
                                                                   },
                                                                   shape: RoundedRectangleBorder(
                                                                     borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                                   ),
                                                                   backgroundColor:Color(0xff7F78D8),
-                                                                  child: Text(AppLocalizations.of(context)!.showResult)
+                                                                  child: Text('Show Results')
                                                               ),
                                                             ),
                                                           ),
@@ -1541,7 +1385,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                               color: Colors.grey.shade200
                                           ),
                                           child: Center(
-                                            child: Text(AppLocalizations.of(context)!.category,
+                                            child: Text('Category',
                                               style: TextStyle(
                                                   fontSize: 16.5,
                                                   color: Colors.blue,
@@ -1567,19 +1411,19 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                       begin: Offset(1, 0),
                                       end: Offset.zero,
                                     ).animate(_animationController),
-                                    child: Offline(snapshot: snapshot,),
+                                    child: ImageOffline(snapshot: snapshot,),
                                   ),
                                   SlideTransition(
                                     position: Tween<Offset>(
                                       begin: Offset.zero,
                                       end: Offset(-1, 0),
                                     ).animate(_animationController),
-                                    child: Online(snapshot: snapshot,),
+                                    child: ImageOnline(snapshot: snapshot,),
                                   ),
 
                                 ],
                               )
-                          ):Online(snapshot: snapshot),
+                          ):ImageOnline(snapshot: snapshot),
                         ),
                       ],
                     );

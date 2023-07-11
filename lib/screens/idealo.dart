@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+import 'package:job/network/network.dart';
 import 'package:job/screens/kallo_profile_login.dart';
 import 'package:job/screens/settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'kallo_profile_signup.dart';
 
 class Profile extends StatefulWidget {
@@ -17,6 +20,10 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
 
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
+  final TextEditingController _email = TextEditingController();
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  late String _message;
+   String? _addEmail;
   @override
   void initState() {
     // TODO: implement initState
@@ -25,29 +32,29 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return FirebaseAuth.instance.currentUser != null?
-    FutureBuilder<DocumentSnapshot>(
-      future: users.doc(FirebaseAuth.instance.currentUser!.uid).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
-        if (snapshot.hasError) {
-          return Text("Something went wrong");
-        }
-
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return Text("Document does not exist");
-        }
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          return  Scaffold(
+     Scaffold(
               backgroundColor: Colors.grey.shade100,
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.grey.shade100,
                 toolbarHeight: MediaQuery.of(context).size.height*0.1,
               ),
-              body: Center(
+              body: FutureBuilder<DocumentSnapshot>(
+                future: users.doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+                  if (snapshot.hasError) {
+                    return Text("Something went wrong");
+                  }
+
+                  if (snapshot.hasData && !snapshot.data!.exists) {
+                    return Text("Document does not exist");
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                    return Center(
                 child: Column(
                   children: [
                     Padding(
@@ -109,21 +116,176 @@ class _ProfileState extends State<Profile> {
                             Divider(),
                             Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.phone, color: Colors.black,),
-                                      SizedBox(
-                                        width: 12,
+                              child: GestureDetector(
+                                onTap: (){
+                                  _email.text = data['email'];
+                                  showModalBottomSheet(
+                                      context: context,
+                                      backgroundColor: Colors.grey.shade200,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(20),
+                                              topLeft: Radius.circular(20)
+                                          )
                                       ),
-                                      Text(AppLocalizations.of(context)!.contactAndFeedback),
-                                    ],
-                                  ),
+                                      builder: (context){
+                                        return Form(
+                                          key: _globalKey,
+                                          child: StatefulBuilder(
+                                              builder: (BuildContext context, StateSetter setState){
+                                                return Column(
+                                                  children: [
+                                                    Container(
+                                                      height: 50,
+                                                      // color: Colors.grey,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(25),
+                                                            topRight: Radius.circular(25),
+                                                          ),
+                                                          color: Colors.grey.shade200
+                                                      ),
+                                                      width: MediaQuery.of(context).size.width,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                        child: Row(
+                                                          children: [
+                                                            IconButton(
+                                                                onPressed: (){
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                icon: Icon(Icons.close)
+                                                            ),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Text('Summit feedback or ask for help',
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontSize: 22
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 20,),
+                                                    Container(
+                                                      width: MediaQuery.of(context).size.width* 0.9,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(14),
+                                                        color: Colors.white,
+                                                      ),
+                                                      child: TextFormField(
+                                                        validator: (v){
+                                                          if(v!.isEmpty){
+                                                            return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
+                                                          }
+                                                          return null;
+                                                        },
+                                                        onChanged:(v){
+                                                          _message = v;
+                                                        },
+                                                        maxLines: 7,
 
-                                  Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
-                                ],
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Your message to us',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(14),
+                                                              borderSide: const BorderSide(
+                                                                  color: Colors.white
+                                                              )
+                                                          ),
+                                                            enabledBorder:  OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(10),
+                                                                borderSide: const BorderSide(
+                                                                    color: Colors.transparent
+                                                                )
+                                                            )
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 25,),
+                                                    Container(
+                                                      width: MediaQuery.of(context).size.width* 0.9,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(14),
+                                                        color: Colors.white,
+                                                      ),
+                                                      child: TextFormField(
+                                                        controller: _email,
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Enter email (optional)',
+                                                            border: OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(14),
+                                                                borderSide: const BorderSide(
+                                                                    color: Colors.white
+                                                                )
+                                                            ),
+                                                            enabledBorder:  OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(10),
+                                                                borderSide: const BorderSide(
+                                                                    color: Colors.transparent
+                                                                )
+                                                            )
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(child: SizedBox()),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(bottom: 12.0),
+                                                      child: GestureDetector(
+                                                        onTap:(){
+                                                          if (_globalKey.currentState!.validate()) {
+                                                            EasyLoading.show();
+                                                            Network().getFeedback(_message, _email.text, context).then((_) {
+                                                              EasyLoading.dismiss();
+                                                              Navigator.pop(context);
+                                                            });
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(context).size.width*0.5,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(12),
+                                                            color: Color(0xff7F78D8)
+                                                          ),
+                                                          child: Center(
+                                                            child: Text('Send',
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w500
+                                                            ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              }
+                                          ),
+                                        );
+                                      }
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.phone, color: Colors.black,),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(AppLocalizations.of(context)!.contactAndFeedback),
+                                      ],
+                                    ),
+
+                                    Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                                  ],
+                                ),
                               ),
                             ),
                             Divider(),
@@ -157,28 +319,63 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 50,
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Rate our app',
+                          style: TextStyle(
+                            color: Color(0xff7F78D8),
+                          ),
+                        ),
+                        SizedBox(width: 5,),
+                        Icon(Icons.star, color: Color(0xff7F78D8), size: 18,),
+                        Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                        Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                        Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                        Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                      ],
                     ),
-
+                    SizedBox(height: 15,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            String url = 'https://kallo.io/company/privacy/';
+                            Uri uri = Uri.parse(url);
+                            try{
+                              launchUrl(uri);
+                            }catch(e){
+                              print(e.toString());
+                            }
+                          },
+                          child: Text("Privacy policy",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
-              )
-          );
-        }
+              );
+              }
 
-        return Center(
-          child: CircularProgressIndicator(color: Color(0xff7F78D8)),
-        );
-      },
-    ):Scaffold(
+              return Center(
+              child: CircularProgressIndicator(color: Color(0xff7F78D8)),
+            );
+          },
+    )
+     ):Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.grey.shade100,
-          toolbarHeight: MediaQuery.of(context).size.height*0.1,
-        ),
-        body: Center(
+        elevation: 0,
+        backgroundColor: Colors.grey.shade100,
+        toolbarHeight: MediaQuery.of(context).size.height*0.1,
+            ),
+          body:Center(
           child: Column(
             children: [
               SizedBox(
@@ -216,21 +413,177 @@ class _ProfileState extends State<Profile> {
                       Divider(),
                       Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.phone, color: Colors.black,),
-                                SizedBox(
-                                  width: 12,
+                        child: GestureDetector(
+                          onTap: (){
+                            showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.grey.shade200,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(20),
+                                        topLeft: Radius.circular(20)
+                                    )
                                 ),
-                                Text(AppLocalizations.of(context)!.contactAndFeedback),
-                              ],
-                            ),
+                                builder: (context){
+                                  return Form(
+                                    key: _globalKey,
+                                    child: StatefulBuilder(
+                                        builder: (BuildContext buildContext, StateSetter setState){
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                height: 50,
+                                                // color: Colors.grey,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(25),
+                                                      topRight: Radius.circular(25),
+                                                    ),
+                                                    color: Colors.grey.shade200
+                                                ),
+                                                width: MediaQuery.of(context).size.width,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                                  child: Row(
+                                                    children: [
+                                                      IconButton(
+                                                          onPressed: (){
+                                                            Navigator.pop(context);
+                                                          },
+                                                          icon: Icon(Icons.close)
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text('Summit feedback or ask for help',
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 22
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 20,),
+                                              Container(
+                                                width: MediaQuery.of(context).size.width* 0.9,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(14),
+                                                  color: Colors.white,
+                                                ),
+                                                child: TextFormField(
+                                                  validator: (v){
+                                                    if(v!.isEmpty){
+                                                      return AppLocalizations.of(context)!.fieldMustNotBeEmpty;
+                                                    }
+                                                    return null;
+                                                  },
+                                                  onChanged:(v){
+                                                    _message = v;
+                                                  },
+                                                  maxLines: 7,
 
-                            Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
-                          ],
+                                                  decoration: InputDecoration(
+                                                      labelText: 'Your message to us',
+                                                      border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(14),
+                                                          borderSide: const BorderSide(
+                                                              color: Colors.white
+                                                          )
+                                                      ),
+                                                      enabledBorder:  OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          borderSide: const BorderSide(
+                                                              color: Colors.transparent
+                                                          )
+                                                      )
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 25,),
+                                              Container(
+                                                width: MediaQuery.of(context).size.width* 0.9,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(14),
+                                                  color: Colors.white,
+                                                ),
+                                                child: TextFormField(
+                                                  onChanged:(v){
+                                                    _addEmail = v;
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      labelText: 'Enter email (optional)',
+                                                      border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(14),
+                                                          borderSide: const BorderSide(
+                                                              color: Colors.white
+                                                          )
+                                                      ),
+                                                      enabledBorder:  OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          borderSide: const BorderSide(
+                                                              color: Colors.transparent
+                                                          )
+                                                      )
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(child: SizedBox()),
+                                              Padding(
+                                                padding: const EdgeInsets.only(bottom: 12.0),
+                                                child: GestureDetector(
+                                                  onTap:(){
+                                                    if (_globalKey.currentState!.validate()) {
+                                                      EasyLoading.show();
+                                                      Network().getFeedback(_message, _addEmail, context).then((_) {
+                                                        EasyLoading.dismiss();
+                                                        Navigator.pop(context);
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    height: 40,
+                                                    width: MediaQuery.of(context).size.width*0.5,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        color: Color(0xff7F78D8)
+                                                    ),
+                                                    child: Center(
+                                                      child: Text('Send',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.w500
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                    ),
+                                  );
+                                }
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.phone, color: Colors.black,),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(AppLocalizations.of(context)!.contactAndFeedback),
+                                ],
+                              ),
+
+                              Icon(Icons.arrow_forward_ios_sharp, size: 17, color: Colors.black,)
+                            ],
+                          ),
                         ),
                       ),
                       Divider(),
@@ -381,11 +734,51 @@ class _ProfileState extends State<Profile> {
                       child: Text(AppLocalizations.of(context)!.logIn)
                   )
                 ],
+              ),
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Rate our app',
+                  style: TextStyle(
+                    color: Color(0xff7F78D8),
+                  ),
+                  ),
+                  SizedBox(width: 5,),
+                  Icon(Icons.star, color: Color(0xff7F78D8), size: 18,),
+                  Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                  Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                  Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                  Icon(Icons.star, color: Color(0xff7F78D8),size: 18,),
+                ],
+              ),
+              SizedBox(height: 15,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      String url = 'https://kallo.io/company/privacy/';
+                      Uri uri = Uri.parse(url);
+                      try{
+                        launchUrl(uri);
+                      }catch(e){
+                        print(e.toString());
+                      }
+                    },
+                    child: Text("Privacy policy",
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
+                ],
               )
             ],
           ),
         )
     );
+
 
 
 

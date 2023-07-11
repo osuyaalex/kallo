@@ -67,5 +67,19 @@
   "signingOut": "로그아웃 중",
   "areYouSure": "정말로 로그아웃 하시겠습니까?",
   "yes": "예",
-  "no": "아니오"
+  "no": "아니오",
+  "category": "카테고리",
+  "mostRelevant": "가장 관련성 높은 순",
+  "price": "가격",
+  "lowToHigh": "낮은 가격순",
+  "highToLow": "높은 가격순",
+  "distance": "거리",
+  "closestFirst": "가장 가까운 순",
+  "showResult": "결과 보기",
+  "sort": "정렬",
+  "filter": "필터",
+  "selectCategories": "카테고리 선택",
+  "categories": "카테고리",
+  "searchSimilarImages": "이 항목과 유사한 이미지 검색?",
+  "productCategory": "제품 카테고리"
 }

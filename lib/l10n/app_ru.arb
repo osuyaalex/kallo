@@ -67,5 +67,19 @@
  "signingOut": "Выход",
  "areYouSure": "Вы уверены, что хотите выйти?",
  "yes": "Да",
- "no": "Нет"
+ "no": "Нет",
+ "category": "Категория",
+ "mostRelevant": "Наиболее актуальные",
+ "price": "Цена",
+ "lowToHigh": "От низкой к высокой",
+ "highToLow": "От высокой к низкой",
+ "distance": "Расстояние",
+ "closestFirst": "Ближайшие впереди",
+ "showResult": "Показать результаты",
+ "sort": "Сортировка",
+ "filter": "Фильтр",
+ "selectCategories": "Выбрать категории",
+ "categories": "Категории",
+ "searchSimilarImages": "Искать похожие изображения для этого товара?",
+ "productCategory": "Категория товара"
 }

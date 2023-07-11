@@ -67,5 +67,19 @@
   "signingOut": "Keluar",
   "areYouSure": "Apakah Anda yakin ingin keluar?",
   "yes": "Ya",
-  "no": "Tidak"
+  "no": "Tidak",
+  "category": "Kategori",
+  "mostRelevant": "Paling Relevan",
+  "price": "Harga",
+  "lowToHigh": "Rendah ke Tinggi",
+  "highToLow": "Tinggi ke Rendah",
+  "distance": "Jarak",
+  "closestFirst": "Terdekat Pertama",
+  "showResult": "Tampilkan Hasil",
+  "sort": "Urutkan",
+  "filter": "Filter",
+  "selectCategories": "Pilih Kategori",
+  "categories": "Kategori",
+  "searchSimilarImages": "Cari Gambar Serupa untuk Item Ini?",
+  "productCategory": "Kategori Produk"
 }

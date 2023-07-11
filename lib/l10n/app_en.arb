@@ -192,6 +192,20 @@
   "loggedInAs": "logged in as",
   "signingOut": "Signing Out",
   "areYouSure": "Are you sure you want to sign out?",
-  "yes": "yes",
-  "no": "no"
+  "yes": "YES",
+  "no": "NO",
+  "category": "Category",
+  "mostRelevant": "Most Relevant",
+  "price": "Price",
+  "lowToHigh": "low to high",
+  "highToLow": "High to low",
+  "distance": "Distance",
+  "closestFirst": "Closest first",
+  "showResult": "Show Results",
+  "sort": "Sort",
+  "filter": "Filter",
+  "selectCategories": "Select Categories",
+  "categories": "Categories",
+  "searchSimilarImages": "search for images similar to this item?",
+  "productCategory": "Product Category"
 }
