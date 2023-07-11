@@ -148,14 +148,17 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
         if (_start == 0) {
           _timer?.cancel();
         }else {
-          setState(() {
-            _start--;
-          });
+         if(mounted){
+           setState(() {
+             _start--;
+           });
+         }
         }
 
       },
     );
   }
+
 
   _shiftCamera()async{
       _loadCountryCode();
@@ -805,7 +808,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                             SizedBox(
                                                               width: 10,
                                                             ),
-                                                            Text('Filter',
+                                                            Text(AppLocalizations.of(context)!.filter,
                                                               style: TextStyle(
                                                                   fontWeight: FontWeight.w600,
                                                                   fontSize: 22
@@ -823,7 +826,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                       child: Row(
                                                         mainAxisAlignment: MainAxisAlignment.start,
                                                         children: [
-                                                          Text('Price',
+                                                          Text(AppLocalizations.of(context)!.price,
                                                             style: TextStyle(
                                                                 fontWeight: FontWeight.w600,
                                                                 fontSize: 22
@@ -850,7 +853,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                           TextField(
                                                             enabled: _isSliderInteracted,
                                                             decoration: InputDecoration(
-                                                                prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
+                                                                prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
                                                                   style: TextStyle(
                                                                       fontSize: 18
                                                                   ),
@@ -891,7 +894,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                               TextField(
                                                                 enabled: _isSliderInteracted,
                                                                 decoration: InputDecoration(
-                                                                    prefix: Text("${snapshot.data!.data!.products![1].currency??''}  ",
+                                                                    prefix: Text("${snapshot.data!.data!.products![0].currency??''}  ",
                                                                       style: TextStyle(
                                                                           fontSize: 18
                                                                       ),
@@ -956,7 +959,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                             Row(
                                                               crossAxisAlignment: CrossAxisAlignment.end,
                                                               children: [
-                                                                Text('Select Categories',
+                                                                Text(AppLocalizations.of(context)!.selectCategories,
                                                                   style: TextStyle(
                                                                       fontWeight: FontWeight.w600,
                                                                       color: Colors.white,
@@ -1016,7 +1019,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                             SizedBox(
                                                               width: 10,
                                                             ),
-                                                            Text('Categories',
+                                                            Text(AppLocalizations.of(context)!.categories,
                                                               style: TextStyle(
                                                                   fontWeight: FontWeight.w600,
                                                                   fontSize: 22
@@ -1139,7 +1142,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                             SizedBox(
                                                               width: 10,
                                                             ),
-                                                            Text('Product Category',
+                                                            Text(AppLocalizations.of(context)!.productCategory,
                                                               style: TextStyle(
                                                                   fontWeight: FontWeight.w600,
                                                                   fontSize: 22
@@ -1212,7 +1215,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                           borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                         ),
                                                         backgroundColor:Color(0xff7F78D8),
-                                                        child: Text('Show Results')
+                                                        child: Text(AppLocalizations.of(context)!.showResult)
                                                     ),
                                                   ),
                                                 ),
@@ -1234,7 +1237,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Filter',
+                                    Text(AppLocalizations.of(context)!.filter,
                                       style: TextStyle(
                                           fontSize: 16.5,
                                           color: Colors.blue,
@@ -1297,7 +1300,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                             SizedBox(
                                                               width: 10,
                                                             ),
-                                                            Text('Categories',
+                                                            Text(AppLocalizations.of(context)!.categories,
                                                               style: TextStyle(
                                                                   fontWeight: FontWeight.w600,
                                                                   fontSize: 22
@@ -1420,7 +1423,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                             SizedBox(
                                                               width: 10,
                                                             ),
-                                                            Text('Product Category',
+                                                            Text(AppLocalizations.of(context)!.productCategory,
                                                               style: TextStyle(
                                                                   fontWeight: FontWeight.w600,
                                                                   fontSize: 22
@@ -1493,7 +1496,7 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                                                           borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                         ),
                                                         backgroundColor:Color(0xff7F78D8),
-                                                        child: Text('Show Results')
+                                                        child: Text(AppLocalizations.of(context)!.showResult)
                                                     ),
                                                   ),
                                                 ),
@@ -1506,14 +1509,14 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
                               },
                               child: Container(
                                 height: 40,
-                                width: 90,
+                                width: 100,
                                 padding: EdgeInsets.symmetric(horizontal: 14.0),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: Colors.grey.shade200
                                 ),
                                 child: Center(
-                                  child: Text('Category',
+                                  child: Text(AppLocalizations.of(context)!.category,
                                     style: TextStyle(
                                         fontSize: 16.5,
                                         color: Colors.blue,

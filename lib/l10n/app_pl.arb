@@ -67,5 +67,19 @@
  "signingOut": "Wylogowywanie",
  "areYouSure": "Czy na pewno chcesz się wylogować?",
  "yes": "Tak",
- "no": "Nie"
+ "no": "Nie",
+ "category": "Kategoria",
+ "mostRelevant": "Najbardziej Relevantne",
+ "price": "Cena",
+ "lowToHigh": "Od najniższej do najwyższej",
+ "highToLow": "Od najwyższej do najniższej",
+ "distance": "Odległość",
+ "closestFirst": "Najbliższe jako pierwsze",
+ "showResult": "Pokaż Wyniki",
+ "sort": "Sortuj",
+ "filter": "Filtruj",
+ "selectCategories": "Wybierz Kategorie",
+ "categories": "Kategorie",
+ "searchSimilarImages": "Szukaj Podobnych Obrazów do Tego Przedmiotu?",
+ "productCategory": "Kategoria produktu"
 }

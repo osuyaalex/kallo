@@ -570,7 +570,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   SizedBox(
                                                                     width: 10,
                                                                   ),
-                                                                  Text('Sort',
+                                                                  Text(AppLocalizations.of(context)!.sort,
                                                                     style: TextStyle(
                                                                         fontWeight: FontWeight.w600,
                                                                         fontSize: 22
@@ -602,7 +602,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   child: Row(
                                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                                     children: [
-                                                                      Text('Most Relevant',
+                                                                      Text(AppLocalizations.of(context)!.mostRelevant,
                                                                         style: TextStyle(
                                                                           fontWeight: FontWeight.w600,
                                                                           fontSize: 17,
@@ -636,7 +636,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   children: [
                                                                     Padding(
                                                                       padding: const EdgeInsets.only(right: 12.0),
-                                                                      child: Text('Price:',
+                                                                      child: Text(AppLocalizations.of(context)!.price,
                                                                         style: TextStyle(
                                                                           fontWeight: FontWeight.w600,
                                                                           fontSize: 17,
@@ -644,7 +644,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                    Text('Low to high',
+                                                                    Text(AppLocalizations.of(context)!.lowToHigh,
                                                                       style: TextStyle(
                                                                         fontWeight: FontWeight.w600,
                                                                         fontSize: 17,
@@ -680,7 +680,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   children: [
                                                                     Padding(
                                                                       padding: const EdgeInsets.only(right: 12.0),
-                                                                      child: Text('Price:',
+                                                                      child: Text(AppLocalizations.of(context)!.price,
                                                                         style: TextStyle(
                                                                           fontWeight: FontWeight.w600,
                                                                           fontSize: 17,
@@ -689,7 +689,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                    Text('High to low',
+                                                                    Text(AppLocalizations.of(context)!.highToLow,
                                                                       style: TextStyle(
                                                                         fontWeight: FontWeight.w600,
                                                                         fontSize: 17,
@@ -719,14 +719,14 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                 children: [
                                                                   Padding(
                                                                     padding: const EdgeInsets.only(right: 12.0),
-                                                                    child: Text('Distance:',
+                                                                    child: Text(AppLocalizations.of(context)!.distance,
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight.w600,
                                                                           fontSize: 17
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  Text('Closest first',
+                                                                  Text(AppLocalizations.of(context)!.closestFirst,
                                                                     style: TextStyle(
                                                                         fontWeight: FontWeight.w600,
                                                                         fontSize: 17
@@ -755,7 +755,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                   borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                                 ),
                                                                 backgroundColor:Color(0xff7F78D8),
-                                                                child: Text('Show Results',
+                                                                child: Text(AppLocalizations.of(context)!.showResult,
                                                                   style: TextStyle(
                                                                       fontSize: 18
                                                                   ),
@@ -778,7 +778,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                               color: Colors.grey.shade200
                                           ),
                                           child: Center(
-                                            child: Text('Sort',
+                                            child: Text(AppLocalizations.of(context)!.sort,
                                               style: TextStyle(
                                                   fontSize: 16.5,
                                                   color: Colors.blue,
@@ -890,7 +890,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text('Filter',
+                                                                      Text(AppLocalizations.of(context)!.filter,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -908,7 +908,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                 child: Row(
                                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                                   children: [
-                                                                    Text('Price',
+                                                                    Text(AppLocalizations.of(context)!.price,
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight.w600,
                                                                           fontSize: 22
@@ -1041,7 +1041,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       Row(
                                                                         crossAxisAlignment: CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Text('Select Categories',
+                                                                          Text(AppLocalizations.of(context)!.selectCategories,
                                                                             style: TextStyle(
                                                                                 fontWeight: FontWeight.w600,
                                                                                 color: Colors.white,
@@ -1099,7 +1099,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text('Categories',
+                                                                      Text(AppLocalizations.of(context)!.categories,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1191,7 +1191,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text('Product Category',
+                                                                      Text(AppLocalizations.of(context)!.productCategory,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1269,7 +1269,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                                   ),
                                                                   backgroundColor:Color(0xff7F78D8),
-                                                                  child: Text('Show Results',
+                                                                  child: Text(AppLocalizations.of(context)!.showResult,
                                                                     style: TextStyle(
                                                                         fontSize: 18
                                                                     ),
@@ -1295,7 +1295,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Text('Filter',
+                                              Text(AppLocalizations.of(context)!.filter,
                                                 style: TextStyle(
                                                     fontSize: 16.5,
                                                     color: Colors.blue,
@@ -1356,7 +1356,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text('Categories',
+                                                                      Text(AppLocalizations.of(context)!.categories,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1448,7 +1448,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
-                                                                      Text('Product Category',
+                                                                      Text(AppLocalizations.of(context)!.productCategory,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: 22
@@ -1521,7 +1521,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                                     borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                                                                   ),
                                                                   backgroundColor:Color(0xff7F78D8),
-                                                                  child: Text('Show Results')
+                                                                  child: Text(AppLocalizations.of(context)!.showResult)
                                                               ),
                                                             ),
                                                           ),
@@ -1534,14 +1534,14 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                         },
                                         child: Container(
                                           height: 40,
-                                          width: 90,
+                                          width: 100,
                                           padding: EdgeInsets.symmetric(horizontal: 14.0),
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(25),
                                               color: Colors.grey.shade200
                                           ),
                                           child: Center(
-                                            child: Text('Category',
+                                            child: Text(AppLocalizations.of(context)!.category,
                                               style: TextStyle(
                                                   fontSize: 16.5,
                                                   color: Colors.blue,

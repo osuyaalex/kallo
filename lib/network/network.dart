@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:job/network/feedback.dart';
 import 'package:job/network/image_json.dart';
 import 'package:job/network/json.dart';
 import 'package:job/utilities/snackbar.dart';
@@ -383,6 +385,47 @@ class Network{
     }
 
     return Koye.fromJson(jsonResponse);
+
+  }
+
+  Future<FeedbackSent> getFeedback(String message, String? email, BuildContext context) async {
+    var jsonResponse;
+
+    try {
+      const String apiKey = 'f7shtjns57sjBbjdf';
+      const String url = 'https://o3hmv2z8oj.execute-api.us-east-1.amazonaws.com/Prod/nlp';
+      final response = await http.post(Uri.parse('$url'),
+        headers: {
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body:  jsonEncode({
+          "action": "send_feedback",
+          "text_prompt": message,
+          "user_supplied_email": email
+        }),
+      );
+      print('hhhhhhhhhhhh');
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        jsonResponse  = jsonDecode(response.body);
+        snack(context, "Message sent successfully!");
+      } else {
+        throw Exception('Failed to load transactions');
+      }
+    } catch(error){
+      String errorMessage = error.toString();
+      print('the error isissssssisisisis ${errorMessage}');
+      if (errorMessage.contains('Failed host lookup')) {
+        snack(context, AppLocalizations.of(context)!.connectionIsDown);
+      } else if (errorMessage.contains('DOCTYPE HTML')) {
+        snack(context, AppLocalizations.of(context)!.somethingWentWrong);
+      } else {
+        snack(context, errorMessage);
+      }
+    }
+
+    return FeedbackSent.fromJson(jsonResponse);
 
   }
 }

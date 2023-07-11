@@ -1378,7 +1378,7 @@ class _SimilarImagePageState extends State<SimilarImagePage>with SingleTickerPro
                                         },
                                         child: Container(
                                           height: 40,
-                                          width: 90,
+                                          width: 100,
                                           padding: EdgeInsets.symmetric(horizontal: 14.0),
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(25),

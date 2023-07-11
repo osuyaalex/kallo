@@ -281,7 +281,7 @@ class _OnlineState extends State<Online> {
                         ),
                         Positioned(
                             top: 10,
-                            left: 10,
+                            right: 10,
                             child: GestureDetector(
                                 onTap: (){
                                   showDialog(
@@ -321,7 +321,10 @@ class _OnlineState extends State<Online> {
                                   },
                                   );
                                 },
-                                child: SvgPicture.asset('asset/search with image icon.svg')
+                                child: Opacity(
+                                    opacity: 0.5,
+                                    child: SvgPicture.asset('asset/search with image icon.svg')
+                                )
                             )
                         )
                       ],
@@ -535,7 +538,7 @@ class _OnlineState extends State<Online> {
                       ),
                       Positioned(
                           top: 10,
-                          left: 10,
+                          right: 10,
                           child: GestureDetector(
                               onTap: (){
                                 showDialog(
@@ -575,7 +578,10 @@ class _OnlineState extends State<Online> {
                                   },
                                 );
                               },
-                              child: SvgPicture.asset('asset/search with image icon.svg')
+                              child: Opacity(
+                                  opacity: 0.5,
+                                  child: SvgPicture.asset('asset/search with image icon.svg')
+                              )
                           )
                       )
                     ],

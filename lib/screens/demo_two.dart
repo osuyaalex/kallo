@@ -315,7 +315,7 @@ class _DemsState extends State<Dems>with SingleTickerProviderStateMixin{
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Category',
+                        Text(AppLocalizations.of(context)!.category,
                           style: TextStyle(
                               fontSize: 27,
                               fontWeight: FontWeight.w700

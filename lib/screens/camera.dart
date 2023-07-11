@@ -123,7 +123,7 @@ class _CameraScreenState extends State<CameraScreen> {
     _startTimer();
     _controller = CameraController(
       widget.camera,
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
     );
     _initializeControllerFuture = _controller.initialize();
   }

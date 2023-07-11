@@ -67,5 +67,19 @@
   "signingOut": "ログアウト中",
   "areYouSure": "ログアウトしますか？",
   "yes": "はい",
-  "no": "いいえ"
+  "no": "いいえ",
+  "category": "カテゴリ",
+  "mostRelevant": "最も関連性の高い順",
+  "price": "価格",
+  "lowToHigh": "安い順",
+  "highToLow": "高い順",
+  "distance": "距離",
+  "closestFirst": "最も近い順",
+  "showResult": "結果を表示",
+  "sort": "並び替え",
+  "filter": "フィルター",
+  "selectCategories": "カテゴリを選択",
+  "categories": "カテゴリ",
+  "searchSimilarImages": "このアイテムに類似する画像を検索しますか？",
+  "productCategory": "商品カテゴリ"
 }
