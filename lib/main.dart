@@ -25,7 +25,8 @@ void main() async{
     providers: [
       ChangeNotifierProvider(create: (_){
         return AnimatedProvider();
-      })
+      }),
+
     ],
       child: MyApp(isFirstLaunch: isFirstLaunch, user:  user,)
   ));

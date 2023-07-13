@@ -1630,7 +1630,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                  ),
                                ],
                              ),
-                           ):Online(snapshot: snapshot),
+                           ):Online(snapshot: snapshot,),
                          )
                        ],
                      );

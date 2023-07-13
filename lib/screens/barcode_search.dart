@@ -1655,7 +1655,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
 
                             ],
                           )
-                      ):Online(snapshot: snapshot),
+                      ):Online(snapshot: snapshot,),
                     ),
                   ],
                 );

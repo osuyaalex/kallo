@@ -5,10 +5,13 @@ import 'package:job/network/image_json.dart';
 import 'package:job/providers/animated.dart';
 import 'package:job/screens/similar_images.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
+
+import '../network/network.dart';
 
 
 
@@ -100,12 +103,51 @@ class _ImageOnlineState extends State<ImageOnline> {
     "Puzzles",
     "Kids Toys",
   };
+  List<Products> online = [];
+  String? _value;
+  int _apiCallCounter = 0;
+  late String _code = '';
+  final _controller = ScrollController();
+  Future<void> _loadCountryCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCode = prefs.getString('countryCode');
+    setState(() {
+      _code = savedCode??'NG';
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // _requestLocationPermission();
     // _getCurrentLocation();
+    List<Products>? products = widget.snapshot.data!.data!.products;
+    online = products!.where((element) => element.merchantType == "online").toList();
+
+    _controller.addListener(() {
+      if(_controller.position.maxScrollExtent == _controller.offset){
+        if(_apiCallCounter < 5){
+          setState(() {
+            _apiCallCounter++;
+          });
+          _loadCountryCode().then((value){
+            Network().getInfiniteScrollingImage(widget.snapshot.data!.responseScrollId??'', _code, context).then((value){
+              setState(() {
+                online.addAll(value.data!.products!.where((element) => element.merchantType == "online"));
+                _value = value.responseScrollId;
+              });
+            });
+          });
+        }
+      }
+    });
+
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -117,16 +159,16 @@ class _ImageOnlineState extends State<ImageOnline> {
       }
       return name;
     }
-    List<Products>? products = widget.snapshot.data!.data!.products;
-    var online = products?.where((element) => element.merchantType == "online").toList();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: NotificationListener<ScrollNotification>(
         onNotification: (notification){
           if(notification is ScrollUpdateNotification){
             // Check the direction of scroll and update the visibility of the container
-            if(online!.isNotEmpty){
+            if(online.isNotEmpty){
               animatedProvider.myVariable = notification.scrollDelta! < 0;
+
             }else{
               animatedProvider.myVariable = notification.scrollDelta! > 0;
             }
@@ -134,9 +176,10 @@ class _ImageOnlineState extends State<ImageOnline> {
           return false;
         },
         child: StaggeredGridView.countBuilder(
+            controller: _controller,
             physics: ClampingScrollPhysics(),
             crossAxisCount: 2,
-            itemCount: online?.length,
+            itemCount: online.length+1,
             itemBuilder: (context, index){
               // final doubleValue = offline[index]['price'];
               // // the indexOf() method is to check if there are any digits after the decimal point
@@ -145,37 +188,298 @@ class _ImageOnlineState extends State<ImageOnline> {
               // final textToDisplay = decimalIndex == -1
               //     ? doubleValue.toStringAsFixed(0)
               //     : doubleValue.toStringAsFixed(2);
-              final item = online?[index].price;
-              String displayValue;
+              if(index < online.length){
+                final item = online[index].price;
+                String displayValue;
 
-              if (item is double) {
-                final double number = item;
-                if (number == number.floor()) {
-                  displayValue = number.floor().toString();
+                if (item is double) {
+                  final double number = item;
+                  if (number == number.floor()) {
+                    displayValue = number.floor().toString();
+                  } else {
+                    displayValue = number.toString();
+                  }
+                  if (number >= 1000) {
+                    final formatter = NumberFormat("#,###");
+                    displayValue = formatter.format(number);
+                  }
+                } else if (item is String) {
+                  final double number = double.tryParse(item) ?? 0.0;
+                  if (number == number.floor()) {
+                    displayValue = number.floor().toString();
+                  } else {
+                    displayValue = number.toString();
+                  }
+                  if (number >= 1000) {
+                    final formatter = NumberFormat("#,###");
+                    displayValue = formatter.format(number);
+                  }
                 } else {
-                  displayValue = number.toString();
+                  displayValue = 'N/A'; // Handle the case when item is neither a double nor a string
                 }
-                if (number >= 1000) {
-                  final formatter = NumberFormat("#,###");
-                  displayValue = formatter.format(number);
-                }
-              } else if (item is String) {
-                final double number = double.tryParse(item) ?? 0.0;
-                if (number == number.floor()) {
-                  displayValue = number.floor().toString();
-                } else {
-                  displayValue = number.toString();
-                }
-                if (number >= 1000) {
-                  final formatter = NumberFormat("#,###");
-                  displayValue = formatter.format(number);
-                }
-              } else {
-                displayValue = 'N/A'; // Handle the case when item is neither a double nor a string
-              }
-              final addRow = online?[index];
-              if(addRow?.productCategory != null){
-                if(_matchingCategories.contains(addRow?.productCategory)){
+
+                final addRow = online?[index];
+
+                if(addRow?.productCategory != null){
+                  if(_matchingCategories.contains(addRow?.productCategory)){
+                    return  GestureDetector(
+                      onTap: (){
+                        String url = addRow?.productLink??'';
+                        Uri uri = Uri.parse(url);
+                        try{
+                          launchUrl(uri);
+                        }catch(e){
+                          print(e.toString());
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: 310,
+                            width: 250,
+                            child: Card(
+                              elevation: 1,
+                              shadowColor: Colors.grey.shade300,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(13)
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 160,
+                                    width: 180,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        image: DecorationImage(
+                                            image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
+                                            online[index].imageThumbnailUrl!:
+                                            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
+                                            ),
+                                            fit: BoxFit.fill
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: SizedBox(
+                                      width: 180,
+                                      child: Text(breakUnwantedPart(addRow?.productName??''),
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text(addRow?.merchantName??'',
+                                          style: const TextStyle(
+                                              color: Color(0xff161b22),
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 15
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(addRow?.currency??'',
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color(0xff7F78D8)
+                                            ),
+                                          ),
+                                          Text(displayValue,
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color(0xff7F78D8)
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              top: 10,
+                              right: 10,
+                              child: GestureDetector(
+                                  onTap: (){
+                                    showDialog(
+                                      context: context,
+                                      builder: (context){
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12)
+                                          ),
+                                          content: Text('Search for images similar to this item?',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: (){
+                                                  Navigator.of(context).pop();
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                    return SimilarImagePage(similarSearch: addRow?.imageThumbnailUrl);
+                                                  }));
+                                                },
+                                                child: Text(AppLocalizations.of(context)!.yes,
+                                                  style: TextStyle(
+                                                    color:  Colors.black,
+                                                  ),
+                                                )
+                                            ),
+                                            TextButton(
+                                                onPressed: (){
+                                                  Navigator.pop(context);
+                                                }, child: Text(AppLocalizations.of(context)!.no,
+                                              style: TextStyle(
+                                                color:  Colors.black,
+                                              ),
+                                            )
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Opacity(
+                                      opacity: 0.5,
+                                      child: SvgPicture.asset('asset/search with image icon.svg')
+                                  )
+                              )
+                          )
+                        ],
+                      ),
+                    );
+                  }else{
+                    return GestureDetector(
+                      onTap: (){
+                        String url = addRow?.productLink??'';
+                        Uri uri = Uri.parse(url);
+                        try{
+                          launchUrl(uri);
+                        }catch(e){
+                          print(e.toString());
+                        }
+                      },
+                      child: SizedBox(
+                        height: 310,
+                        width: 250,
+                        child: Card(
+                          elevation: 1,
+                          shadowColor: Colors.grey.shade300,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(13)
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 160,
+                                width: 180,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    image: DecorationImage(
+                                        image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
+                                        online[index].imageThumbnailUrl!:
+                                        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
+                                        ),
+                                        fit: BoxFit.fill
+                                    )
+                                ),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: SizedBox(
+                                  width: 180,
+                                  child: Text(breakUnwantedPart(addRow?.productName??''),
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(addRow?.merchantName??'',
+                                      style: const TextStyle(
+                                          color: Color(0xff161b22),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              SizedBox(
+                                height: 20,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(addRow?.currency??'',
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xff7F78D8)
+                                        ),
+                                      ),
+                                      Text(displayValue,
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xff7F78D8)
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                }else{
+
                   return  GestureDetector(
                     onTap: (){
                       String url = addRow?.productLink??'';
@@ -206,7 +510,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                                       borderRadius: BorderRadius.circular(12),
                                       image: DecorationImage(
                                           image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
-                                          online![index].imageThumbnailUrl!:
+                                          online[index].imageThumbnailUrl!:
                                           'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
                                           ),
                                           fit: BoxFit.fill
@@ -302,7 +606,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                                               },
                                               child: Text(AppLocalizations.of(context)!.yes,
                                                 style: TextStyle(
-                                                  color:  Colors.black,
+                                                    color: Colors.black
                                                 ),
                                               )
                                           ),
@@ -311,7 +615,7 @@ class _ImageOnlineState extends State<ImageOnline> {
                                                 Navigator.pop(context);
                                               }, child: Text(AppLocalizations.of(context)!.no,
                                             style: TextStyle(
-                                              color:  Colors.black,
+                                                color: Colors.black
                                             ),
                                           )
                                           )
@@ -329,264 +633,16 @@ class _ImageOnlineState extends State<ImageOnline> {
                       ],
                     ),
                   );
-                }else{
-                  return GestureDetector(
-                    onTap: (){
-                      String url = addRow?.productLink??'';
-                      Uri uri = Uri.parse(url);
-                      try{
-                        launchUrl(uri);
-                      }catch(e){
-                        print(e.toString());
-                      }
-                    },
-                    child: SizedBox(
-                      height: 310,
-                      width: 250,
-                      child: Card(
-                        elevation: 1,
-                        shadowColor: Colors.grey.shade300,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(13)
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 160,
-                              width: 180,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  image: DecorationImage(
-                                      image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
-                                      online![index].imageThumbnailUrl!:
-                                      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
-                                      ),
-                                      fit: BoxFit.fill
-                                  )
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: SizedBox(
-                                width: 180,
-                                child: Text(breakUnwantedPart(addRow?.productName??''),
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(addRow?.merchantName??'',
-                                    style: const TextStyle(
-                                        color: Color(0xff161b22),
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 15
-                                    ),
-                                  ),
 
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            SizedBox(
-                              height: 20,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(addRow?.currency??'',
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color(0xff7F78D8)
-                                      ),
-                                    ),
-                                    Text(displayValue,
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color(0xff7F78D8)
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
                 }
               }else{
-                return  GestureDetector(
-                  onTap: (){
-                    String url = addRow?.productLink??'';
-                    Uri uri = Uri.parse(url);
-                    try{
-                      launchUrl(uri);
-                    }catch(e){
-                      print(e.toString());
-                    }
-                  },
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: 310,
-                        width: 250,
-                        child: Card(
-                          elevation: 1,
-                          shadowColor: Colors.grey.shade300,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(13)
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 160,
-                                width: 180,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    image: DecorationImage(
-                                        image: NetworkImage(addRow?.imageThumbnailUrl?.isNotEmpty == true?
-                                        online![index].imageThumbnailUrl!:
-                                        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png'
-                                        ),
-                                        fit: BoxFit.fill
-                                    )
-                                ),
-                              ),
-                              SizedBox(
-                                height: 7,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: SizedBox(
-                                  width: 180,
-                                  child: Text(breakUnwantedPart(addRow?.productName??''),
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 7,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(addRow?.merchantName??'',
-                                      style: const TextStyle(
-                                          color: Color(0xff161b22),
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 15
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 7,
-                              ),
-                              SizedBox(
-                                height: 20,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(addRow?.currency??'',
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xff7F78D8)
-                                        ),
-                                      ),
-                                      Text(displayValue,
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xff7F78D8)
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                          top: 10,
-                          right: 10,
-                          child: GestureDetector(
-                              onTap: (){
-                                showDialog(
-                                  context: context,
-                                  builder: (context){
-                                    return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12)
-                                      ),
-                                      content: Text('Search for images similar to this item?',
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: (){
-                                              Navigator.of(context).pop();
-                                              Navigator.push(context, MaterialPageRoute(builder: (context){
-                                                return SimilarImagePage(similarSearch: addRow?.imageThumbnailUrl);
-                                              }));
-                                            },
-                                            child: Text(AppLocalizations.of(context)!.yes,
-                                              style: TextStyle(
-                                                color:  Colors.black,
-                                              ),
-                                            )
-                                        ),
-                                        TextButton(
-                                            onPressed: (){
-                                              Navigator.pop(context);
-                                            }, child: Text(AppLocalizations.of(context)!.no,
-                                          style: TextStyle(
-                                            color:  Colors.black,
-                                          ),
-                                        )
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Opacity(
-                                  opacity: 0.5,
-                                  child: SvgPicture.asset('asset/search with image icon.svg')
-                              )
-                          )
-                      )
-                    ],
-                  ),
-                );
+                return widget.snapshot.data!.responseScrollId != null?_apiCallCounter<5?
+                Center(child: CircularProgressIndicator(
+                    color: Color(0xff7F78D8)
+                ))
+                    :Container():Container();
               }
+
 
 
             },

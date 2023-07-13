@@ -17,6 +17,7 @@ import 'package:job/screens/image_online.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -70,14 +71,11 @@ class _ImageSearchState extends State<ImageSearch>with SingleTickerProviderState
     final firstCamera = cameras.first;
     PermissionStatus status = await Permission.camera.request();
     if(status.isGranted){
-      final result = await Navigator.push(
+      final result = await PersistentNavBarNavigator.pushNewScreen(
         context,
-        MaterialPageRoute(
-          fullscreenDialog: true,
-          builder: (context) => CameraScreen(
-            camera: firstCamera,
-          ),
-        ),
+        screen: CameraScreen(camera: firstCamera),
+        withNavBar: false, // OPTIONAL VALUE. True by default.
+        pageTransitionAnimation: PageTransitionAnimation.cupertino,
       );
 
       // Handle the result, such as saving the picture or displaying it in the UI

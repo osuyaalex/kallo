@@ -261,7 +261,7 @@ class _CameraScreenState extends State<CameraScreen> {
         },
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
+        padding: const EdgeInsets.only(bottom: 50.0),
         child: CircleAvatar(
           backgroundColor: Color(0xff7F78D8).withOpacity(0.4),
           radius: 35,
@@ -309,7 +309,7 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 }

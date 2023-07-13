@@ -1579,7 +1579,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
 
                                 ],
                               )
-                          ):Online(snapshot: snapshot),
+                          ):Online(snapshot: snapshot,),
                         ),
                       ],
                     );
