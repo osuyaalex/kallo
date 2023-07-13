@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/google_sign_in.dart';
 import '../providers/animated.dart';
+import '../providers/products.dart';
 import '../screens/demo_two.dart';
 import '../screens/home.dart';
 import '../screens/idealo.dart';
@@ -32,8 +33,12 @@ class _MainHomeState extends State<MainHome> {
     // TODO: implement initState
     super.initState();
     _controller = PersistentTabController(initialIndex: 1);
+    _loadP();
   }
 
+  _loadP()async{
+    await Provider.of<ProductProvider>(context, listen: false).loadCart();
+  }
   List<Widget> _buildScreens() {
     return [
       MyHome(

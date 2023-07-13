@@ -12,6 +12,9 @@ import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
+import '../providers/products.dart';
+
+
 
 
 class Online extends StatefulWidget {
@@ -490,6 +493,15 @@ class _OnlineState extends State<Online> {
                       }catch(e){
                         print(e.toString());
                       }
+                      Provider.of<ProductProvider>(context, listen: false).addItem(
+                          online[index].productName??'',
+                          online[index].imageThumbnailUrl??'',
+                          displayValue,
+                        online[index].productLink??'',
+                        online[index].merchantName??'',
+                        online[index].currency??'',
+                        online[index].productCategory
+                      );
                     },
                     child: Stack(
                       children: [

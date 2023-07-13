@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:job/providers/product_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CartProvider extends ChangeNotifier {
+class ProductProvider extends ChangeNotifier {
   final List<Product> _list = [];
   List<Product> get getItems {
     return _list;
@@ -35,9 +35,13 @@ class CartProvider extends ChangeNotifier {
       String name,
       String imageUrl,
       String price,
+      String url,
+      String merchantName,
+      String currency,
+      String? productCategory,
 
       ) {
-    final product = Product(name: name, imageUrl: imageUrl, price:  price);
+    final product = Product(name: name, imageUrl: imageUrl, price:  price, url: url, merchantName: merchantName, currency: currency, productCategory:  productCategory);
     _list.add(product);
     notifyListeners();
     saveCart();

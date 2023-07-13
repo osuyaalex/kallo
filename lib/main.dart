@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:job/first%20pages/main_home.dart';
 import 'package:job/providers/animated.dart';
+import 'package:job/providers/products.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -21,12 +22,15 @@ void main() async{
   User? user = FirebaseAuth.instance.currentUser;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+
   runApp( MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_){
         return AnimatedProvider();
       }),
-
+      ChangeNotifierProvider(create: (_){
+        return ProductProvider();
+      }),
     ],
       child: MyApp(isFirstLaunch: isFirstLaunch, user:  user,)
   ));
