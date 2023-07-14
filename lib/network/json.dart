@@ -113,6 +113,7 @@ class Pproducts {
   dynamic price;
   PriceHistoryDict? priceHistoryDict;
   String? merchantUrl;
+  dynamic priceChange;
   bool? hasClipVector512;
   String? merchantDomain;
   String? merchantName;
@@ -127,6 +128,7 @@ class Pproducts {
         this.price,
         this.priceHistoryDict,
         this.merchantUrl,
+        this.priceChange,
         this.hasClipVector512,
         this.merchantDomain,
         this.merchantName,
@@ -143,6 +145,7 @@ class Pproducts {
         ? new PriceHistoryDict.fromJson(json['price_history_dict'])
         : null;
     merchantUrl = json['merchant_url'];
+    priceChange = json['price_change'];
     hasClipVector512 = json['has_clip_vector_512'];
     merchantDomain = json['merchant_domain'];
     merchantName = json['merchant_name'];
@@ -161,6 +164,7 @@ class Pproducts {
       data['price_history_dict'] = this.priceHistoryDict!.toJson();
     }
     data['merchant_url'] = this.merchantUrl;
+    data['price_change'] = this.priceChange;
     data['has_clip_vector_512'] = this.hasClipVector512;
     data['merchant_domain'] = this.merchantDomain;
     data['merchant_name'] = this.merchantName;

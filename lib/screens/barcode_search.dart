@@ -639,7 +639,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                         onTap:(){
                                                           setState((){
                                                             _selectedContainerIndex = 1;
-                                                            _magnitude = 'asc';
+                                                            _magnitude = 'price_asc';
                                                           });
                                                         },
                                                         child: Container(
@@ -683,7 +683,7 @@ class _BarcodeSearchState extends State<BarcodeSearch>with SingleTickerProviderS
                                                         onTap:(){
                                                           setState((){
                                                             _selectedContainerIndex = 2;
-                                                            _magnitude = 'desc';
+                                                            _magnitude = 'price_desc';
                                                           });
 
                                                         },

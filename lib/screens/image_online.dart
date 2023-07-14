@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app-localizations.dart';
 
 import '../network/network.dart';
+import '../providers/products.dart';
 
 
 
@@ -231,6 +232,15 @@ class _ImageOnlineState extends State<ImageOnline> {
                         }catch(e){
                           print(e.toString());
                         }
+                        Provider.of<ProductProvider>(context, listen: false).addItem(
+                            online[index].productName??'',
+                            online[index].imageThumbnailUrl??'',
+                            displayValue,
+                            online[index].productLink??'',
+                            online[index].merchantName??'',
+                            online[index].currency??'',
+                            online[index].productCategory
+                        );
                       },
                       child: Stack(
                         children: [
@@ -385,6 +395,15 @@ class _ImageOnlineState extends State<ImageOnline> {
                         }catch(e){
                           print(e.toString());
                         }
+                        Provider.of<ProductProvider>(context, listen: false).addItem(
+                            online[index].productName??'',
+                            online[index].imageThumbnailUrl??'',
+                            displayValue,
+                            online[index].productLink??'',
+                            online[index].merchantName??'',
+                            online[index].currency??'',
+                            online[index].productCategory
+                        );
                       },
                       child: SizedBox(
                         height: 310,
@@ -489,6 +508,15 @@ class _ImageOnlineState extends State<ImageOnline> {
                       }catch(e){
                         print(e.toString());
                       }
+                      Provider.of<ProductProvider>(context, listen: false).addItem(
+                          online[index].productName??'',
+                          online[index].imageThumbnailUrl??'',
+                          displayValue,
+                          online[index].productLink??'',
+                          online[index].merchantName??'',
+                          online[index].currency??'',
+                          online[index].productCategory
+                      );
                     },
                     child: Stack(
                       children: [

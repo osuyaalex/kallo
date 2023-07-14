@@ -612,7 +612,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                        onTap:(){
                                                          setState((){
                                                            _selectedContainerIndex = 1;
-                                                           _magnitude = "asc";
+                                                           _magnitude = "price_asc";
                                                          });
                                                        },
                                                        child: Container(
@@ -656,7 +656,7 @@ class _DemoScreenState extends State<DemoScreen>with SingleTickerProviderStateMi
                                                        onTap:(){
                                                          setState((){
                                                            _selectedContainerIndex = 2;
-                                                           _magnitude = "desc";
+                                                           _magnitude = "price_desc";
                                                          });
 
                                                        },

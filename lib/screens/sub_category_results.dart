@@ -619,7 +619,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                             onTap:(){
                                                               setState((){
                                                                 _selectedContainerIndex = 1;
-                                                                _magnitude = 'asc';
+                                                                _magnitude = 'price_asc';
                                                               });
                                                             },
                                                             child: Container(
@@ -663,7 +663,7 @@ class _SubCategoryResultsState extends State<SubCategoryResults>with SingleTicke
                                                             onTap:(){
                                                               setState((){
                                                                 _selectedContainerIndex = 2;
-                                                                _magnitude = '_desc';
+                                                                _magnitude = 'price_desc';
                                                               });
                                                             },
                                                             child: Container(

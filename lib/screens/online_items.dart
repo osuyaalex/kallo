@@ -235,6 +235,15 @@ class _OnlineState extends State<Online> {
                         }catch(e){
                           print(e.toString());
                         }
+                        Provider.of<ProductProvider>(context, listen: false).addItem(
+                            online[index].productName??'',
+                            online[index].imageThumbnailUrl??'',
+                            displayValue,
+                            online[index].productLink??'',
+                            online[index].merchantName??'',
+                            online[index].currency??'',
+                            online[index].productCategory
+                        );
                       },
                       child: Stack(
                         children: [
@@ -389,6 +398,15 @@ class _OnlineState extends State<Online> {
                         }catch(e){
                           print(e.toString());
                         }
+                        Provider.of<ProductProvider>(context, listen: false).addItem(
+                            online[index].productName??'',
+                            online[index].imageThumbnailUrl??'',
+                            displayValue,
+                            online[index].productLink??'',
+                            online[index].merchantName??'',
+                            online[index].currency??'',
+                            online[index].productCategory
+                        );
                       },
                       child: SizedBox(
                         height: 310,
